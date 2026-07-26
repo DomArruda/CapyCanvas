@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+capycanvas/__init__.py
+capycanvas/template.py
+capycanvas.egg-info/PKG-INFO
+capycanvas.egg-info/SOURCES.txt
+capycanvas.egg-info/dependency_links.txt
+capycanvas.egg-info/requires.txt
+capycanvas.egg-info/top_level.txt

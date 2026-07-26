@@ -1,0 +1,21 @@
+[project]
+name = "capycanvas"
+version = "0.1.0"
+description = "Package partner data into CapyCanvas single-file HTML reports"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Dom Arruda" }]
+dependencies = []
+
+[project.optional-dependencies]
+pandas = ["pandas"]
+polars = ["polars"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["capycanvas*"]

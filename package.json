@@ -1,0 +1,10 @@
+{
+  "name": "capycanvas",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "split": "bun split.ts",
+    "build": "bun build.ts",
+    "rebuild": "bun split.ts && bun build.ts"
+  }
+}

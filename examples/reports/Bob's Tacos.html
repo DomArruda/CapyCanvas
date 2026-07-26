@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CapyCanvas</title>
+
+<!--CAPYCANVAS_HDR:v1
+{"v":1,"magic":"CC01","mode":"app","packaged":true,"files":[{"name":"data.csv","ext":"csv","size":157,"prefix_hex":"49642c5061","store":"embedded-data","key":"data.csv"}]}
+CAPYCANVAS_HDR_END-->
+
+<!-- The app script. On export this is rewritten with data-encoding="base64",
+     which sidesteps any chance of user code containing a closing script tag. -->
+<script id="app-source" type="text/x-python" data-encoding="base64">aW1wb3J0IGNhcHljYW52YXMgYXMgc3QKaW1wb3J0IHBhbmRhcyBhcyBwZAppbXBvcnQgbnVtcHkgYXMgbnAKCiVwaXAgaW5zdGFsbCBzZWFib3JuCmltcG9ydCBzZWFib3JuIGFzIHNucwppbXBvcnQgbWF0cGxvdGxpYi5weXBsb3QgYXMgcGx0CgpzdC5zZXRfcGFnZV9jb25maWcocGFnZV90aXRsZT0iU2FsZXMgZXhwbG9yZXIiLCBsYXlvdXQ9IndpZGUiKQpzdC50aXRsZSgiU2FsZXMgZXhwbG9yZXIiKQoKZiA9IHN0LmVtYmVkZGVkKCJkYXRhLmNzdiIpCmlmIGYgaXMgTm9uZToKICAgIHN0Lndhcm5pbmcoIk5vIGVtYmVkZGVkIGRhdGEuY3N2IOKAlCBzdGFnZSBpdCBpbiB0aGUgRGF0YSBwYW5lbCBvciBwYWNrYWdlIGl0IHdpdGggdGhlIFB5dGhvbiBBUEkuIikKICAgIHN0LnN0b3AoKQoKZGYgPSBmLmRhdGFmcmFtZSgpCnN0LmNhcHRpb24oZiJMb2FkZWQgKip7Zi5uYW1lfSoqIOKAlCB7bGVuKGRmKTosfSByb3dzIikKCiMgLS0tLSBGaWx0ZXJzIC0tLS0Kc3Quc3ViaGVhZGVyKCJGaWx0ZXJzIikKYzEsIGMyID0gc3QuY29sdW1ucygyKQoKCgp3aXRoIGMxOgogICAgcGFydG5lcnMgPSBzb3J0ZWQoZGZbIlBhcnRuZXIiXS5kcm9wbmEoKS51bmlxdWUoKS50b2xpc3QoKSkKICAgIHNlbF9wYXJ0bmVycyA9IHN0Lm11bHRpc2VsZWN0KCJQYXJ0bmVyIiwgb3B0aW9ucz1wYXJ0bmVycywgZGVmYXVsdD1wYXJ0bmVycykKd2l0aCBjMjoKICAgIGJyYW5jaGVzID0gc29ydGVkKGRmWyJCcmFuY2giXS5kcm9wbmEoKS51bmlxdWUoKS50b2xpc3QoKSkKICAgIHNlbF9icmFuY2hlcyA9IHN0Lm11bHRpc2VsZWN0KCJCcmFuY2giLCBvcHRpb25zPWJyYW5jaGVzLCBkZWZhdWx0PWJyYW5jaGVzKQoKbWluX3JldiA9IHN0LnNsaWRlcigKICAgICJNaW5pbXVtIHJldmVudWUiLAogICAgbWluX3ZhbHVlPTAsCiAgICBtYXhfdmFsdWU9aW50KGRmWyJSZXYiXS5tYXgoKSkgaWYgbGVuKGRmKSBlbHNlIDAsCiAgICB2YWx1ZT0wLAogICAgc3RlcD0xMDAwLAopCgppZiBub3Qgc2VsX3BhcnRuZXJzIG9yIG5vdCBzZWxfYnJhbmNoZXM6CiAgICBzdC5pbmZvKCJTZWxlY3QgYXQgbGVhc3Qgb25lIHBhcnRuZXIgYW5kIG9uZSBicmFuY2guIikKICAgIHN0LnN0b3AoKQoKdmlldyA9IGRmWwogICAgZGZbIlBhcnRuZXIiXS5pc2luKHNlbF9wYXJ0bmVycykKICAgICYgZGZbIkJyYW5jaCJdLmlzaW4oc2VsX2JyYW5jaGVzKQogICAgJiAoZGZbIlJldiJdID49IG1pbl9yZXYpCl0uY29weSgpCgppZiB2aWV3LmVtcHR5OgogICAgc3Qud2FybmluZygiTm8gcm93cyBtYXRjaCB0aG9zZSBmaWx0ZXJzLiIpCiAgICBzdC5zdG9wKCkKCiMgLS0tLSBLUEkgbWV0cmljcyAtLS0tCnRvdGFsX3JldiA9IHZpZXdbIlJldiJdLnN1bSgpCmF2Z19yZXYgPSB2aWV3WyJSZXYiXS5tZWFuKCkKbl9wYXJ0bmVycyA9IHZpZXdbIlBhcnRuZXIiXS5udW5pcXVlKCkKbl9icmFuY2hlcyA9IHZpZXdbIkJyYW5jaCJdLm51bmlxdWUoKQoKc3QubWV0cmljKCJUb3RhbCByZXZlbnVlIiwgZiIke3RvdGFsX3JldjosLjBmfSIsIGhlcm89VHJ1ZSkKCm0xLCBtMiwgbTMsIG00ID0gc3QuY29sdW1ucyg0KQptMS5tZXRyaWMoIlJvd3MiLCBmIntsZW4odmlldyk6LH0iKQptMi5tZXRyaWMoIkF2ZyByZXZlbnVlIiwgZiIke2F2Z19yZXY6LC4wZn0iKQptMy5tZXRyaWMoIlBhcnRuZXJzIiwgc3RyKG5fcGFydG5lcnMpKQptNC5tZXRyaWMoIkJyYW5jaGVzIiwgc3RyKG5fYnJhbmNoZXMpKQoKc3QuZGl2aWRlcigpCgojIC0tLS0gQ2hhcnRzIC0tLS0KbGVmdCwgcmlnaHQgPSBzdC5jb2x1bW5zKDIpCgpvbmVfcGFydG5lciA9IFRydWUKaWYgbGVuKHZpZXdbJ1BhcnRuZXInXS51bmlxdWUoKSkgPiAxOgogICAgb25lX3BhcnRuZXIgPSBGYWxzZQoKCnN0LnN1YmhlYWRlcigiUmV2ZW51ZSBieSBicmFuY2giKQpieV9icmFuY2ggPSAoCiAgICB2aWV3Lmdyb3VwYnkoIkJyYW5jaCIsIGFzX2luZGV4PUZhbHNlKVsiUmV2Il0KICAgIC5zdW0oKQogICAgLnNvcnRfdmFsdWVzKCJSZXYiLCBhc2NlbmRpbmc9RmFsc2UpCikKZmlnMSwgYXgxID0gcGx0LnN1YnBsb3RzKGZpZ3NpemU9KDcsIDQpLCBkcGk9MTIwKQpzbnMuYmFycGxvdChkYXRhPWJ5X2JyYW5jaCwgeD0iQnJhbmNoIiwgeT0iUmV2IiwgYXg9YXgxLCBjb2xvcj0iIzRhN2ZiNSIsIGVycm9yYmFyPU5vbmUpCmF4MS5zZXRfeGxhYmVsKCIiKQpheDEuc2V0X3lsYWJlbCgiUmV2ZW51ZSIpCmF4MS5zcGluZXNbWyJ0b3AiLCAicmlnaHQiXV0uc2V0X3Zpc2libGUoRmFsc2UpCmZpZzEudGlnaHRfbGF5b3V0KCkKc3QucHlwbG90KGZpZzEpCgppZiBub3Qgb25lX3BhcnRuZXI6CiAgICBzdC5zdWJoZWFkZXIoIlJldmVudWUgYnkgcGFydG5lciIpCiAgICBieV9wYXJ0bmVyID0gKAogICAgICAgIHZpZXcuZ3JvdXBieSgiUGFydG5lciIsIGFzX2luZGV4PUZhbHNlKVsiUmV2Il0KICAgICAgICAuc3VtKCkKICAgICAgICAuc29ydF92YWx1ZXMoIlJldiIsIGFzY2VuZGluZz1GYWxzZSkKICAgICAgICAuaGVhZCgxMCkKCiAgICApCgoKICAgIGZpZzIsIGF4MiA9IHBsdC5zdWJwbG90cyhmaWdzaXplPSg3LCA0KSwgZHBpPTEyMCkKICAgIHNucy5iYXJwbG90KGRhdGE9YnlfcGFydG5lciwgeD0iUmV2IiwgeT0iUGFydG5lciIsIGF4PWF4MiwgY29sb3I9IiM1YjhmNmEiLCBlcnJvcmJhcj1Ob25lKQogICAgYXgyLnNldF94bGFiZWwoIlJldmVudWUiKQogICAgYXgyLnNldF95bGFiZWwoIiIpCiAgICBheDIuc3BpbmVzW1sidG9wIiwgInJpZ2h0Il1dLnNldF92aXNpYmxlKEZhbHNlKQogICAgZmlnMi50aWdodF9sYXlvdXQoKQogICAgc3QucHlwbG90KGZpZzIpCgoKd2l0aCBzdC5leHBhbmRlcigiU2hvdyBmaWx0ZXJlZCByb3dzIik6CiAgICBzdC5kYXRhZnJhbWUoCiAgICAgICAgdmlldy5zb3J0X3ZhbHVlcygiUmV2IiwgYXNjZW5kaW5nPUZhbHNlKS5yZXNldF9pbmRleChkcm9wPVRydWUpCiAgICApCgpzdC5kb3dubG9hZF9idXR0b24oCiAgICAiRG93bmxvYWQgZmlsdGVyZWQgQ1NWIiwKICAgIHZpZXcuc29ydF92YWx1ZXMoIlJldiIsIGFzY2VuZGluZz1GYWxzZSksCiAgICBmaWxlX25hbWU9ImZpbHRlcmVkX3NhbGVzLmNzdiIsCiAgICBtaW1lPSJ0ZXh0L2NzdiIsCik=</script>
+<script id="app-mode" type="application/json">{"mode": "app"}</script>
+<!-- Packaged data (only present when export chose "packaged"). Same shape as Data Canvas.
+     Shape: { "filename.ext": { "b64": "...", "ext": "csv", "size": 123 } } -->
+<script id="embedded-data" type="application/json">{"data.csv":{"b64":"SWQsUGFydG5lcixCcmFuY2gsUmV2CjEsQm9iJ3MgVGFjb3MsRG93bnRvd24sODEzNwoyLEJvYidzIFRhY29zLFdlc3RzaWRlLDgyNzQKMyxCb2IncyBUYWNvcyxBaXJwb3J0LDg0MTEKNCxCb2IncyBUYWNvcyxNYWxsLDg1NDgKNSxCb2IncyBUYWNvcyxTdWJ1cmJhbiw4Njg1Cg==","ext":"csv","size":157}}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+
+<script defer="" src="https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/ayu-dark.min.css">
+<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+
+<!-- #region file: styles.css -->
+<style>
+:root {
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --bg: #f8fafc; --surface: #ffffff; --border: #e2e8f0;
+    --text: #0f172a; --text-muted: #64748b; --text-faint: #94a3b8;
+    --accent: #4f46e5; --accent-hover: #4338ca;
+    --slate-btn-bg: #f1f5f9; --slate-btn-text: #334155; --slate-btn-border: #cbd5e1; --slate-btn-hover: #e2e8f0;
+    --danger-bg: #fee2e2; --danger-text: #ef4444; --danger-hover-text: #b91c1c;
+    --run-bg: #10b981; --run-hover: #059669;
+    --ok-bg: #ecfdf5; --ok-border: #6ee7b7; --ok-text: #047857;
+    --warn-bg: #fffbeb; --warn-border: #fcd34d; --warn-text: #b45309;
+    --info-bg: #eff6ff; --info-border: #bfdbfe; --info-text: #1d4ed8;
+    --code-bg: #f1f5f9;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+    --shadow-md: 0 1px 3px rgba(0,0,0,.06);
+}
+html[data-theme="dark"] {
+    --bg: #0b1120; --surface: #111827; --border: #1f2937;
+    --text: #e5e7eb; --text-muted: #9ca3af; --text-faint: #6b7280;
+    --accent: #818cf8; --accent-hover: #6366f1;
+    --slate-btn-bg: #1f2937; --slate-btn-text: #d1d5db; --slate-btn-border: #374151; --slate-btn-hover: #374151;
+    --danger-bg: #7f1d1d; --danger-text: #fca5a5; --danger-hover-text: #fecaca;
+    --ok-bg: #052e2b; --ok-border: #065f46; --ok-text: #6ee7b7;
+    --warn-bg: #3b2f0b; --warn-border: #92400e; --warn-text: #fcd34d;
+    --info-bg: #0c1e3e; --info-border: #1e3a8a; --info-text: #93c5fd;
+    --code-bg: #0f172a;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0; font-family: var(--font-sans); background: var(--bg); color: var(--text);
+    height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+}
+[x-cloak], .hidden { display: none !important; }
+
+/* ---------------------------------------------------------------- chrome */
+.navbar {
+    display: flex; align-items: center; gap: 8px; flex: none;
+    padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.brand { font-weight: 650; font-size: 14.5px; letter-spacing: -.02em; margin-right: 6px; }
+.brand span { color: var(--accent); }
+.spacer { flex: 1; }
+.btn {
+    font-family: inherit; font-size: 12.5px; font-weight: 550; cursor: pointer;
+    padding: 7px 13px; border-radius: 8px; border: 1px solid var(--slate-btn-border);
+    background: var(--slate-btn-bg); color: var(--slate-btn-text);
+    transition: background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    line-height: 1.25;
+}
+.btn:hover {
+    background: var(--slate-btn-hover);
+    border-color: color-mix(in srgb, var(--slate-btn-border) 70%, var(--text-muted));
+}
+.btn:active { transform: translateY(1px); box-shadow: none; }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.btn-run {
+    background: var(--run-bg); border-color: transparent; color: #fff;
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--run-bg) 40%, transparent);
+}
+.btn-run:hover {
+    background: var(--run-hover); border-color: transparent;
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--run-bg) 35%, transparent);
+}
+.btn-accent {
+    background: var(--accent); border-color: transparent; color: #fff;
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.btn-accent:hover {
+    background: var(--accent-hover); border-color: transparent;
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.btn-sm { padding: 4px 9px; font-size: 11.5px; border-radius: 6px; box-shadow: none; }
+
+.cc-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; }
+.cc-modal[hidden] { display: none !important; }
+.cc-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.45); }
+.cc-modal-card {
+  position: relative; z-index: 1; width: min(420px, 92vw);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.2); padding: 18px 18px 14px;
+}
+.cc-modal-title { margin: 0 0 6px; font-size: 16px; font-weight: 650; }
+.cc-modal-hint { margin: 0 0 14px; font-size: 12.5px; color: var(--text-muted); line-height: 1.4; }
+.cc-modal-label { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); margin-bottom: 6px; }
+.cc-modal-input {
+  width: 100%; box-sizing: border-box; font-family: var(--font-mono); font-size: 12.5px;
+  padding: 9px 11px; border-radius: 8px; border: 1px solid var(--slate-btn-border);
+  background: var(--bg); color: var(--text); margin-bottom: 14px;
+}
+.cc-modal-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.cc-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+.menu { position: relative; }
+.menu-panel {
+    position: absolute; right: 0; top: calc(100% + 6px); min-width: 280px; z-index: 40;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.1), 0 2px 6px rgba(0,0,0,.06); padding: 10px; display: none;
+}
+.menu.open .menu-panel { display: block; }
+.menu-item {
+    display: block; width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
+    font-family: inherit; font-size: 12.5px; color: var(--text); padding: 8px 10px; border-radius: 7px;
+    transition: background .12s ease;
+}
+.menu-item:hover { background: var(--slate-btn-bg); }
+.menu-item small { display: block; color: var(--text-muted); font-size: 11px; margin-top: 2px; }
+
+.panel-section { margin-bottom: 10px; }
+.panel-section:last-child { margin-bottom: 0; }
+.panel-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); margin-bottom: 6px; }
+.panel-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.panel-row input[type="text"] { flex: 1; font-size: 12.5px; padding: 5px 8px; border: 1px solid var(--slate-btn-border); border-radius: 6px; background: var(--surface); color: var(--text); font-family: inherit; }
+.panel-list { max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: 7px; }
+.panel-list-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 9px; border-bottom: 1px solid var(--border); font-size: 12px; }
+.panel-list-item:last-child { border-bottom: 0; }
+.panel-list-item .name { font-family: var(--font-mono); color: var(--text); word-break: break-all; }
+.panel-list-item .meta { color: var(--text-faint); font-size: 11px; white-space: nowrap; }
+.panel-list-item .status-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.panel-list-item .status-dot.on { background: var(--run-bg); }
+.panel-list-item .status-dot.off { background: var(--text-faint); }
+.panel-empty { color: var(--text-faint); font-size: 12px; padding: 10px; text-align: center; }
+.export-choice { display: flex; gap: 6px; margin-bottom: 8px; }
+.export-choice label {
+    flex: 1; text-align: center; font-size: 12px; padding: 8px 4px;
+    border: 1px solid var(--slate-btn-border); border-radius: 8px; cursor: pointer;
+    background: var(--surface); color: var(--text-muted);
+    transition: background .12s ease, border-color .12s ease, color .12s ease;
+}
+.export-choice label:hover { background: var(--slate-btn-bg); }
+.export-choice label.on {
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    border-color: var(--accent); color: var(--text); font-weight: 550;
+}
+.export-choice input { display: none; }
+
+.status {
+    flex: none; display: none; align-items: center; gap: 9px;
+    padding: 8px 14px; font-size: 12.5px;
+    background: var(--info-bg); border-bottom: 1px solid var(--info-border); color: var(--info-text);
+}
+.status.show { display: flex; }
+.status.error { background: var(--danger-bg); border-color: var(--danger-text); color: var(--danger-hover-text); }
+.spinner {
+    width: 13px; height: 13px; border: 2px solid currentColor; border-right-color: transparent;
+    border-radius: 50%; animation: spin .7s linear infinite; flex: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ----------------------------------------------------------------- panes */
+.workspace { flex: 1; display: flex; min-height: 0; }
+.pane-editor { width: 46%; min-width: 260px; display: flex; flex-direction: column; background: var(--surface); border-right: 1px solid var(--border); }
+.pane-head {
+    flex: none; display: flex; align-items: center; gap: 8px; padding: 7px 12px;
+    border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .06em; color: var(--text-faint);
+}
+.editor-wrap { flex: 1; min-height: 0; overflow: auto; }
+.CodeMirror { height: 100%; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; }
+.resizer { flex: none; width: 5px; cursor: col-resize; background: transparent; }
+.resizer:hover { background: var(--accent); opacity: .35; }
+.pane-app { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
+.app-scroll { flex: 1; overflow: auto; padding: 26px 30px 60px; }
+.app-inner { max-width: 780px; margin: 0 auto; }
+body.layout-wide .app-inner { max-width: min(1400px, 96vw); }
+body.mode-app .pane-editor, body.mode-app .resizer { display: none; }
+/* Client mode: only Run + Theme remain visible */
+body.mode-app #editToggle,
+body.mode-app #depsMenu,
+body.mode-app #dataMenu,
+body.mode-app #shareMenu,
+body.mode-app #pkgCacheToggle,
+body.mode-app .cache-toggle { display: none !important; }
+
+/* -------------------------------------------------------------- elements */
+.st-md { font-size: 14.5px; line-height: 1.65; }
+.st-md h1 { font-size: 27px; margin: 4px 0 12px; letter-spacing: -.02em; }
+.st-md h2 { font-size: 21px; margin: 22px 0 10px; letter-spacing: -.01em; }
+.st-md h3 { font-size: 16.5px; margin: 18px 0 8px; }
+.st-md p { margin: 0 0 11px; }
+.st-md ul, .st-md ol { margin: 0 0 11px; padding-left: 22px; }
+.st-md code { font-family: var(--font-mono); font-size: .88em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+.st-md a { color: var(--accent); }
+.st-text { font-family: var(--font-mono); font-size: 12.5px; white-space: pre-wrap; margin: 0 0 11px; }
+.st-caption { font-size: 12px; color: var(--text-muted); margin: 0 0 11px; }
+.st-code { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; overflow-x: auto; font-family: var(--font-mono); font-size: 12.5px; margin: 0 0 13px; }
+.st-divider { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
+.st-img { max-width: 100%; border-radius: 8px; display: block; margin: 0 0 13px; }
+.st-json { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; font-family: var(--font-mono); font-size: 12px; overflow-x: auto; margin: 0 0 13px; }
+
+.st-alert { border-radius: 8px; padding: 10px 13px; font-size: 13.5px; margin: 0 0 13px; border: 1px solid; }
+.st-alert.info { background: var(--info-bg); border-color: var(--info-border); color: var(--info-text); }
+.st-alert.success { background: var(--ok-bg); border-color: var(--ok-border); color: var(--ok-text); }
+.st-alert.warning { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
+.st-alert.error { background: var(--danger-bg); border-color: var(--danger-text); color: var(--danger-hover-text); }
+
+.st-df-wrap { overflow-x: auto; margin: 0 0 14px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); }
+.st-df { border-collapse: collapse; width: 100%; font-size: 12.5px; font-family: var(--font-mono); }
+.st-df th, .st-df td { padding: 6px 11px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.st-df thead th { background: var(--code-bg); font-weight: 600; position: sticky; top: 0; }
+.st-df tbody tr:last-child td { border-bottom: 0; }
+
+.st-metric { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin: 0 0 13px; min-width: 0; }
+.st-metric .m-label { font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
+.st-metric .m-value { font-size: 22px; font-weight: 600; letter-spacing: -.02em; margin-top: 3px; line-height: 1.2; overflow-wrap: anywhere; }
+.st-metric .m-delta { font-size: 12px; margin-top: 2px; color: var(--text-muted); }
+/* Full-width hero KPI (use alone, not inside tight columns) */
+.st-metric.hero { text-align: center; padding: 22px 28px; border-radius: 14px; margin-bottom: 18px; }
+.st-metric.hero .m-label { font-size: 13px; letter-spacing: .08em; font-weight: 500; }
+.st-metric.hero .m-value { font-size: clamp(2.2rem, 5.5vw, 3.5rem); font-weight: 650; letter-spacing: -.03em; margin-top: 8px; line-height: 1.1; }
+
+
+.st-cols { display: flex; gap: 16px; margin: 0 0 4px; align-items: flex-start; }
+.st-col { min-width: 0; }
+@media (max-width: 720px) { .st-cols { flex-direction: column; } .st-col { width: 100% !important; } }
+.st-expander { border: 1px solid var(--border); border-radius: 9px; margin: 0 0 13px; background: var(--surface); }
+.st-expander > summary { cursor: pointer; padding: 9px 13px; font-size: 13.5px; font-weight: 500; list-style: none; }
+.st-expander > summary::-webkit-details-marker { display: none; }
+.st-expander > summary::before { content: "\25B8"; display: inline-block; margin-right: 8px; color: var(--text-faint); transition: transform .15s; }
+.st-expander[open] > summary::before { transform: rotate(90deg); }
+.st-expander .st-exp-body { padding: 2px 13px 12px; }
+
+/* --------------------------------------------------------------- widgets */
+.st-w { margin: 0 0 13px; }
+.st-label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 5px; color: var(--text); }
+.st-help { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; }
+.st-input, .st-select, .st-textarea {
+    width: 100%; font-family: inherit; font-size: 13.5px; color: var(--text);
+    background: var(--surface); border: 1px solid var(--slate-btn-border);
+    border-radius: 7px; padding: 7px 10px; transition: border-color .12s, box-shadow .12s;
+}
+.st-textarea { font-family: var(--font-mono); font-size: 12.5px; resize: vertical; }
+.st-input:focus, .st-select:focus, .st-textarea:focus {
+    outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.st-range { width: 100%; accent-color: var(--accent); }
+.st-range-row { display: flex; align-items: center; gap: 11px; }
+.st-range-val { font-family: var(--font-mono); font-size: 12.5px; min-width: 52px; text-align: right; color: var(--text-muted); }
+.st-check { display: flex; align-items: center; gap: 8px; font-size: 13.5px; cursor: pointer; }
+.st-check input { accent-color: var(--accent); width: 15px; height: 15px; }
+.st-radio-group { display: flex; flex-direction: column; gap: 6px; }
+.st-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.st-chip {
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+    font-size: 12.5px; padding: 5px 11px; border-radius: 999px;
+    border: 1px solid var(--slate-btn-border); background: var(--surface); color: var(--text-muted);
+}
+.st-chip input { display: none; }
+.st-chip.on { background: color-mix(in srgb, var(--accent) 14%, transparent); border-color: var(--accent); color: var(--text); font-weight: 500; }
+.st-file { position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none; }
+.st-file-drop {
+    border: 1.5px dashed var(--slate-btn-border); border-radius: 10px;
+    padding: 18px 16px; text-align: center; color: var(--text-muted); font-size: 13px;
+    background: color-mix(in srgb, var(--slate-btn-bg) 50%, transparent);
+    transition: border-color .15s ease, background .15s ease;
+    cursor: pointer;
+}
+.st-file-drop:hover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+.st-file-drop.dragover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.st-file-drop .st-file-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: inherit; font-size: 12.5px; font-weight: 550;
+    padding: 7px 14px; border-radius: 8px; border: 1px solid var(--slate-btn-border);
+    background: var(--surface); color: var(--text);
+    box-shadow: 0 1px 2px rgba(0,0,0,.04); cursor: pointer;
+    transition: background .12s ease, border-color .12s ease;
+}
+.st-file-drop .st-file-btn:hover {
+    background: var(--slate-btn-bg);
+    border-color: color-mix(in srgb, var(--slate-btn-border) 60%, var(--text-muted));
+}
+.st-file-hint { margin-top: 8px; font-size: 12px; color: var(--text-faint); }
+.st-file-name {
+    margin-top: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--text);
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 6px; background: var(--ok-bg); color: var(--ok-text);
+    border: 1px solid var(--ok-border);
+}
+.st-color { width: 54px; height: 32px; padding: 2px; border-radius: 7px; border: 1px solid var(--slate-btn-border); background: var(--surface); }
+
+.st-fatal {
+    background: var(--danger-bg); border: 1px solid var(--danger-text); color: var(--danger-hover-text);
+    border-radius: 9px; padding: 13px 15px; font-family: var(--font-mono); font-size: 12px;
+    white-space: pre-wrap; overflow-x: auto; margin: 0 0 14px;
+}
+.st-empty { color: var(--text-faint); font-size: 13.5px; text-align: center; padding: 60px 20px; }
+</style>
+<!-- #endregion -->
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="brand">Capy<span>Canvas</span></div>
+    <button class="btn btn-run" id="runBtn" disabled="">Run</button>
+    <button class="btn" id="editToggle">Hide editor</button>
+    <div class="spacer"></div>
+
+    <!-- Dependencies dropdown -->
+    <div class="menu" id="depsMenu">
+        <button class="btn" id="depsBtn">Dependencies</button>
+        <div class="menu-panel" id="depsPanel">
+            <div class="panel-section">
+                <div class="panel-label">Installed packages</div>
+                <div class="panel-list" id="depsList"><div class="panel-empty">None yet</div></div>
+            </div>
+            <div class="panel-section">
+                <div class="panel-label">Install package</div>
+                <div class="panel-row">
+                    <input type="text" id="depsInput" placeholder="e.g. seaborn or pandas==2.2.0">
+                    <button class="btn btn-accent" id="depsInstallBtn" style="padding:5px 10px;">Install</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data dropdown — developer data dependencies (not the same as st.file_uploader) -->
+    <div class="menu" id="dataMenu">
+        <button class="btn" id="dataBtn">Data</button>
+        <div class="menu-panel" id="dataPanel">
+            <div class="panel-section">
+                <div class="panel-label">Staged files (embed on Packaged export)</div>
+                <div class="panel-list" id="dataList"><div class="panel-empty">No files staged</div></div>
+            </div>
+            <div class="panel-section">
+                <div class="panel-label">Add data dependencies</div>
+                <input type="file" id="dataFileInput" multiple="" accept=".csv,.tsv,.txt,.json,.xlsx,.xls,.parquet" hidden="">
+                <button class="btn" id="dataAddBtn" style="width:100%;margin-bottom:8px;">+ Add files</button>
+                <small style="color:var(--text-muted);font-size:11px;display:block;margin-bottom:8px;line-height:1.4;">
+                    For developers: stage files the app can load with <code style="font-size:10px;">st.embedded("name")</code>.
+                    They are embedded only on Packaged export. End users never see this panel.
+                </small>
+                <button class="btn" id="dataClearBtn" style="width:100%;">Clear all</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share / Export with two-axis choices -->
+    <div class="menu" id="shareMenu">
+        <button class="btn btn-accent" id="shareBtn">Share / Export</button>
+        <div class="menu-panel" style="min-width:300px;">
+            <div class="panel-section">
+                <div class="panel-label">Audience</div>
+                <div class="export-choice" id="audienceChoice">
+                    <label class="on"><input type="radio" name="audience" value="client" checked=""> Client</label>
+                    <label><input type="radio" name="audience" value="dev"> Developer</label>
+                </div>
+                <small style="color:var(--text-muted);font-size:11px;display:block;margin-top:-4px;margin-bottom:8px;">
+                    Client = editor hidden, minimal chrome. Developer = full tools.
+                </small>
+            </div>
+            <div class="panel-section">
+                <div class="panel-label">Packaging</div>
+                <div class="export-choice" id="packageChoice">
+                    <label class="on"><input type="radio" name="packaging" value="packaged" checked=""> Packaged</label>
+                    <label><input type="radio" name="packaging" value="logic"> Logic only</label>
+                </div>
+                <small style="color:var(--text-muted);font-size:11px;display:block;margin-top:-4px;margin-bottom:10px;">
+                    Packaged embeds uploaded files as JSON (name → bytes). Logic only ships the app code.
+                </small>
+            </div>
+            <button class="btn btn-accent" id="exportGoBtn" style="width:100%;margin-bottom:6px;">Export .canvas.html</button>
+            <button class="menu-item" id="exportPyBtn" style="text-align:center;">Download app.py only</button>
+        </div>
+    </div>
+
+    <button class="btn" id="themeBtn" title="Toggle theme">Theme</button>
+</nav>
+
+<div class="status show" id="status">
+    <div class="spinner" id="spinner"></div>
+    <span id="statusText">Starting the Python runtime…</span>
+</div>
+
+
+<!-- Export rename modal -->
+<div id="exportModal" class="cc-modal" hidden="">
+  <div class="cc-modal-backdrop" data-close-export=""></div>
+  <div class="cc-modal-card" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+    <h3 id="exportModalTitle" class="cc-modal-title">Export canvas</h3>
+    <p class="cc-modal-hint">Choose a file name. Default follows Audience + Packaging.</p>
+    <label class="cc-modal-label" for="exportFileName">File name</label>
+    <input type="text" id="exportFileName" class="cc-modal-input" spellcheck="false">
+    <div class="cc-modal-actions">
+      <button type="button" class="btn" data-close-export="">Cancel</button>
+      <button type="button" class="btn btn-accent" id="exportConfirmBtn">Download</button>
+    </div>
+  </div>
+</div>
+
+<div class="workspace">
+    <div class="pane-editor" id="paneEditor">
+        <div class="pane-head">app.py</div>
+        <div class="editor-wrap"><textarea id="editor"></textarea></div>
+    </div>
+    <div class="resizer" id="resizer"></div>
+    <div class="pane-app">
+        <div class="app-scroll">
+            <div class="app-inner" id="appRoot">
+                <div class="st-empty">Waiting for the runtime…</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================================================================== -->
+<script id="capycanvas-py" type="text/x-python">
+# pyregion file: capycanvas.py
+"""capycanvas - a small, Streamlit-shaped API for single-file data apps.
+
+The execution model is Streamlit's: the whole script runs top to bottom again
+on every interaction. A widget call returns whatever the user currently has
+selected, so ordinary control flow *is* the render pass - no reactive graph,
+no callbacks.
+
+The cost of that model is that everything runs again on every click, so wrap
+anything slow in @st.cache_data.
+
+Widget identity: a widget with no key= gets one from its call order. Create
+widgets inside an if/else and the ordering shifts, which silently resets the
+ones after it. Pass key= for anything conditional.
+"""
+
+import base64
+import io
+import json as _json
+import traceback
+
+# ------------------------------------------------------------ runtime state
+_elements = []
+_stack = []
+_state = {}
+_clicked = None
+_counter = 0
+_uploads = {}
+_embedded = {}   # name -> bytes  (restored from packaged export)
+_cache = {}
+_config = {}
+
+
+class _SessionState(dict):
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
+    def __setattr__(self, name, value):
+        self[name] = value
+    def __delattr__(self, name):
+        del self[name]
+
+
+session_state = _SessionState()
+
+
+class StopApp(Exception):
+    pass
+
+
+def stop():
+    raise StopApp()
+
+
+def _emit(element):
+    (_stack[-1] if _stack else _elements).append(element)
+    return element
+
+
+def _next_key(kind, label):
+    global _counter
+    _counter += 1
+    return "auto:" + kind + ":" + str(_counter)
+
+
+def _widget(wtype, label, key, default, **props):
+    k = key or _next_key(wtype, label)
+    value = _state.get(k, default)
+    element = {"kind": "widget", "type": wtype, "key": k, "label": label, "value": value}
+    element.update(props)
+    _emit(element)
+    return value
+
+
+def _as_number(raw, fallback, step):
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        return fallback
+    if isinstance(step, int) and isinstance(fallback, int):
+        return int(round(value))
+    return value
+
+
+class Container:
+    def __init__(self, element):
+        object.__setattr__(self, "_element", element)
+    def __enter__(self):
+        _stack.append(self._element["children"])
+        return self
+    def __exit__(self, *exc_info):
+        _stack.pop()
+        return False
+    def __getattr__(self, name):
+        fn = globals().get(name)
+        if not callable(fn):
+            raise AttributeError(name)
+        def scoped(*args, **kwargs):
+            with self:
+                return fn(*args, **kwargs)
+        return scoped
+
+
+def container():
+    return Container(_emit({"kind": "container", "children": []}))
+
+
+def columns(spec, gap="medium"):
+    widths = [1.0] * spec if isinstance(spec, int) else [float(w) for w in spec]
+    cols = [{"children": []} for _ in widths]
+    _emit({"kind": "columns", "widths": widths, "gap": gap, "cols": cols})
+    return [Container(c) for c in cols]
+
+
+def expander(label, expanded=False):
+    return Container(_emit({
+        "kind": "expander", "label": str(label),
+        "expanded": bool(expanded), "children": []
+    }))
+
+
+def markdown(body):
+    _emit({"kind": "markdown", "body": str(body)})
+
+
+def title(body):
+    markdown("# " + str(body))
+
+
+def header(body):
+    markdown("## " + str(body))
+
+
+def subheader(body):
+    markdown("### " + str(body))
+
+
+def caption(body):
+    _emit({"kind": "caption", "body": str(body)})
+
+
+def text(body):
+    _emit({"kind": "text", "body": str(body)})
+
+
+def code(body, language="python"):
+    _emit({"kind": "code", "body": str(body), "language": language})
+
+
+def divider():
+    _emit({"kind": "divider"})
+
+
+def json(obj):
+    try:
+        body = _json.dumps(obj, indent=2, default=str)
+    except Exception:
+        body = str(obj)
+    _emit({"kind": "json", "body": body})
+
+
+def _alert(level, body):
+    _emit({"kind": "alert", "level": level, "body": str(body)})
+
+
+def info(body):
+    _alert("info", body)
+
+
+def success(body):
+    _alert("success", body)
+
+
+def warning(body):
+    _alert("warning", body)
+
+
+def error(body):
+    _alert("error", body)
+
+
+def metric(label, value, delta=None, hero=False):
+    _emit({"kind": "metric", "label": str(label), "value": str(value),
+           "delta": None if delta is None else str(delta), "hero": bool(hero)})
+
+
+def dataframe(data, use_container_width=True, max_rows=200):
+    try:
+        frame = data.head(max_rows)
+        html = frame.to_html(classes="st-df", border=0, index=True)
+        truncated = len(data) > max_rows
+    except AttributeError:
+        _emit({"kind": "text", "body": str(data)})
+        return
+    _emit({"kind": "dataframe", "html": html, "full_width": bool(use_container_width),
+           "note": ("showing first " + str(max_rows) + " of " + str(len(data)) + " rows")
+                   if truncated else None})
+
+
+table = dataframe
+
+
+def pyplot(fig=None, clear=True):
+    import matplotlib.pyplot as plt
+    if fig is None:
+        fig = plt.gcf()
+    if hasattr(fig, "get_figure") and not hasattr(fig, "savefig"):
+        fig = fig.get_figure()
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", bbox_inches="tight", dpi=96)
+    src = "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
+    buf.close()
+    if clear:
+        plt.close(fig)
+    _emit({"kind": "image", "src": src, "caption": None})
+
+
+def _chart(data, kind):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import pandas as pd
+
+    if isinstance(data, pd.Series):
+        frame = data.to_frame()
+    elif isinstance(data, pd.DataFrame):
+        frame = data
+    else:
+        frame = pd.DataFrame(data)
+
+    plt.style.use("default")
+    fig, ax = plt.subplots(figsize=(7.2, 3.4))
+    numeric = frame.select_dtypes("number")
+    if numeric.empty:
+        plt.close(fig)
+        warning("Nothing numeric to chart.")
+        return
+
+    if kind == "bar":
+        numeric.plot(kind="bar", ax=ax, width=.78)
+    elif kind == "area":
+        numeric.plot(kind="area", ax=ax, alpha=.45)
+    elif kind == "scatter" and numeric.shape[1] >= 2:
+        ax.scatter(numeric.iloc[:, 0], numeric.iloc[:, 1], s=18, alpha=.75)
+        ax.set_xlabel(numeric.columns[0])
+        ax.set_ylabel(numeric.columns[1])
+    else:
+        numeric.plot(ax=ax)
+
+    ax.grid(True, alpha=.25, linewidth=.7)
+    ax.set_facecolor("#ffffff")
+    fig.patch.set_facecolor("#ffffff")
+    for spine in ("top", "right"):
+        ax.spines[spine].set_visible(False)
+    if kind != "scatter" and (numeric.shape[1] > 1 or kind in ("bar", "area")):
+        ax.legend(frameon=False, fontsize=8)
+    fig.tight_layout()
+    pyplot(fig)
+
+
+def line_chart(data):
+    _chart(data, "line")
+
+
+def bar_chart(data):
+    _chart(data, "bar")
+
+
+def area_chart(data):
+    _chart(data, "area")
+
+
+def scatter_chart(data):
+    _chart(data, "scatter")
+
+
+def button(label, key=None, type="secondary"):
+    k = key or _next_key("button", label)
+    _emit({"kind": "widget", "type": "button", "key": k, "label": str(label),
+           "value": False, "variant": type})
+    return _clicked == k
+
+
+def text_input(label, value="", key=None, placeholder="", help=None):
+    return str(_widget("text_input", label, key, str(value),
+                       placeholder=placeholder, help=help))
+
+
+def text_area(label, value="", key=None, height=130, placeholder="", help=None):
+    return str(_widget("text_area", label, key, str(value),
+                       height=height, placeholder=placeholder, help=help))
+
+
+def number_input(label, min_value=None, max_value=None, value=0, step=1, key=None, help=None):
+    raw = _widget("number_input", label, key, value,
+                  min=min_value, max=max_value, step=step, help=help)
+    return _as_number(raw, value, step)
+
+
+def slider(label, min_value=0, max_value=100, value=None, step=1, key=None, help=None):
+    default = min_value if value is None else value
+    raw = _widget("slider", label, key, default,
+                  min=min_value, max=max_value, step=step, help=help)
+    return _as_number(raw, default, step)
+
+
+def checkbox(label, value=False, key=None, help=None):
+    return bool(_widget("checkbox", label, key, bool(value), help=help))
+
+
+def toggle(label, value=False, key=None, help=None):
+    return bool(_widget("toggle", label, key, bool(value), help=help))
+
+
+def _pick_one(wtype, label, options, index, key, help):
+    opts = list(options)
+    labels = [str(o) for o in opts]
+    if not labels:
+        _widget(wtype, label, key, "", options=[], help=help)
+        return None
+    index = max(0, min(int(index), len(labels) - 1))
+    raw = _widget(wtype, label, key, labels[index], options=labels, help=help)
+    return opts[labels.index(raw)] if raw in labels else opts[index]
+
+
+def selectbox(label, options, index=0, key=None, help=None):
+    return _pick_one("selectbox", label, options, index, key, help)
+
+
+def radio(label, options, index=0, key=None, help=None):
+    return _pick_one("radio", label, options, index, key, help)
+
+
+def multiselect(label, options, default=None, key=None, help=None):
+    opts = list(options)
+    labels = [str(o) for o in opts]
+    chosen = [str(d) for d in (default or [])]
+    raw = _widget("multiselect", label, key, chosen, options=labels, help=help)
+    if not isinstance(raw, list):
+        raw = []
+    return [opts[labels.index(r)] for r in raw if r in labels]
+
+
+def color_picker(label, value="#4f46e5", key=None, help=None):
+    return str(_widget("color_picker", label, key, str(value), help=help))
+
+
+def date_input(label, value="", key=None, help=None):
+    return str(_widget("date_input", label, key, str(value), help=help))
+
+
+class UploadedFile:
+    def __init__(self, name, data):
+        self.name = name
+        self.size = len(data)
+        self._data = data
+    def getvalue(self):
+        return self._data
+    def read(self):
+        return self._data
+    def dataframe(self, **kwargs):
+        import pandas as pd
+        lower = self.name.lower()
+        buf = io.BytesIO(self._data)
+        if lower.endswith(".csv") or lower.endswith(".txt"):
+            return pd.read_csv(buf, **kwargs)
+        if lower.endswith(".tsv"):
+            return pd.read_csv(buf, sep="\t", **kwargs)
+        if lower.endswith(".json"):
+            return pd.read_json(buf, **kwargs)
+        if lower.endswith(".xlsx") or lower.endswith(".xls"):
+            return pd.read_excel(buf, **kwargs)
+        if lower.endswith(".parquet"):
+            return pd.read_parquet(buf, **kwargs)
+        raise ValueError("Don't know how to read " + self.name + " as a table.")
+    def __repr__(self):
+        return "<UploadedFile " + self.name + " (" + str(self.size) + " bytes)>"
+
+
+def file_uploader(label, type=None, key=None, help=None):
+    k = key or _next_key("file_uploader", label)
+    accept = ",".join("." + str(t).lstrip(".") for t in type) if type else ""
+    current = _uploads.get(k)
+    _emit({"kind": "widget", "type": "file_uploader", "key": k, "label": str(label),
+           "value": current[0] if current else None, "accept": accept, "help": help})
+    if not current:
+        return None
+    return UploadedFile(current[0], current[1])
+
+
+def embedded(name):
+    """Return an UploadedFile for a file that was embedded via packaged export, or None."""
+    data = _embedded.get(name)
+    if data is None:
+        return None
+    return UploadedFile(name, data)
+
+
+def list_embedded():
+    """Return the list of filenames that were restored from a packaged export."""
+    return list(_embedded.keys())
+
+
+def download_button(label, data, file_name="download.txt", mime="text/plain", key=None):
+    if isinstance(data, bytes):
+        raw = data
+    elif isinstance(data, str):
+        raw = data.encode("utf-8")
+    elif hasattr(data, "to_csv"):
+        raw = data.to_csv(index=False).encode("utf-8")
+    else:
+        raw = str(data).encode("utf-8")
+    _emit({"kind": "download", "key": key or _next_key("download", label),
+           "label": str(label), "file_name": str(file_name), "mime": str(mime),
+           "b64": base64.b64encode(raw).decode("ascii")})
+
+
+def write(*args):
+    for arg in args:
+        _write_one(arg)
+
+
+def _write_one(obj):
+    if obj is None:
+        text("None")
+        return
+    if isinstance(obj, str):
+        markdown(obj)
+        return
+    if isinstance(obj, bool) or isinstance(obj, (int, float)):
+        text(str(obj))
+        return
+    if isinstance(obj, (dict, list, tuple, set)):
+        json(list(obj) if isinstance(obj, set) else obj)
+        return
+    type_name = str(type(obj))
+    if "matplotlib.figure.Figure" in type_name:
+        pyplot(obj)
+        return
+    if "matplotlib.axes" in type_name:
+        pyplot(obj.get_figure())
+        return
+    if hasattr(obj, "to_html"):
+        dataframe(obj)
+        return
+    if hasattr(obj, "_repr_html_"):
+        _emit({"kind": "html", "html": obj._repr_html_()})
+        return
+    text(str(obj))
+
+
+def cache_data(func=None, **_kwargs):
+    def wrap(fn):
+        def inner(*args, **kwargs):
+            try:
+                token = fn.__name__ + repr(args) + repr(sorted(kwargs.items()))
+            except Exception:
+                return fn(*args, **kwargs)
+            if token not in _cache:
+                _cache[token] = fn(*args, **kwargs)
+            return _cache[token]
+        inner.clear = _cache.clear
+        inner.__name__ = getattr(fn, "__name__", "cached")
+        return inner
+    return wrap if func is None else wrap(func)
+
+
+cache_resource = cache_data
+
+
+def set_page_config(page_title=None, layout="centered", **_kwargs):
+    if page_title:
+        _config["title"] = str(page_title)
+    _config["layout"] = layout
+
+
+def _put_upload(key, name, b64):
+    _uploads[key] = (name, base64.b64decode(b64))
+
+
+def _clear_upload(key):
+    _uploads.pop(key, None)
+
+
+def _restore_embedded(name, b64):
+    _embedded[name] = base64.b64decode(b64)
+
+
+def _run(payload_json, source):
+    global _elements, _stack, _state, _clicked, _counter
+    payload = _json.loads(payload_json)
+    _state = payload.get("state") or {}
+    _clicked = payload.get("clicked")
+    _elements = []
+    _stack = []
+    _counter = 0
+    _config.clear()
+    _config.update({"title": "CapyCanvas app", "layout": "centered"})
+
+    import sys
+    namespace = {"__name__": "__capycanvas_app__", "st": sys.modules[__name__]}
+    for alias, module_name in (("pd", "pandas"), ("np", "numpy")):
+        try:
+            namespace[alias] = __import__(module_name)
+        except Exception:
+            pass
+
+    error_text = None
+    try:
+        exec(compile(source, "app.py", "exec"), namespace)
+    except StopApp:
+        pass
+    except Exception:
+        error_text = traceback.format_exc()
+
+    return _json.dumps({"elements": _elements, "error": error_text, "config": _config},
+                       default=str)
+</script>
+
+<script id="default-app" type="text/x-python">
+# pyregion file: default_app.py
+import capycanvas as st
+import pandas as pd
+import numpy as np
+
+st.set_page_config(page_title="Sales explorer")
+
+st.title("Sales explorer")
+st.caption("CapyCanvas is an independent project, heavily inspired by Streamlit. Not affiliated with Streamlit or Snowflake.")
+st.markdown(
+    "Edit the code on the left and press **Run**. "
+    "Use `%pip install package` for extra packages. "
+    "Upload a CSV or leave empty for sample data.\n\n"
+    "Data staged in the **Data** panel (developer data dependencies) is available "
+    "via `st.embedded(\"filename\")` — it is **not** auto-loaded. Reference it "
+    "explicitly in your code when you want it."
+)
+
+# Example of using a staged data dependency (uncomment to try):
+# f = st.embedded("stonks_data.csv")
+# if f is not None:
+#     df = f.dataframe()
+#     st.success(f"Loaded {f.name} — {len(df)} rows")
+#     st.stop()   # or continue with your own filters
+
+# Example package install:
+# %pip install seaborn
+# import seaborn as sns
+
+@st.cache_data
+def load_sample(n_rows):
+    rng = np.random.default_rng(7)
+    return pd.DataFrame({
+        "region": rng.choice(["North", "South", "East", "West"], n_rows),
+        "month": rng.choice(["Jan", "Feb", "Mar", "Apr", "May", "Jun"], n_rows),
+        "units": rng.integers(20, 200, n_rows),
+        "revenue": rng.normal(5000, 1500, n_rows).round(2),
+    })
+
+uploaded = st.file_uploader("Upload a CSV, or leave empty for sample data", type=["csv"])
+if uploaded is not None:
+    df = uploaded.dataframe()
+    st.success("Loaded " + uploaded.name + " — " + str(len(df)) + " rows")
+else:
+    df = load_sample(st.slider("Sample rows", 50, 1000, 300, step=50))
+
+st.subheader("Filters")
+left, right = st.columns(2)
+with left:
+    regions = st.multiselect("Region", sorted(df["region"].unique()),
+                             default=sorted(df["region"].unique()))
+with right:
+    min_units = st.number_input("Minimum units", min_value=0, max_value=200, value=0, step=10)
+
+view = df[df["region"].isin(regions) & (df["units"] >= min_units)]
+
+a, b, c = st.columns(3)
+a.metric("Rows", len(view))
+b.metric("Revenue", "$" + format(view["revenue"].sum(), ",.0f"))
+c.metric("Avg units", round(view["units"].mean(), 1) if len(view) else 0)
+
+st.divider()
+
+if view.empty:
+    st.warning("No rows match those filters.")
+    st.stop()
+
+st.subheader("Revenue by month")
+st.bar_chart(view.groupby("month", sort=False)["revenue"].sum())
+
+with st.expander("Show the filtered table"):
+    st.dataframe(view.head(50))
+
+st.download_button("Download filtered CSV", view, file_name="filtered.csv", mime="text/csv")
+
+if st.button("Say hello"):
+    st.info("Buttons are True only on the run they trigger, then flip back.")
+</script>
+
+<script>
+//#region file: js/main.js
+window.addEventListener("DOMContentLoaded", function () {
+    "use strict";
+
+    const $ = (id) => document.getElementById(id);
+    const appRoot = $("appRoot");
+    const statusEl = $("status");
+    const statusText = $("statusText");
+
+    let pyodide = null;
+    let editor = null;
+    let running = false;
+    let queued = false;
+    let pendingClick = null;
+    let appState = {};
+
+    // filename -> { b64, ext, size }
+    let embeddedFiles = {};
+
+    const MODE = (() => {
+        try { return (JSON.parse($("app-mode").textContent || "{}").mode) || "edit"; }
+        catch (e) { return "edit"; }
+    })();
+
+    function b64Encode(str) {
+        const bytes = new TextEncoder().encode(str);
+        let bin = "";
+        for (let i = 0; i < bytes.length; i += 0x8000) {
+            bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+        }
+        return btoa(bin);
+    }
+    function b64Decode(b64) {
+        const bin = atob(b64);
+        return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0)));
+    }
+    function bytesToBase64(bytes) {
+        let binary = "";
+        const chunk = 0x8000;
+        for (let i = 0; i < bytes.length; i += chunk) {
+            binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+        }
+        return btoa(binary);
+    }
+    function formatBytes(n) {
+        if (n < 1024) return n + " B";
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1) + " KB";
+        return (n / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
+    function sanitize(html) {
+        if (typeof DOMPurify === "undefined") return "";
+        return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+    }
+    function mdToHtml(src) {
+        if (typeof marked === "undefined") return sanitize("<p>" + String(src) + "</p>");
+        return sanitize(marked.parse(String(src)));
+    }
+    function setStatus(message, kind) {
+        statusEl.className = "status show" + (kind === "error" ? " error" : "");
+        $("spinner").style.display = kind ? "none" : "block";
+        statusText.textContent = message;
+    }
+    function hideStatus() { statusEl.className = "status"; }
+
+    function download(text, filename, mime) {
+        const url = URL.createObjectURL(new Blob([text], { type: mime }));
+        const a = document.createElement("a");
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+    }
+
+    function initialSource() {
+        const el = $("app-source");
+        const raw = (el.textContent || "").trim();
+        if (!raw) return ($("default-app").textContent || "").replace(/^\n/, "");
+        return el.dataset.encoding === "base64" ? b64Decode(raw) : raw;
+    }
+    const currentSource = () => (editor ? editor.getValue() : initialSource());
+
+    // ---- Data panel helpers ----
+    function refreshDataList() {
+        const list = $("dataList");
+        const names = Object.keys(embeddedFiles);
+        if (!names.length) {
+            list.innerHTML = '<div class="panel-empty">No files staged</div>';
+            return;
+        }
+        list.innerHTML = names.map(name => {
+            const f = embeddedFiles[name];
+            return `<div class="panel-list-item">
+                <div>
+                    <div class="name">${name}</div>
+                    <div class="meta">${formatBytes(f.size)} · .${f.ext}</div>
+                </div>
+                <button class="btn btn-sm" data-rm-file="${name}">Remove</button>
+            </div>`;
+        }).join("");
+        list.querySelectorAll("[data-rm-file]").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                delete embeddedFiles[btn.dataset.rmFile];
+                refreshDataList();
+            });
+        });
+    }
+
+    // ---- Dependencies panel helpers ----
+    const installed = new Set();
+    function refreshDepsList() {
+        const list = $("depsList");
+        const names = Array.from(installed).sort();
+        if (!names.length) {
+            list.innerHTML = '<div class="panel-empty">None yet</div>';
+            return;
+        }
+        list.innerHTML = names.map(name => {
+            return `<div class="panel-list-item">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span class="status-dot on"></span>
+                    <span class="name">${name}</span>
+                </div>
+                <button class="btn btn-sm" data-rm-pkg="${name}">Remove</button>
+            </div>`;
+        }).join("");
+        list.querySelectorAll("[data-rm-pkg]").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                installed.delete(btn.dataset.rmPkg);
+                refreshDepsList();
+            });
+        });
+    }
+
+    // ---- Widgets / render (unchanged core) ----
+    function commit(key, value) {
+        appState[key] = value;
+        runApp();
+    }
+
+    function labelFor(el, forId) {
+        const l = document.createElement("label");
+        l.className = "st-label";
+        l.textContent = el.label || "";
+        if (forId) l.setAttribute("for", forId);
+        return l;
+    }
+    function helpFor(el) {
+        if (!el.help) return null;
+        const d = document.createElement("div");
+        d.className = "st-help";
+        d.textContent = el.help;
+        return d;
+    }
+
+    function buildWidget(el) {
+        const wrap = document.createElement("div");
+        wrap.className = "st-w";
+        const id = "w_" + Math.random().toString(36).slice(2, 9);
+        const t = el.type;
+
+        if (t === "button") {
+            const b = document.createElement("button");
+            b.className = "btn " + (el.variant === "primary" ? "btn-accent" : "");
+            b.textContent = el.label;
+            b.dataset.key = el.key;
+            b.addEventListener("click", () => { pendingClick = el.key; runApp(); });
+            wrap.appendChild(b);
+            return wrap;
+        }
+
+        if (t === "checkbox" || t === "toggle") {
+            const lab = document.createElement("label");
+            lab.className = "st-check";
+            const input = document.createElement("input");
+            input.type = "checkbox";
+            input.checked = !!el.value;
+            input.dataset.key = el.key;
+            input.addEventListener("change", () => commit(el.key, input.checked));
+            lab.appendChild(input);
+            lab.appendChild(document.createTextNode(el.label || ""));
+            wrap.appendChild(lab);
+            const h = helpFor(el); if (h) wrap.appendChild(h);
+            return wrap;
+        }
+
+        wrap.appendChild(labelFor(el, id));
+
+        if (t === "text_input" || t === "date_input") {
+            const input = document.createElement("input");
+            input.id = id; input.className = "st-input";
+            input.type = t === "date_input" ? "date" : "text";
+            input.value = el.value == null ? "" : el.value;
+            input.placeholder = el.placeholder || "";
+            input.dataset.key = el.key;
+            input.addEventListener("change", () => commit(el.key, input.value));
+            wrap.appendChild(input);
+        } else if (t === "text_area") {
+            const ta = document.createElement("textarea");
+            ta.id = id; ta.className = "st-textarea";
+            ta.style.height = (el.height || 130) + "px";
+            ta.value = el.value == null ? "" : el.value;
+            ta.placeholder = el.placeholder || "";
+            ta.dataset.key = el.key;
+            ta.addEventListener("change", () => commit(el.key, ta.value));
+            wrap.appendChild(ta);
+        } else if (t === "number_input") {
+            const input = document.createElement("input");
+            input.id = id; input.className = "st-input"; input.type = "number";
+            if (el.min != null) input.min = el.min;
+            if (el.max != null) input.max = el.max;
+            if (el.step != null) input.step = el.step;
+            input.value = el.value; input.dataset.key = el.key;
+            input.addEventListener("change", () => commit(el.key, input.value));
+            wrap.appendChild(input);
+        } else if (t === "slider") {
+            const row = document.createElement("div");
+            row.className = "st-range-row";
+            const input = document.createElement("input");
+            input.id = id; input.className = "st-range"; input.type = "range";
+            input.min = el.min; input.max = el.max; input.step = el.step || 1;
+            input.value = el.value; input.dataset.key = el.key;
+            const out = document.createElement("span");
+            out.className = "st-range-val"; out.textContent = el.value;
+            input.addEventListener("input", () => { out.textContent = input.value; });
+            input.addEventListener("change", () => commit(el.key, input.value));
+            row.appendChild(input); row.appendChild(out);
+            wrap.appendChild(row);
+        } else if (t === "selectbox") {
+            const sel = document.createElement("select");
+            sel.id = id; sel.className = "st-select"; sel.dataset.key = el.key;
+            (el.options || []).forEach((opt) => {
+                const o = document.createElement("option");
+                o.value = opt; o.textContent = opt;
+                if (opt === el.value) o.selected = true;
+                sel.appendChild(o);
+            });
+            sel.addEventListener("change", () => commit(el.key, sel.value));
+            wrap.appendChild(sel);
+        } else if (t === "radio") {
+            const group = document.createElement("div");
+            group.className = "st-radio-group";
+            (el.options || []).forEach((opt) => {
+                const lab = document.createElement("label");
+                lab.className = "st-check";
+                const input = document.createElement("input");
+                input.type = "radio"; input.name = el.key; input.value = opt;
+                input.checked = opt === el.value; input.dataset.key = el.key;
+                input.addEventListener("change", () => commit(el.key, opt));
+                lab.appendChild(input);
+                lab.appendChild(document.createTextNode(opt));
+                group.appendChild(lab);
+            });
+            wrap.appendChild(group);
+        } else if (t === "multiselect") {
+            const chosen = Array.isArray(el.value) ? el.value.slice() : [];
+            const chips = document.createElement("div");
+            chips.className = "st-chips";
+            (el.options || []).forEach((opt) => {
+                const lab = document.createElement("label");
+                lab.className = "st-chip" + (chosen.indexOf(opt) >= 0 ? " on" : "");
+                const input = document.createElement("input");
+                input.type = "checkbox";
+                input.checked = chosen.indexOf(opt) >= 0;
+                input.addEventListener("change", () => {
+                    const next = input.checked ? chosen.concat([opt]) : chosen.filter((x) => x !== opt);
+                    commit(el.key, next);
+                });
+                lab.appendChild(input);
+                lab.appendChild(document.createTextNode(opt));
+                chips.appendChild(lab);
+            });
+            wrap.appendChild(chips);
+        } else if (t === "color_picker") {
+            const input = document.createElement("input");
+            input.id = id; input.type = "color"; input.className = "st-color";
+            input.value = el.value || "#4f46e5"; input.dataset.key = el.key;
+            input.addEventListener("change", () => commit(el.key, input.value));
+            wrap.appendChild(input);
+        } else if (t === "file_uploader") {
+            const drop = document.createElement("div");
+            drop.className = "st-file-drop";
+            const input = document.createElement("input");
+            input.id = id; input.type = "file"; input.className = "st-file";
+            if (el.accept) input.accept = el.accept;
+            input.dataset.key = el.key;
+            input.addEventListener("change", () => {
+                if (input.files && input.files[0]) putUpload(el.key, input.files[0]);
+            });
+
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "st-file-btn";
+            btn.textContent = "Choose file";
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                input.click();
+            });
+
+            const hint = document.createElement("div");
+            hint.className = "st-file-hint";
+            hint.textContent = "or drag and drop here";
+
+            drop.appendChild(input);
+            drop.appendChild(btn);
+            drop.appendChild(hint);
+
+            // Click anywhere on the drop zone opens the picker
+            drop.addEventListener("click", (e) => {
+                if (e.target === btn || btn.contains(e.target)) return;
+                input.click();
+            });
+            // Basic drag-and-drop
+            drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("dragover"); });
+            drop.addEventListener("dragleave", () => drop.classList.remove("dragover"));
+            drop.addEventListener("drop", (e) => {
+                e.preventDefault();
+                drop.classList.remove("dragover");
+                const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+                if (f) putUpload(el.key, f);
+            });
+
+            if (el.value) {
+                const name = document.createElement("div");
+                name.className = "st-file-name";
+                name.textContent = "Loaded: " + el.value;
+                drop.appendChild(name);
+            }
+            wrap.appendChild(drop);
+        } else {
+            const p = document.createElement("div");
+            p.className = "st-text";
+            p.textContent = "Unsupported widget: " + t;
+            wrap.appendChild(p);
+        }
+
+        const h = helpFor(el); if (h) wrap.appendChild(h);
+        return wrap;
+    }
+
+    async function putUpload(key, file) {
+        setStatus("Reading " + file.name + "\u2026");
+        const buf = await file.arrayBuffer();
+        const bytes = new Uint8Array(buf);
+        const b64 = bytesToBase64(bytes);
+        const ext = (file.name.split(".").pop() || "").toLowerCase();
+
+        // Track for packaging (Data Canvas style)
+        embeddedFiles[file.name] = { b64, ext, size: bytes.length };
+        refreshDataList();
+
+        pyodide.globals.set("__st_up_key", key);
+        pyodide.globals.set("__st_up_name", file.name);
+        pyodide.globals.set("__st_up_b64", b64);
+        pyodide.runPython(
+            "import capycanvas\n" +
+            "capycanvas._put_upload(__st_up_key, __st_up_name, __st_up_b64)"
+        );
+        ["__st_up_key", "__st_up_name", "__st_up_b64"].forEach((k) => {
+            try { pyodide.globals.delete(k); } catch (e) {}
+        });
+        hideStatus();
+        runApp();
+    }
+
+    function buildElement(el) {
+        let node;
+        switch (el.kind) {
+            case "markdown":
+                node = document.createElement("div");
+                node.className = "st-md";
+                node.innerHTML = mdToHtml(el.body);
+                return node;
+            case "text":
+                node = document.createElement("pre");
+                node.className = "st-text";
+                node.textContent = el.body;
+                return node;
+            case "caption":
+                node = document.createElement("div");
+                node.className = "st-caption";
+                node.textContent = el.body;
+                return node;
+            case "code":
+                node = document.createElement("pre");
+                node.className = "st-code";
+                node.textContent = el.body;
+                return node;
+            case "json":
+                node = document.createElement("pre");
+                node.className = "st-json";
+                node.textContent = el.body;
+                return node;
+            case "divider":
+                return document.createElement("hr");
+            case "html":
+                node = document.createElement("div");
+                node.className = "st-md";
+                node.innerHTML = sanitize(el.html);
+                return node;
+            case "image":
+                node = document.createElement("img");
+                node.className = "st-img";
+                if (typeof el.src === "string" && /^data:image\//.test(el.src)) node.src = el.src;
+                return node;
+            case "alert":
+                node = document.createElement("div");
+                node.className = "st-alert " + el.level;
+                node.innerHTML = mdToHtml(el.body);
+                return node;
+            case "metric": {
+                node = document.createElement("div");
+                node.className = "st-metric" + (el.hero ? " hero" : "");
+                const l = document.createElement("div"); l.className = "m-label"; l.textContent = el.label;
+                const v = document.createElement("div"); v.className = "m-value"; v.textContent = el.value;
+                node.appendChild(l); node.appendChild(v);
+                if (el.delta != null) {
+                    const d = document.createElement("div"); d.className = "m-delta"; d.textContent = el.delta;
+                    node.appendChild(d);
+                }
+                return node;
+            }
+            case "dataframe": {
+                node = document.createElement("div");
+                const box = document.createElement("div");
+                box.className = "st-df-wrap";
+                box.innerHTML = sanitize(el.html);
+                node.appendChild(box);
+                if (el.note) {
+                    const n = document.createElement("div");
+                    n.className = "st-caption";
+                    n.textContent = el.note;
+                    node.appendChild(n);
+                }
+                return node;
+            }
+            case "download": {
+                node = document.createElement("button");
+                node.className = "btn";
+                node.style.marginBottom = "13px";
+                node.textContent = el.label;
+                node.addEventListener("click", () => {
+                    const bin = atob(el.b64);
+                    const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+                    download(bytes, el.file_name, el.mime);
+                });
+                return node;
+            }
+            case "container":
+                node = document.createElement("div");
+                renderList(el.children || [], node);
+                return node;
+            case "columns": {
+                node = document.createElement("div");
+                node.className = "st-cols";
+                const total = (el.widths || []).reduce((a, b) => a + b, 0) || 1;
+                (el.cols || []).forEach((col, i) => {
+                    const c = document.createElement("div");
+                    c.className = "st-col";
+                    c.style.flex = (el.widths[i] / total) + " 1 0";
+                    renderList(col.children || [], c);
+                    node.appendChild(c);
+                });
+                return node;
+            }
+            case "expander": {
+                node = document.createElement("details");
+                node.className = "st-expander";
+                node.open = !!el.expanded;
+                const s = document.createElement("summary");
+                s.textContent = el.label;
+                node.appendChild(s);
+                const body = document.createElement("div");
+                body.className = "st-exp-body";
+                renderList(el.children || [], body);
+                node.appendChild(body);
+                return node;
+            }
+            case "widget":
+                return buildWidget(el);
+            default:
+                node = document.createElement("div");
+                node.className = "st-caption";
+                node.textContent = "Unknown element: " + el.kind;
+                return node;
+        }
+    }
+
+    function renderList(list, parent) {
+        for (const el of list) {
+            try { parent.appendChild(buildElement(el)); }
+            catch (e) {
+                const err = document.createElement("div");
+                err.className = "st-fatal";
+                err.textContent = "Failed to render " + el.kind + ": " + e;
+                parent.appendChild(err);
+            }
+        }
+    }
+
+    function captureFocus() {
+        const a = document.activeElement;
+        if (!a || !a.dataset || !a.dataset.key) return null;
+        let start = null, end = null;
+        try { start = a.selectionStart; end = a.selectionEnd; } catch (e) {}
+        return { key: a.dataset.key, start, end };
+    }
+    function restoreFocus(saved) {
+        if (!saved) return;
+        const el = appRoot.querySelector('[data-key="' + CSS.escape(saved.key) + '"]');
+        if (!el) return;
+        el.focus();
+        if (saved.start != null) {
+            try { el.setSelectionRange(saved.start, saved.end); } catch (e) {}
+        }
+    }
+
+    function isClientMode() {
+        return document.body.classList.contains("mode-app") || MODE === "app";
+    }
+
+    const CLIENT_ERROR_MSG =
+        "Looks like the app encountered an error. Please try refreshing your page and changing your inputs.";
+
+    function showError(parent, fullText) {
+        const box = document.createElement("div");
+        if (isClientMode()) {
+            box.className = "st-alert error";
+            box.textContent = CLIENT_ERROR_MSG;
+        } else {
+            box.className = "st-fatal";
+            box.textContent = fullText;
+        }
+        parent.appendChild(box);
+    }
+
+    function renderApp(result) {
+        appRoot.innerHTML = "";
+        document.body.classList.toggle("layout-wide",
+            result.config && result.config.layout === "wide");
+        if (result.config && result.config.title) {
+            document.title = result.config.title + " · CapyCanvas";
+        }
+        renderList(result.elements || [], appRoot);
+        if (result.error) {
+            showError(appRoot, result.error);
+        }
+        if (!(result.elements || []).length && !result.error) {
+            const empty = document.createElement("div");
+            empty.className = "st-empty";
+            empty.textContent = "This app didn't render anything yet.";
+            appRoot.appendChild(empty);
+        }
+    }
+
+    async function runApp() {
+        if (!pyodide) return;
+        if (running) { queued = true; return; }
+        running = true;
+        const focus = captureFocus();
+        try {
+            const rawSource = currentSource();
+            await installFor(rawSource);
+            const source = cleanMagicCommands(rawSource);
+            const payload = JSON.stringify({ state: appState, clicked: pendingClick });
+            pendingClick = null;
+            pyodide.globals.set("__st_payload", payload);
+            pyodide.globals.set("__st_source", source);
+            const raw = pyodide.runPython(
+                "import capycanvas\ncapycanvas._run(__st_payload, __st_source)"
+            );
+            renderApp(JSON.parse(raw));
+        } catch (err) {
+            appRoot.innerHTML = "";
+            showError(appRoot, String((err && err.message) || err));
+        } finally {
+            running = false;
+            restoreFocus(focus);
+            if (queued) { queued = false; runApp(); }
+        }
+    }
+
+    // ---- packages + %pip ----
+    const LAZY_PACKAGES = {
+        seaborn: "seaborn", openpyxl: "openpyxl", scipy: "scipy",
+        sklearn: "scikit-learn", statsmodels: "statsmodels", duckdb: "duckdb",
+        pyarrow: "pyarrow", plotly: "plotly", PIL: "pillow"
+    };
+
+    function detectPipPackages(source) {
+        const pkgs = new Set();
+        const re = /^[ \t]*[%!]{1,2}pip\s+install\s+([^\n#]+)/gm;
+        let m;
+        while ((m = re.exec(source)) !== null) {
+            m[1].trim().split(/\s+/).forEach(tok => {
+                if (tok.startsWith('-')) return;
+                const clean = tok.replace(/^['"]|['"]$/g, '');
+                if (clean) pkgs.add(clean);
+            });
+        }
+        return Array.from(pkgs);
+    }
+
+    function cleanMagicCommands(source) {
+        return source.replace(/^[ \t]*[%!]{1,2}pip\s+install\s+[^\n]+$/gm, (line) => {
+            return "# Intercepted (CapyCanvas): " + line.trim();
+        });
+    }
+
+    async function installFor(source) {
+        const wanted = new Set();
+        const re = /^[ \t]*(?:import|from)[ \t]+([A-Za-z_][A-Za-z0-9_]*)/gm;
+        let m;
+        while ((m = re.exec(source)) !== null) {
+            const pkg = LAZY_PACKAGES[m[1]];
+            if (pkg && !installed.has(pkg)) wanted.add(pkg);
+        }
+        if (/\b(?:to_excel|read_excel)\s*\(/.test(source) && !installed.has("openpyxl")) {
+            wanted.add("openpyxl");
+        }
+        detectPipPackages(source).forEach(p => {
+            if (!installed.has(p)) wanted.add(p);
+        });
+        if (!wanted.size) return;
+        setStatus("Installing " + Array.from(wanted).join(", ") + "\u2026");
+        const micropip = pyodide.pyimport("micropip");
+        for (const pkg of wanted) {
+            try {
+                await micropip.install(pkg);
+                installed.add(pkg);
+                const bare = pkg.split(/[=<>!~]/)[0];
+                installed.add(bare);
+            } catch (e) {
+                console.warn("Failed to install " + pkg + ":", e);
+                setStatus("Failed to install " + pkg + ": " + ((e && e.message) || e), "error");
+            }
+        }
+        refreshDepsList();
+        hideStatus();
+    }
+
+    // ---- bootstrap ----
+    async function boot() {
+        setStatus("Downloading the Python runtime\u2026 (first load only)");
+        pyodide = await loadPyodide();
+
+        setStatus("Installing pandas, numpy and matplotlib\u2026");
+        await pyodide.loadPackage("micropip");
+        const micropip = pyodide.pyimport("micropip");
+        await micropip.install(["pandas", "numpy", "matplotlib"]);
+        installed.add("pandas"); installed.add("numpy"); installed.add("matplotlib");
+
+        setStatus("Wiring up capycanvas\u2026");
+        pyodide.FS.mkdirTree("/sl_lib");
+        pyodide.FS.writeFile("/sl_lib/capycanvas.py",
+            $("capycanvas-py").textContent, { encoding: "utf8" });
+        pyodide.runPython(
+            "import sys\n" +
+            "if '/sl_lib' not in sys.path: sys.path.insert(0, '/sl_lib')\n" +
+            "import matplotlib\n" +
+            "matplotlib.use('Agg')\n" +
+            "import capycanvas"
+        );
+
+        // Restore packaged data if present (Data Canvas style)
+        try {
+            const raw = ($("embedded-data").textContent || "{}").trim();
+            const data = JSON.parse(raw || "{}");
+            const names = Object.keys(data);
+            if (names.length) {
+                setStatus("Restoring packaged data\u2026");
+                for (const name of names) {
+                    const entry = data[name];
+                    if (!entry || !entry.b64) continue;
+                    embeddedFiles[name] = {
+                        b64: entry.b64,
+                        ext: entry.ext || (name.split(".").pop() || "").toLowerCase(),
+                        size: entry.size || Math.floor((entry.b64.length * 3) / 4)
+                    };
+                    pyodide.globals.set("__st_emb_name", name);
+                    pyodide.globals.set("__st_emb_b64", entry.b64);
+                    pyodide.runPython(
+                        "import capycanvas\n" +
+                        "capycanvas._restore_embedded(__st_emb_name, __st_emb_b64)"
+                    );
+                }
+                ["__st_emb_name", "__st_emb_b64"].forEach(k => {
+                    try { pyodide.globals.delete(k); } catch (e) {}
+                });
+                refreshDataList();
+            }
+        } catch (e) {
+            console.warn("Could not restore embedded data:", e);
+        }
+
+        $("runBtn").disabled = false;
+        refreshDepsList();
+        hideStatus();
+        await installFor(currentSource());
+        await runApp();
+    }
+
+    // ---- chrome ----
+    editor = CodeMirror.fromTextArea($("editor"), {
+        mode: "python",
+        lineNumbers: true,
+        indentUnit: 4,
+        viewportMargin: Infinity,
+        theme: document.documentElement.getAttribute("data-theme") === "dark" ? "ayu-dark" : "default"
+    });
+    editor.setValue(initialSource());
+    editor.setSize("100%", "100%");
+
+    $("runBtn").addEventListener("click", async () => {
+        await installFor(currentSource());
+        appState = {};
+        pendingClick = null;
+        runApp();
+    });
+    editor.setOption("extraKeys", {
+        "Ctrl-Enter": () => $("runBtn").click(),
+        "Cmd-Enter": () => $("runBtn").click()
+    });
+
+    $("editToggle").addEventListener("click", () => {
+        const hidden = document.body.classList.toggle("mode-app");
+        $("editToggle").textContent = hidden ? "Show editor" : "Hide editor";
+        if (!hidden) setTimeout(() => editor.refresh(), 0);
+    });
+
+    $("themeBtn").addEventListener("click", () => {
+        const dark = document.documentElement.getAttribute("data-theme") === "dark";
+        document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+        editor.setOption("theme", dark ? "default" : "ayu-dark");
+        try { localStorage.setItem("sl-theme", dark ? "light" : "dark"); } catch (e) {}
+    });
+
+    // Menu open/close helpers
+    function setupMenu(menuId, btnId) {
+        const menu = $(menuId);
+        const btn = $(btnId);
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            // close others
+            document.querySelectorAll(".menu.open").forEach(m => {
+                if (m !== menu) m.classList.remove("open");
+            });
+            menu.classList.toggle("open");
+        });
+    }
+    setupMenu("depsMenu", "depsBtn");
+    setupMenu("dataMenu", "dataBtn");
+    setupMenu("shareMenu", "shareBtn");
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".menu.open").forEach(m => m.classList.remove("open"));
+    });
+    // Prevent panel clicks from closing
+    ["depsPanel", "dataPanel"].forEach(id => {
+        const el = $(id);
+        if (el) el.addEventListener("click", e => e.stopPropagation());
+    });
+    $("shareMenu").querySelector(".menu-panel").addEventListener("click", e => e.stopPropagation());
+
+    // Dependencies install
+    $("depsInstallBtn").addEventListener("click", async () => {
+        const name = ($("depsInput").value || "").trim();
+        if (!name) return;
+        setStatus("Installing " + name + "\u2026");
+        try {
+            const micropip = pyodide.pyimport("micropip");
+            await micropip.install(name);
+            installed.add(name);
+            const bare = name.split(/[=<>!~]/)[0];
+            installed.add(bare);
+            refreshDepsList();
+            $("depsInput").value = "";
+            hideStatus();
+        } catch (e) {
+            setStatus("Failed to install " + name + ": " + ((e && e.message) || e), "error");
+        }
+    });
+
+    // Multi-file "data dependencies" — staged by devs, not auto-injected into the app UI
+    $("dataAddBtn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        $("dataFileInput").click();
+    });
+    $("dataFileInput").addEventListener("change", async (e) => {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+        setStatus("Reading " + files.length + " file(s)\u2026");
+        for (const file of files) {
+            try {
+                const buf = await file.arrayBuffer();
+                const bytes = new Uint8Array(buf);
+                const b64 = bytesToBase64(bytes);
+                const ext = (file.name.split(".").pop() || "").toLowerCase();
+                embeddedFiles[file.name] = { b64, ext, size: bytes.length };
+                // Also restore into Python so st.embedded("name") works immediately
+                if (pyodide) {
+                    pyodide.globals.set("__st_emb_name", file.name);
+                    pyodide.globals.set("__st_emb_b64", b64);
+                    pyodide.runPython(
+                        "import capycanvas\n" +
+                        "capycanvas._restore_embedded(__st_emb_name, __st_emb_b64)"
+                    );
+                    try { pyodide.globals.delete("__st_emb_name"); } catch (err) {}
+                    try { pyodide.globals.delete("__st_emb_b64"); } catch (err) {}
+                }
+            } catch (err) {
+                console.warn("Failed to read " + file.name + ":", err);
+            }
+        }
+        refreshDataList();
+        hideStatus();
+        e.target.value = "";
+        // Re-run only so apps that already call st.embedded(...) can see new files.
+        // Staging here does NOT auto-load data into the app — the author must reference it.
+        if (pyodide) runApp();
+    });
+
+    $("dataClearBtn").addEventListener("click", () => {
+        if (!Object.keys(embeddedFiles).length) return;
+        if (!confirm("Clear all tracked files? They will no longer be embedded on export.")) return;
+        embeddedFiles = {};
+        refreshDataList();
+    });
+
+    // Export choice toggles (visual)
+    function wireChoice(groupId, name) {
+        const group = $(groupId);
+        group.querySelectorAll("label").forEach(lab => {
+            lab.addEventListener("click", () => {
+                group.querySelectorAll("label").forEach(l => l.classList.remove("on"));
+                lab.classList.add("on");
+            });
+        });
+    }
+    wireChoice("audienceChoice", "audience");
+    wireChoice("packageChoice", "packaging");
+
+    // Export rename modal
+    function suggestedExportName() {
+        const audience = (document.querySelector('input[name="audience"]:checked') || {}).value || "client";
+        const packaging = (document.querySelector('input[name="packaging"]:checked') || {}).value || "packaged";
+        return "capycanvas-" + audience + "-" + packaging + ".canvas.html";
+    }
+    function openExportModal() {
+        const modal = $("exportModal");
+        const input = $("exportFileName");
+        input.value = suggestedExportName();
+        modal.hidden = false;
+        setTimeout(() => { input.focus(); input.select(); }, 0);
+    }
+    function closeExportModal() {
+        $("exportModal").hidden = true;
+    }
+    function sanitizeExportName(name) {
+        let filename = (name || "").trim() || suggestedExportName();
+        if (!/\.html?$/i.test(filename)) filename += ".html";
+        filename = filename.replace(/[\\\/]+/g, "-");
+        return filename;
+    }
+    // Build machine-readable header comment for Python packaging tools
+    function buildHdrComment(mode, dataPayload) {
+        const files = Object.keys(dataPayload || {}).map((name) => {
+            const e = dataPayload[name] || {};
+            let prefixHex = "";
+            try {
+                const bin = atob(e.b64 || "");
+                const n = Math.min(5, bin.length);
+                for (let i = 0; i < n; i++) {
+                    prefixHex += bin.charCodeAt(i).toString(16).padStart(2, "0");
+                }
+            } catch (err) {}
+            return {
+                name,
+                ext: e.ext || (name.split(".").pop() || "").toLowerCase(),
+                size: e.size || 0,
+                prefix_hex: prefixHex,
+                store: "embedded-data",
+                key: name
+            };
+        });
+        const meta = {
+            v: 1,
+            magic: "CC01",
+            mode: mode,
+            packaged: files.length > 0,
+            files
+        };
+        return "<!--CAPYCANVAS_HDR:v1\n" + JSON.stringify(meta) + "\nCAPYCANVAS_HDR_END-->";
+    }
+
+    function replaceHdr(html, mode, dataPayload) {
+        const block = buildHdrComment(mode, dataPayload);
+        const re = /<!--CAPYCANVAS_HDR:v1\n[\s\S]*?\nCAPYCANVAS_HDR_END-->/;
+        if (re.test(html)) return html.replace(re, block);
+        // Insert after <title>...</title> if missing
+        return html.replace(/<\/title>/i, "</title>\n\n" + block);
+    }
+
+    // Export
+    function doCanvasExport(filename) {
+        const audience = (document.querySelector('input[name="audience"]:checked') || {}).value || "client";
+        const packaging = (document.querySelector('input[name="packaging"]:checked') || {}).value || "packaged";
+        const mode = audience === "client" ? "app" : "edit";
+
+        const LT = "<", GT = ">", CLOSE = LT + "/script" + GT;
+        const openTag = (attrs) => LT + "script " + attrs + GT;
+        const tagPattern = (id) => new RegExp(
+            LT + 'script id="' + id + '"[^' + GT + ']*' + GT + '[\\s\\S]*?' + CLOSE
+        );
+
+        let html = window.__SL_PRISTINE__;
+        html = html.replace(
+            tagPattern("app-source"),
+            openTag('id="app-source" type="text/x-python" data-encoding="base64"') +
+            b64Encode(currentSource()) + CLOSE
+        );
+        html = html.replace(
+            tagPattern("app-mode"),
+            openTag('id="app-mode" type="application/json"') +
+            JSON.stringify({ mode }) + CLOSE
+        );
+
+        const dataPayload = packaging === "packaged" ? embeddedFiles : {};
+        let dataJson = JSON.stringify(dataPayload);
+        dataJson = dataJson.replace(/<\//g, "<\\/");
+        html = html.replace(
+            tagPattern("embedded-data"),
+            openTag('id="embedded-data" type="application/json"') +
+            dataJson + CLOSE
+        );
+
+        html = replaceHdr(html, mode, dataPayload);
+        download(html, filename, "text/html");
+    }
+
+    $("exportGoBtn").addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        $("shareMenu").classList.remove("open");
+        openExportModal();
+    });
+
+    $("exportConfirmBtn").addEventListener("click", () => {
+        const filename = sanitizeExportName($("exportFileName").value);
+        closeExportModal();
+        doCanvasExport(filename);
+    });
+
+    $("exportFileName").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            $("exportConfirmBtn").click();
+        } else if (e.key === "Escape") {
+            closeExportModal();
+        }
+    });
+
+    document.querySelectorAll("[data-close-export]").forEach((el) => {
+        el.addEventListener("click", () => closeExportModal());
+    });
+
+    $("exportPyBtn").addEventListener("click", () => {
+        download(currentSource(), "app.py", "text/x-python");
+        $("shareMenu").classList.remove("open");
+    });
+
+    // Resizer
+    const paneEditor = $("paneEditor");
+    let dragging = false;
+    $("resizer").addEventListener("mousedown", (e) => { dragging = true; e.preventDefault(); });
+    window.addEventListener("mousemove", (e) => {
+        if (!dragging) return;
+        const pct = Math.min(75, Math.max(20, (e.clientX / window.innerWidth) * 100));
+        paneEditor.style.width = pct + "%";
+    });
+    window.addEventListener("mouseup", () => {
+        if (dragging) { dragging = false; editor.refresh(); }
+    });
+
+    // Init
+    try {
+        const saved = localStorage.getItem("sl-theme");
+        if (saved) {
+            document.documentElement.setAttribute("data-theme", saved);
+            editor.setOption("theme", saved === "dark" ? "ayu-dark" : "default");
+        }
+    } catch (e) {}
+
+    if (MODE === "app") {
+        document.body.classList.add("mode-app");
+        $("editToggle").textContent = "Show editor";
+    }
+
+    boot().catch((err) => {
+        console.error(err);
+        setStatus(
+            "The Python runtime didn't load: " + ((err && err.message) || err) +
+            ". It downloads from a CDN on first open — check your connection and reload.",
+            "error"
+        );
+    });
+});
+//#endregion
+</script>
+
+<script>window.__SL_PRISTINE__ = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;</script></body></html>

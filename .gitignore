@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.bun/
+
+# Lockfiles (optional — uncomment if you prefer not to commit them)
+# bun.lock
+# package-lock.json
+
+# Build / temp outputs
+*.rebuilt.html
+dist/
+tmp/
+.cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.code-workspace
+
+# Logs & env
+*.log
+.env
+.env.*
+!.env.example
+
+# Python (if anyone runs local helpers)
+__pycache__/
+*.py[cod]
+.venv/
+venv/

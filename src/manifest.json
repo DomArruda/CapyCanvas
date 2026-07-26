@@ -1,0 +1,21 @@
+{
+  "source": "capycanvas.html",
+  "regions": [
+    {
+      "path": "styles.css",
+      "kind": "html-comment"
+    },
+    {
+      "path": "capycanvas.py",
+      "kind": "pyregion"
+    },
+    {
+      "path": "default_app.py",
+      "kind": "pyregion"
+    },
+    {
+      "path": "js/main.js",
+      "kind": "js-comment"
+    }
+  ]
+}

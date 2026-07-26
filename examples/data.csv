@@ -1,0 +1,51 @@
+Id,Partner,Branch,Rev
+1,Bob's Tacos,Downtown,8137
+2,Bob's Tacos,Westside,8274
+3,Bob's Tacos,Airport,8411
+4,Bob's Tacos,Mall,8548
+5,Bob's Tacos,Suburban,8685
+6,Bullseye,Downtown,8822
+7,Bullseye,Westside,8959
+8,Bullseye,Airport,9096
+9,Bullseye,Mall,9233
+10,Bullseye,Suburban,9370
+11,Wallsmart,Downtown,9507
+12,Wallsmart,Westside,9644
+13,Wallsmart,Airport,9781
+14,Wallsmart,Mall,9918
+15,Wallsmart,Suburban,10055
+16,GreenLeaf Market,Downtown,10192
+17,GreenLeaf Market,Westside,10329
+18,GreenLeaf Market,Airport,10466
+19,GreenLeaf Market,Mall,10603
+20,GreenLeaf Market,Suburban,10740
+21,Summit Tools,Downtown,10877
+22,Summit Tools,Westside,11014
+23,Summit Tools,Airport,11151
+24,Summit Tools,Mall,11288
+25,Summit Tools,Suburban,11425
+26,Harbor Coffee,Downtown,11562
+27,Harbor Coffee,Westside,11699
+28,Harbor Coffee,Airport,11836
+29,Harbor Coffee,Mall,11973
+30,Harbor Coffee,Suburban,12110
+31,Northwind Outfitters,Downtown,12247
+32,Northwind Outfitters,Westside,12384
+33,Northwind Outfitters,Airport,12521
+34,Northwind Outfitters,Mall,12658
+35,Northwind Outfitters,Suburban,12795
+36,Cedar Dental,Downtown,12932
+37,Cedar Dental,Westside,13069
+38,Cedar Dental,Airport,13206
+39,Cedar Dental,Mall,13343
+40,Cedar Dental,Suburban,13480
+41,Pixel Pets,Downtown,13617
+42,Pixel Pets,Westside,13754
+43,Pixel Pets,Airport,13891
+44,Pixel Pets,Mall,14028
+45,Pixel Pets,Suburban,14165
+46,Lakeside Hardware,Downtown,14302
+47,Lakeside Hardware,Westside,14439
+48,Lakeside Hardware,Airport,14576
+49,Lakeside Hardware,Mall,14713
+50,Lakeside Hardware,Suburban,14850
