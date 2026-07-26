@@ -184,6 +184,3 @@ CAPYCANVAS_HDR_END-->
 
 Each file entry includes `prefix_hex` (first 5 decoded bytes) for validation.
 
-## License
-
-Use and modify freely for internal tools and portfolio work. No warranty.
