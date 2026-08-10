@@ -262,6 +262,48 @@ body.mode-app .cache-toggle { display: none !important; }
 .st-expander > summary::before { content: "\25B8"; display: inline-block; margin-right: 8px; color: var(--text-faint); transition: transform .15s; }
 .st-expander[open] > summary::before { transform: rotate(90deg); }
 .st-expander .st-exp-body { padding: 2px 13px 12px; }
+.st-tabs { margin: 0 0 15px; }
+.st-tab-labels {
+    display: flex; align-items: stretch; gap: 4px; white-space: nowrap;
+    border-bottom: 1px solid var(--border); overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none;
+}
+.st-tab-labels::-webkit-scrollbar { display: none; }
+.st-tab {
+    flex: none; cursor: pointer; border: 0; border-bottom: 2px solid transparent;
+    background: transparent; color: var(--text-muted); font: inherit; font-size: 13px;
+    padding: 8px 12px; margin-bottom: -1px;
+}
+.st-tab:hover { color: var(--text); background: var(--slate-btn-bg); }
+.st-tab.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.st-tab-panel { padding-top: 13px; }
+.st-form { border: 1px solid var(--border); border-radius: 9px; padding: 14px 14px 2px; margin: 0 0 14px; }
+.st-form.no-border { border: 0; padding: 0; }
+.st-spinner-block {
+    display: flex; align-items: center; gap: 8px; padding: 9px 12px; margin: 0 0 13px;
+    background: var(--info-bg); border: 1px solid var(--info-border); border-radius: 8px;
+    color: var(--info-text); font-size: 12.5px;
+}
+.st-spinner-block > .spinner { display: inline-block; }
+.st-toast {
+    position: fixed; right: 20px; bottom: 20px; z-index: 120;
+    max-width: min(360px, calc(100vw - 40px)); padding: 11px 14px;
+    border: 1px solid var(--border); border-radius: 9px; background: var(--surface);
+    color: var(--text); box-shadow: 0 8px 24px rgba(0,0,0,.16); font-size: 13px;
+    animation: toast-in .18s ease-out;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.st-empty-slot { min-height: 1px; }
+.st-editor-wrap { overflow-x: auto; margin: 0 0 14px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); }
+.st-editor-wrap.full-width { width: 100%; }
+.st-editor { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+.st-editor th, .st-editor td { padding: 5px 7px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.st-editor thead th { background: var(--code-bg); font-weight: 600; position: sticky; top: 0; }
+.st-editor tbody tr:last-child td, .st-editor tbody tr:last-child th { border-bottom: 0; }
+.st-editor tbody th { color: var(--text-muted); font-weight: 500; }
+.st-editor-input { min-width: 90px; width: 100%; border: 1px solid transparent; border-radius: 5px; padding: 5px 6px; background: transparent; color: var(--text); font: inherit; }
+.st-editor-input:hover, .st-editor-input:focus { border-color: var(--slate-btn-border); background: var(--surface); outline: none; }
+.st-editor-input[type="checkbox"] { min-width: 15px; width: 15px; accent-color: var(--accent); }
 
 /* --------------------------------------------------------------- widgets */
 .st-w { margin: 0 0 13px; }
@@ -283,6 +325,7 @@ body.mode-app .cache-toggle { display: none !important; }
 .st-check input { accent-color: var(--accent); width: 15px; height: 15px; }
 .st-radio-group { display: flex; flex-direction: column; gap: 6px; }
 .st-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.st-multiselect-actions { display: flex; gap: 6px; margin: -1px 0 8px; }
 .st-chip {
     display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
     font-size: 12.5px; padding: 5px 11px; border-radius: 999px;
@@ -367,7 +410,7 @@ body.mode-app .cache-toggle { display: none !important; }
         <button class="btn" id="dataBtn">Data</button>
         <div class="menu-panel" id="dataPanel">
             <div class="panel-section">
-                <div class="panel-label">Staged files (embed on Packaged export)</div>
+                <div class="panel-label">Staged files (available in Pyodide FS)</div>
                 <div class="panel-list" id="dataList"><div class="panel-empty">No files staged</div></div>
             </div>
             <div class="panel-section">
@@ -375,8 +418,9 @@ body.mode-app .cache-toggle { display: none !important; }
                 <input type="file" id="dataFileInput" multiple accept=".csv,.tsv,.txt,.json,.xlsx,.xls,.parquet" hidden />
                 <button class="btn" id="dataAddBtn" style="width:100%;margin-bottom:8px;">+ Add files</button>
                 <small style="color:var(--text-muted);font-size:11px;display:block;margin-bottom:8px;line-height:1.4;">
-                    For developers: stage files the app can load with <code style="font-size:10px;">st.embedded("name")</code>.
-                    They are embedded only on Packaged export. End users never see this panel.
+                    For developers: staged files are available by filename in Python, e.g.
+                    <code style="font-size:10px;">pd.read_csv("data.csv")</code>.
+                    They are included only on Packaged export. End users never see this panel.
                 </small>
                 <button class="btn" id="dataClearBtn" style="width:100%;">Clear all</button>
             </div>
@@ -480,8 +524,9 @@ _stack = []
 _state = {}
 _clicked = None
 _counter = 0
+_form_stack = []
 _uploads = {}
-_embedded = {}   # name -> bytes  (restored from packaged export)
+_embedded = {}   # legacy st.embedded() storage for older app exports
 _cache = {}
 _config = {}
 
@@ -524,6 +569,8 @@ def _widget(wtype, label, key, default, **props):
     k = key or _next_key(wtype, label)
     value = _state.get(k, default)
     element = {"kind": "widget", "type": wtype, "key": k, "label": label, "value": value}
+    if _form_stack:
+        element["form"] = _form_stack[-1]
     element.update(props)
     _emit(element)
     return value
@@ -558,6 +605,56 @@ class Container:
         return scoped
 
 
+class EmptyContainer(Container):
+    def _clear(self):
+        self._element["children"][:] = []
+
+    def __getattr__(self, name):
+        fn = globals().get(name)
+        if not callable(fn):
+            raise AttributeError(name)
+        def scoped(*args, **kwargs):
+            self._clear()
+            with self:
+                return fn(*args, **kwargs)
+        return scoped
+
+    def container(self):
+        self._clear()
+        return Container(self._element)
+
+
+class FormContainer(Container):
+    def __init__(self, element):
+        super().__init__(element)
+        self._key = element["key"]
+
+    def __enter__(self):
+        _stack.append(self._element["children"])
+        _form_stack.append(self._key)
+        return self
+
+    def __exit__(self, *exc_info):
+        _form_stack.pop()
+        _stack.pop()
+        return False
+
+
+class _Spinner:
+    def __init__(self, text):
+        self.text = str(text)
+        self._element = None
+
+    def __enter__(self):
+        self._element = _emit({"kind": "spinner", "label": self.text, "children": []})
+        _stack.append(self._element["children"])
+        return self
+
+    def __exit__(self, *exc_info):
+        _stack.pop()
+        return False
+
+
 def container():
     return Container(_emit({"kind": "container", "children": []}))
 
@@ -573,6 +670,29 @@ def expander(label, expanded=False):
     return Container(_emit({
         "kind": "expander", "label": str(label),
         "expanded": bool(expanded), "children": []
+    }))
+
+
+def tabs(labels):
+    specs = [{"label": str(label), "children": []} for label in labels]
+    _emit({"kind": "tabs", "tabs": specs})
+    return [Container(spec) for spec in specs]
+
+
+def empty():
+    return EmptyContainer(_emit({"kind": "empty", "children": []}))
+
+
+def spinner(text="In progress..."):
+    return _Spinner(text)
+
+
+def form(key, clear_on_submit=False, enter_to_submit=True, border=True):
+    return FormContainer(_emit({
+        "kind": "form", "key": str(key), "children": [],
+        "clear_on_submit": bool(clear_on_submit),
+        "enter_to_submit": bool(enter_to_submit),
+        "border": bool(border),
     }))
 
 
@@ -636,6 +756,11 @@ def error(body):
     _alert("error", body)
 
 
+def toast(body, icon=None):
+    _emit({"kind": "toast", "body": str(body),
+           "icon": None if icon is None else str(icon)})
+
+
 def metric(label, value, delta=None, hero=False):
     _emit({"kind": "metric", "label": str(label), "value": str(value),
            "delta": None if delta is None else str(delta), "hero": bool(hero)})
@@ -655,6 +780,54 @@ def dataframe(data, use_container_width=True, max_rows=200):
 
 
 table = dataframe
+
+
+def _editor_cell(value):
+    import pandas as pd
+    try:
+        if bool(pd.isna(value)):
+            return None
+    except (TypeError, ValueError):
+        pass
+    try:
+        value = value.item()
+    except AttributeError:
+        pass
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    if hasattr(value, "isoformat"):
+        return value.isoformat()
+    return str(value)
+
+
+def data_editor(data, hide_index=False, num_rows="fixed",
+                use_container_width=True, key=None, **_kwargs):
+    import pandas as pd
+    frame = data.copy() if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
+    k = key or _next_key("data_editor", "")
+    saved = _state.get(k)
+    if isinstance(saved, dict) and isinstance(saved.get("rows"), list):
+        try:
+            frame = pd.DataFrame(saved["rows"], columns=list(frame.columns))
+            saved_index = saved.get("index")
+            if isinstance(saved_index, list) and len(saved_index) == len(frame):
+                frame.index = saved_index
+        except (TypeError, ValueError):
+            frame = data.copy() if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
+    element = {
+        "kind": "data_editor", "key": k,
+        "columns": [str(column) for column in frame.columns],
+        "rows": [[_editor_cell(value) for value in row]
+                 for row in frame.itertuples(index=False, name=None)],
+        "index": [_editor_cell(value) for value in frame.index],
+        "hide_index": bool(hide_index),
+        "num_rows": str(num_rows),
+        "full_width": bool(use_container_width),
+    }
+    if _form_stack:
+        element["form"] = _form_stack[-1]
+    _emit(element)
+    return frame
 
 
 def pyplot(fig=None, clear=True):
@@ -733,8 +906,20 @@ def scatter_chart(data):
 
 def button(label, key=None, type="secondary"):
     k = key or _next_key("button", label)
-    _emit({"kind": "widget", "type": "button", "key": k, "label": str(label),
-           "value": False, "variant": type})
+    element = {"kind": "widget", "type": "button", "key": k,
+               "label": str(label), "value": False, "variant": type}
+    if _form_stack:
+        element["form"] = _form_stack[-1]
+    _emit(element)
+    return _clicked == k
+
+
+def form_submit_button(label="Submit", help=None, type="secondary", key=None, **_kwargs):
+    k = key or _next_key("form_submit_button", label)
+    element = {"kind": "widget", "type": "form_submit_button", "key": k,
+               "label": str(label), "value": False, "variant": type,
+               "help": help, "form": _form_stack[-1] if _form_stack else None}
+    _emit(element)
     return _clicked == k
 
 
@@ -788,11 +973,13 @@ def radio(label, options, index=0, key=None, help=None):
     return _pick_one("radio", label, options, index, key, help)
 
 
-def multiselect(label, options, default=None, key=None, help=None):
+def multiselect(label, options, default=None, key=None, help=None,
+                show_select_all=False):
     opts = list(options)
     labels = [str(o) for o in opts]
     chosen = [str(d) for d in (default or [])]
-    raw = _widget("multiselect", label, key, chosen, options=labels, help=help)
+    raw = _widget("multiselect", label, key, chosen, options=labels, help=help,
+                  show_select_all=bool(show_select_all))
     if not isinstance(raw, list):
         raw = []
     return [opts[labels.index(r)] for r in raw if r in labels]
@@ -846,7 +1033,7 @@ def file_uploader(label, type=None, key=None, help=None):
 
 
 def embedded(name):
-    """Return an UploadedFile for a file that was embedded via packaged export, or None."""
+    """Legacy accessor; new apps should read staged files by their filename."""
     data = _embedded.get(name)
     if data is None:
         return None
@@ -854,7 +1041,7 @@ def embedded(name):
 
 
 def list_embedded():
-    """Return the list of filenames that were restored from a packaged export."""
+    """Legacy accessor for filenames restored from a packaged export."""
     return list(_embedded.keys())
 
 
@@ -944,12 +1131,13 @@ def _restore_embedded(name, b64):
 
 
 def _run(payload_json, source):
-    global _elements, _stack, _state, _clicked, _counter
+    global _elements, _stack, _state, _clicked, _counter, _form_stack
     payload = _json.loads(payload_json)
     _state = payload.get("state") or {}
     _clicked = payload.get("clicked")
     _elements = []
     _stack = []
+    _form_stack = []
     _counter = 0
     _config.clear()
     _config.update({"title": "CapyCanvas app", "layout": "centered"})
@@ -987,11 +1175,55 @@ st.markdown(
     "Edit the code on the left and press **Run**. "
     "Use `%pip install package` for extra packages. "
     "Upload any CSV — the filters and charts below build themselves from its columns.\n\n"
-    "Data staged in the **Data** panel (developer data dependencies) is available "
-    "via `st.embedded(\"filename\")` — it is **not** auto-loaded. Reference it "
-    "explicitly in your code when you want it."
+    "Data staged in the **Data** panel (developer data dependencies) is mounted "
+    "in Pyodide's virtual filesystem. Load it directly by filename, for example "
+    "with `pd.read_csv(\"data.csv\")`."
 )
 
+# ------------------------------------------------------- interaction patterns
+st.header("Interactive patterns")
+st.caption("A few polished building blocks you can copy into a dashboard.")
+demo_tabs = st.tabs(["Workflow", "Editable data", "Feedback"])
+
+with demo_tabs[0]:
+    st.caption("Batch several inputs and apply them together with a form.")
+    with st.form("demo_form"):
+        demo_left, demo_right = st.columns(2)
+        with demo_left:
+            demo_name = st.text_input("Report name", value="Weekly sales")
+        with demo_right:
+            demo_color = st.selectbox("Accent", ["Indigo", "Teal", "Amber"])
+        demo_submitted = st.form_submit_button("Apply")
+    if demo_submitted:
+        st.success(f"Applied **{demo_name}** with {demo_color.lower()} accents.")
+        st.toast("Workflow settings saved", icon="OK")
+
+with demo_tabs[1]:
+    demo_data = pd.DataFrame({
+        "item": ["Notebook", "Marker", "Desk lamp"],
+        "team": ["Operations", "Sales", "Design"],
+        "units": [24, 18, 9],
+        "revenue": [720, 270, 540],
+    })
+    edited_demo_data = st.data_editor(
+        demo_data, key="demo_editor", hide_index=True, num_rows="dynamic"
+    )
+    demo_metric_left, demo_metric_right = st.columns(2)
+    demo_metric_left.metric("Rows", len(edited_demo_data))
+    demo_metric_right.metric("Revenue", f"${edited_demo_data['revenue'].sum():,.0f}")
+    st.bar_chart(edited_demo_data.set_index("item")["revenue"])
+
+with demo_tabs[2]:
+    st.caption("Use placeholders, progress feedback, and transient notifications.")
+    demo_slot = st.empty()
+    demo_slot.info("This message is replaced by the next call to st.empty().")
+    demo_slot.success("st.empty keeps the latest content in its slot.")
+    with st.spinner("Preparing the feedback example"):
+        st.caption("st.spinner provides a status block around work.")
+    if st.button("Show toast", key="demo_toast"):
+        st.toast("Toast triggered", icon="OK")
+
+st.divider()
 
 def pick_one(label, options, index=0):
     """selectbox if available, otherwise a single-choice multiselect."""
@@ -1078,7 +1310,7 @@ TOP_N_VALUES = 200  # cap on distinct values offered for a high-cardinality colu
 
 filter_cols = st.multiselect(
     "Columns to filter on", list(df.columns),
-    default=cat_cols[:1] or list(df.columns)[:1],
+    default=cat_cols[:1] or list(df.columns)[:1], show_select_all=True,
 )
 
 view = df
@@ -1109,7 +1341,7 @@ for col in filter_cols:
         values = list(counts.index[:TOP_N_VALUES])
         if len(counts) > TOP_N_VALUES:
             st.caption(f"{col} has {len(counts):,} distinct values — showing the {TOP_N_VALUES} most common.")
-        keep = st.multiselect(f"{col} — values", values, default=values)
+        keep = st.multiselect(f"{col} — values", values, default=values, show_select_all=True)
         view = view[view[col].astype(str).isin(keep)]
 
 a, b, c = st.columns(3)
@@ -1186,7 +1418,10 @@ with st.expander("Show the aggregated numbers"):
 # ------------------------------------------------------------------ table ---
 st.subheader("Filtered data")
 
-show_cols = st.multiselect("Columns to show", list(view.columns), default=list(view.columns))
+show_cols = st.multiselect(
+    "Columns to show", list(view.columns), default=list(view.columns),
+    show_select_all=True,
+)
 table = view[show_cols] if show_cols else view
 
 with st.expander("Column summary"):
@@ -1215,9 +1450,14 @@ window.addEventListener("DOMContentLoaded", function () {
     let queued = false;
     let pendingClick = null;
     let appState = {};
+    let formDraftState = {};
+    let formConfigs = {};
+    let tabGroupCounter = 0;
+    const activeTabs = {};
 
     // filename -> { b64, ext, size }
     let embeddedFiles = {};
+    let mountedDataFiles = new Set();
 
     const MODE = (() => {
         try { return (JSON.parse($("app-mode").textContent || "{}").mode) || "edit"; }
@@ -1243,6 +1483,12 @@ window.addEventListener("DOMContentLoaded", function () {
             binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
         }
         return btoa(binary);
+    }
+    function base64ToBytes(b64) {
+        const binary = atob(b64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        return bytes;
     }
     function formatBytes(n) {
         if (n < 1024) return n + " B";
@@ -1281,6 +1527,66 @@ window.addEventListener("DOMContentLoaded", function () {
     }
     const currentSource = () => (editor ? editor.getValue() : initialSource());
 
+    // Data dependencies live at the filesystem root, so app code can use
+    // ordinary paths such as pd.read_csv("data.csv").
+    function dataFilePath(name) {
+        const normalized = String(name).replace(/\\/g, "/").replace(/^\/+/, "");
+        if (!normalized || normalized === "." || normalized.split("/").indexOf("..") >= 0) {
+            throw new Error("Invalid staged data filename: " + name);
+        }
+        return "/" + normalized;
+    }
+
+    function mountDataFile(name, entry) {
+        if (!pyodide || !entry || !entry.b64) return null;
+        const path = dataFilePath(name);
+        const slash = path.lastIndexOf("/");
+        if (slash > 0) pyodide.FS.mkdirTree(path.slice(0, slash));
+        pyodide.FS.writeFile(path, base64ToBytes(entry.b64));
+        return path;
+    }
+
+    function unmountDataFile(name) {
+        if (!pyodide) return;
+        let path;
+        try { path = dataFilePath(name); } catch (e) { return; }
+        try { pyodide.FS.unlink(path); } catch (e) {}
+        mountedDataFiles.delete(path);
+    }
+
+    function syncDataFilesToFs() {
+        if (!pyodide) return;
+        const next = new Set();
+        for (const name of Object.keys(embeddedFiles)) {
+            try {
+                const path = mountDataFile(name, embeddedFiles[name]);
+                if (path) next.add(path);
+            } catch (e) {
+                console.warn("Could not mount " + name + " in Pyodide:", e);
+            }
+        }
+        for (const path of mountedDataFiles) {
+            if (!next.has(path)) {
+                try { pyodide.FS.unlink(path); } catch (e) {}
+            }
+        }
+        mountedDataFiles = next;
+    }
+
+    function restorePackagedDataFile(name, entry) {
+        const path = mountDataFile(name, entry);
+        if (path) mountedDataFiles.add(path);
+        pyodide.globals.set("__st_emb_name", name);
+        pyodide.globals.set("__st_emb_b64", entry.b64);
+        pyodide.runPython(
+            "import capycanvas\n" +
+            "capycanvas._restore_embedded(__st_emb_name, __st_emb_b64)"
+        );
+        ["__st_emb_name", "__st_emb_b64"].forEach((k) => {
+            try { pyodide.globals.delete(k); } catch (e) {}
+        });
+    }
+
     // ---- Data panel helpers ----
     function refreshDataList() {
         const list = $("dataList");
@@ -1302,7 +1608,9 @@ window.addEventListener("DOMContentLoaded", function () {
         list.querySelectorAll("[data-rm-file]").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.stopPropagation();
-                delete embeddedFiles[btn.dataset.rmFile];
+                const name = btn.dataset.rmFile;
+                delete embeddedFiles[name];
+                unmountDataFile(name);
                 refreshDataList();
             });
         });
@@ -1336,8 +1644,43 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     // ---- Widgets / render (unchanged core) ----
-    function commit(key, value) {
+    function draftValue(el) {
+        const draft = el.form && formDraftState[el.form];
+        if (draft && Object.prototype.hasOwnProperty.call(draft, el.key)) {
+            return draft[el.key];
+        }
+        return el.value;
+    }
+
+    function commit(key, value, formKey) {
+        if (formKey) {
+            if (!formDraftState[formKey]) formDraftState[formKey] = {};
+            formDraftState[formKey][key] = value;
+            return;
+        }
         appState[key] = value;
+        runApp();
+    }
+
+    function collectFormKeys(list, keys) {
+        (list || []).forEach((element) => {
+            if (element.kind === "widget" && element.key) keys.push(element.key);
+            if (element.children) collectFormKeys(element.children, keys);
+            if (element.tabs) element.tabs.forEach(tab => collectFormKeys(tab.children, keys));
+        });
+    }
+
+    function submitForm(el) {
+        const draft = (el.form && formDraftState[el.form]) || {};
+        Object.assign(appState, draft);
+        const config = el.form && formConfigs[el.form];
+        if (config && config.clear_on_submit) {
+            const keys = [];
+            collectFormKeys(config.children, keys);
+            keys.forEach(key => delete appState[key]);
+        }
+        delete formDraftState[el.form];
+        pendingClick = el.key;
         runApp();
     }
 
@@ -1361,13 +1704,23 @@ window.addEventListener("DOMContentLoaded", function () {
         wrap.className = "st-w";
         const id = "w_" + Math.random().toString(36).slice(2, 9);
         const t = el.type;
+        const value = draftValue(el);
 
-        if (t === "button") {
+        if (t === "button" || t === "form_submit_button") {
             const b = document.createElement("button");
             b.className = "btn " + (el.variant === "primary" ? "btn-accent" : "");
+            b.type = t === "form_submit_button" ? "submit" : "button";
             b.textContent = el.label;
             b.dataset.key = el.key;
-            b.addEventListener("click", () => { pendingClick = el.key; runApp(); });
+            b.addEventListener("click", (event) => {
+                if (t === "form_submit_button") {
+                    event.preventDefault();
+                    submitForm(el);
+                } else {
+                    pendingClick = el.key;
+                    runApp();
+                }
+            });
             wrap.appendChild(b);
             return wrap;
         }
@@ -1377,9 +1730,9 @@ window.addEventListener("DOMContentLoaded", function () {
             lab.className = "st-check";
             const input = document.createElement("input");
             input.type = "checkbox";
-            input.checked = !!el.value;
+            input.checked = !!value;
             input.dataset.key = el.key;
-            input.addEventListener("change", () => commit(el.key, input.checked));
+            input.addEventListener("change", () => commit(el.key, input.checked, el.form));
             lab.appendChild(input);
             lab.appendChild(document.createTextNode(el.label || ""));
             wrap.appendChild(lab);
@@ -1393,19 +1746,19 @@ window.addEventListener("DOMContentLoaded", function () {
             const input = document.createElement("input");
             input.id = id; input.className = "st-input";
             input.type = t === "date_input" ? "date" : "text";
-            input.value = el.value == null ? "" : el.value;
+            input.value = value == null ? "" : value;
             input.placeholder = el.placeholder || "";
             input.dataset.key = el.key;
-            input.addEventListener("change", () => commit(el.key, input.value));
+            input.addEventListener("change", () => commit(el.key, input.value, el.form));
             wrap.appendChild(input);
         } else if (t === "text_area") {
             const ta = document.createElement("textarea");
             ta.id = id; ta.className = "st-textarea";
             ta.style.height = (el.height || 130) + "px";
-            ta.value = el.value == null ? "" : el.value;
+            ta.value = value == null ? "" : value;
             ta.placeholder = el.placeholder || "";
             ta.dataset.key = el.key;
-            ta.addEventListener("change", () => commit(el.key, ta.value));
+            ta.addEventListener("change", () => commit(el.key, ta.value, el.form));
             wrap.appendChild(ta);
         } else if (t === "number_input") {
             const input = document.createElement("input");
@@ -1413,8 +1766,8 @@ window.addEventListener("DOMContentLoaded", function () {
             if (el.min != null) input.min = el.min;
             if (el.max != null) input.max = el.max;
             if (el.step != null) input.step = el.step;
-            input.value = el.value; input.dataset.key = el.key;
-            input.addEventListener("change", () => commit(el.key, input.value));
+            input.value = value; input.dataset.key = el.key;
+            input.addEventListener("change", () => commit(el.key, input.value, el.form));
             wrap.appendChild(input);
         } else if (t === "slider") {
             const row = document.createElement("div");
@@ -1422,11 +1775,11 @@ window.addEventListener("DOMContentLoaded", function () {
             const input = document.createElement("input");
             input.id = id; input.className = "st-range"; input.type = "range";
             input.min = el.min; input.max = el.max; input.step = el.step || 1;
-            input.value = el.value; input.dataset.key = el.key;
+            input.value = value; input.dataset.key = el.key;
             const out = document.createElement("span");
-            out.className = "st-range-val"; out.textContent = el.value;
+            out.className = "st-range-val"; out.textContent = value;
             input.addEventListener("input", () => { out.textContent = input.value; });
-            input.addEventListener("change", () => commit(el.key, input.value));
+            input.addEventListener("change", () => commit(el.key, input.value, el.form));
             row.appendChild(input); row.appendChild(out);
             wrap.appendChild(row);
         } else if (t === "selectbox") {
@@ -1435,10 +1788,10 @@ window.addEventListener("DOMContentLoaded", function () {
             (el.options || []).forEach((opt) => {
                 const o = document.createElement("option");
                 o.value = opt; o.textContent = opt;
-                if (opt === el.value) o.selected = true;
+                if (opt === value) o.selected = true;
                 sel.appendChild(o);
             });
-            sel.addEventListener("change", () => commit(el.key, sel.value));
+            sel.addEventListener("change", () => commit(el.key, sel.value, el.form));
             wrap.appendChild(sel);
         } else if (t === "radio") {
             const group = document.createElement("div");
@@ -1448,18 +1801,36 @@ window.addEventListener("DOMContentLoaded", function () {
                 lab.className = "st-check";
                 const input = document.createElement("input");
                 input.type = "radio"; input.name = el.key; input.value = opt;
-                input.checked = opt === el.value; input.dataset.key = el.key;
-                input.addEventListener("change", () => commit(el.key, opt));
+                input.checked = opt === value; input.dataset.key = el.key;
+                input.addEventListener("change", () => commit(el.key, opt, el.form));
                 lab.appendChild(input);
                 lab.appendChild(document.createTextNode(opt));
                 group.appendChild(lab);
             });
             wrap.appendChild(group);
         } else if (t === "multiselect") {
-            const chosen = Array.isArray(el.value) ? el.value.slice() : [];
+            const chosen = Array.isArray(value) ? value.slice() : [];
+            const options = el.options || [];
+            if (el.show_select_all) {
+                const actions = document.createElement("div");
+                actions.className = "st-multiselect-actions";
+                const selectAll = document.createElement("button");
+                selectAll.type = "button";
+                selectAll.className = "btn btn-sm";
+                selectAll.textContent = "Select all";
+                selectAll.addEventListener("click", () => commit(el.key, options.slice(), el.form));
+                const deselectAll = document.createElement("button");
+                deselectAll.type = "button";
+                deselectAll.className = "btn btn-sm";
+                deselectAll.textContent = "Deselect all";
+                deselectAll.addEventListener("click", () => commit(el.key, [], el.form));
+                actions.appendChild(selectAll);
+                actions.appendChild(deselectAll);
+                wrap.appendChild(actions);
+            }
             const chips = document.createElement("div");
             chips.className = "st-chips";
-            (el.options || []).forEach((opt) => {
+            options.forEach((opt) => {
                 const lab = document.createElement("label");
                 lab.className = "st-chip" + (chosen.indexOf(opt) >= 0 ? " on" : "");
                 const input = document.createElement("input");
@@ -1467,7 +1838,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 input.checked = chosen.indexOf(opt) >= 0;
                 input.addEventListener("change", () => {
                     const next = input.checked ? chosen.concat([opt]) : chosen.filter((x) => x !== opt);
-                    commit(el.key, next);
+                    commit(el.key, next, el.form);
                 });
                 lab.appendChild(input);
                 lab.appendChild(document.createTextNode(opt));
@@ -1477,8 +1848,8 @@ window.addEventListener("DOMContentLoaded", function () {
         } else if (t === "color_picker") {
             const input = document.createElement("input");
             input.id = id; input.type = "color"; input.className = "st-color";
-            input.value = el.value || "#4f46e5"; input.dataset.key = el.key;
-            input.addEventListener("change", () => commit(el.key, input.value));
+            input.value = value || "#4f46e5"; input.dataset.key = el.key;
+            input.addEventListener("change", () => commit(el.key, input.value, el.form));
             wrap.appendChild(input);
         } else if (t === "file_uploader") {
             const drop = document.createElement("div");
@@ -1524,10 +1895,10 @@ window.addEventListener("DOMContentLoaded", function () {
                 if (f) putUpload(el.key, f);
             });
 
-            if (el.value) {
+            if (value) {
                 const name = document.createElement("div");
                 name.className = "st-file-name";
-                name.textContent = "Loaded: " + el.value;
+                name.textContent = "Loaded: " + value;
                 drop.appendChild(name);
             }
             wrap.appendChild(drop);
@@ -1565,6 +1936,105 @@ window.addEventListener("DOMContentLoaded", function () {
         });
         hideStatus();
         runApp();
+    }
+
+    function editorCellValue(input) {
+        if (input.dataset.editorKind === "boolean") return input.checked;
+        if (input.dataset.editorKind === "number") {
+            return input.value === "" ? null : Number(input.value);
+        }
+        return input.value;
+    }
+
+    function buildDataEditor(el) {
+        const wrap = document.createElement("div");
+        wrap.className = "st-editor-wrap" + (el.full_width ? " full-width" : "");
+        const table = document.createElement("table");
+        table.className = "st-editor";
+        const state = draftValue(el) || {};
+        const rows = Array.isArray(state.rows) ? state.rows.map(row => row.slice()) :
+            (el.rows || []).map(row => row.slice());
+        const columns = el.columns || [];
+        const index = Array.isArray(state.index) ? state.index : (el.index || []);
+
+        const head = document.createElement("thead");
+        const headRow = document.createElement("tr");
+        if (!el.hide_index) {
+            const th = document.createElement("th");
+            th.textContent = "";
+            headRow.appendChild(th);
+        }
+        columns.forEach((column) => {
+            const th = document.createElement("th");
+            th.textContent = column;
+            headRow.appendChild(th);
+        });
+        head.appendChild(headRow);
+        table.appendChild(head);
+
+        const body = document.createElement("tbody");
+        rows.forEach((row, rowIndex) => {
+            const tr = document.createElement("tr");
+            if (!el.hide_index) {
+                const indexCell = document.createElement("th");
+                indexCell.textContent = index[rowIndex] == null ? String(rowIndex) : String(index[rowIndex]);
+                tr.appendChild(indexCell);
+            }
+            columns.forEach((_, columnIndex) => {
+                const td = document.createElement("td");
+                const input = document.createElement("input");
+                const value = row[columnIndex];
+                input.className = "st-editor-input";
+                input.dataset.editorRow = rowIndex;
+                input.dataset.editorColumn = columnIndex;
+                if (typeof value === "boolean") {
+                    input.type = "checkbox";
+                    input.checked = value;
+                    input.dataset.editorKind = "boolean";
+                } else if (typeof value === "number") {
+                    input.type = "number";
+                    input.step = "any";
+                    input.value = value;
+                    input.dataset.editorKind = "number";
+                } else {
+                    input.type = "text";
+                    input.value = value == null ? "" : String(value);
+                    input.dataset.editorKind = "text";
+                }
+                td.appendChild(input);
+                tr.appendChild(td);
+            });
+            body.appendChild(tr);
+        });
+        table.appendChild(body);
+
+        const snapshot = () => {
+            const next = rows.map(row => row.slice());
+            table.querySelectorAll("[data-editor-row]").forEach((input) => {
+                next[Number(input.dataset.editorRow)][Number(input.dataset.editorColumn)] = editorCellValue(input);
+            });
+            return { rows: next, index: index.slice() };
+        };
+        table.querySelectorAll("[data-editor-row]").forEach((input) => {
+            input.addEventListener("change", () => commit(el.key, snapshot(), el.form));
+        });
+        wrap.appendChild(table);
+
+        if (el.num_rows === "dynamic") {
+            const add = document.createElement("button");
+            add.type = "button";
+            add.className = "btn btn-sm";
+            add.textContent = "Add row";
+            add.style.marginTop = "8px";
+            add.addEventListener("click", () => {
+                const next = snapshot();
+                next.rows.push(columns.map(() => null));
+                next.index.push(next.index.length);
+                commit(el.key, next, el.form);
+            });
+            wrap.appendChild(add);
+        }
+        return wrap;
     }
 
     function buildElement(el) {
@@ -1612,6 +2082,25 @@ window.addEventListener("DOMContentLoaded", function () {
                 node.className = "st-alert " + el.level;
                 node.innerHTML = mdToHtml(el.body);
                 return node;
+            case "toast":
+                node = document.createElement("div");
+                node.className = "st-toast";
+                if (el.icon) node.appendChild(document.createTextNode(el.icon + " "));
+                node.appendChild(document.createTextNode(el.body));
+                setTimeout(() => node.remove(), 4500);
+                return node;
+            case "spinner": {
+                node = document.createElement("div");
+                node.className = "st-spinner-block";
+                const indicator = document.createElement("span");
+                indicator.className = "spinner";
+                const label = document.createElement("span");
+                label.textContent = el.label;
+                node.appendChild(indicator);
+                node.appendChild(label);
+                renderList(el.children || [], node);
+                return node;
+            }
             case "metric": {
                 node = document.createElement("div");
                 node.className = "st-metric" + (el.hero ? " hero" : "");
@@ -1638,6 +2127,8 @@ window.addEventListener("DOMContentLoaded", function () {
                 }
                 return node;
             }
+            case "data_editor":
+                return buildDataEditor(el);
             case "download": {
                 node = document.createElement("button");
                 node.className = "btn";
@@ -1654,6 +2145,56 @@ window.addEventListener("DOMContentLoaded", function () {
                 node = document.createElement("div");
                 renderList(el.children || [], node);
                 return node;
+            case "empty":
+                node = document.createElement("div");
+                node.className = "st-empty-slot";
+                renderList(el.children || [], node);
+                return node;
+            case "form":
+                node = document.createElement("form");
+                node.className = "st-form" + (el.border === false ? " no-border" : "");
+                formConfigs[el.key] = el;
+                node.addEventListener("submit", (event) => event.preventDefault());
+                renderList(el.children || [], node);
+                return node;
+            case "tabs": {
+                node = document.createElement("div");
+                node.className = "st-tabs";
+                const groupId = "tabs-" + tabGroupCounter++;
+                const labels = document.createElement("div");
+                labels.className = "st-tab-labels";
+                const panels = document.createElement("div");
+                panels.className = "st-tab-panels";
+                const specs = el.tabs || [];
+                let active = Number.isInteger(activeTabs[groupId]) ? activeTabs[groupId] : 0;
+                if (active < 0 || active >= specs.length) active = 0;
+                const buttons = [];
+                const panelNodes = [];
+                const select = (index) => {
+                    activeTabs[groupId] = index;
+                    buttons.forEach((button, i) => button.classList.toggle("on", i === index));
+                    panelNodes.forEach((panel, i) => { panel.hidden = i !== index; });
+                };
+                specs.forEach((spec, index) => {
+                    const button = document.createElement("button");
+                    button.type = "button";
+                    button.className = "st-tab";
+                    button.textContent = spec.label;
+                    button.addEventListener("click", () => select(index));
+                    labels.appendChild(button);
+                    buttons.push(button);
+
+                    const panel = document.createElement("div");
+                    panel.className = "st-tab-panel";
+                    renderList(spec.children || [], panel);
+                    panels.appendChild(panel);
+                    panelNodes.push(panel);
+                });
+                node.appendChild(labels);
+                node.appendChild(panels);
+                select(active);
+                return node;
+            }
             case "columns": {
                 node = document.createElement("div");
                 node.className = "st-cols";
@@ -1740,6 +2281,8 @@ window.addEventListener("DOMContentLoaded", function () {
 
     function renderApp(result) {
         appRoot.innerHTML = "";
+        formConfigs = {};
+        tabGroupCounter = 0;
         document.body.classList.toggle("layout-wide",
             result.config && result.config.layout === "wide");
         if (result.config && result.config.title) {
@@ -1764,6 +2307,7 @@ window.addEventListener("DOMContentLoaded", function () {
         const focus = captureFocus();
         try {
             const rawSource = currentSource();
+            syncDataFilesToFs();
             await installFor(rawSource);
             const source = cleanMagicCommands(rawSource);
             const payload = JSON.stringify({ state: appState, clicked: pendingClick });
@@ -1860,6 +2404,8 @@ window.addEventListener("DOMContentLoaded", function () {
             $("capycanvas-py").textContent, { encoding: "utf8" });
         pyodide.runPython(
             "import sys\n" +
+            "import os\n" +
+            "os.chdir('/')\n" +
             "if '/sl_lib' not in sys.path: sys.path.insert(0, '/sl_lib')\n" +
             "import matplotlib\n" +
             "matplotlib.use('Agg')\n" +
@@ -1881,16 +2427,8 @@ window.addEventListener("DOMContentLoaded", function () {
                         ext: entry.ext || (name.split(".").pop() || "").toLowerCase(),
                         size: entry.size || Math.floor((entry.b64.length * 3) / 4)
                     };
-                    pyodide.globals.set("__st_emb_name", name);
-                    pyodide.globals.set("__st_emb_b64", entry.b64);
-                    pyodide.runPython(
-                        "import capycanvas\n" +
-                        "capycanvas._restore_embedded(__st_emb_name, __st_emb_b64)"
-                    );
+                    restorePackagedDataFile(name, embeddedFiles[name]);
                 }
-                ["__st_emb_name", "__st_emb_b64"].forEach(k => {
-                    try { pyodide.globals.delete(k); } catch (e) {}
-                });
                 refreshDataList();
             }
         } catch (e) {
@@ -1918,6 +2456,7 @@ window.addEventListener("DOMContentLoaded", function () {
     $("runBtn").addEventListener("click", async () => {
         await installFor(currentSource());
         appState = {};
+        formDraftState = {};
         pendingClick = null;
         runApp();
     });
@@ -2000,16 +2539,9 @@ window.addEventListener("DOMContentLoaded", function () {
                 const b64 = bytesToBase64(bytes);
                 const ext = (file.name.split(".").pop() || "").toLowerCase();
                 embeddedFiles[file.name] = { b64, ext, size: bytes.length };
-                // Also restore into Python so st.embedded("name") works immediately
+                // Keep the legacy API working while the file is mounted normally.
                 if (pyodide) {
-                    pyodide.globals.set("__st_emb_name", file.name);
-                    pyodide.globals.set("__st_emb_b64", b64);
-                    pyodide.runPython(
-                        "import capycanvas\n" +
-                        "capycanvas._restore_embedded(__st_emb_name, __st_emb_b64)"
-                    );
-                    try { pyodide.globals.delete("__st_emb_name"); } catch (err) {}
-                    try { pyodide.globals.delete("__st_emb_b64"); } catch (err) {}
+                    restorePackagedDataFile(file.name, embeddedFiles[file.name]);
                 }
             } catch (err) {
                 console.warn("Failed to read " + file.name + ":", err);
@@ -2018,8 +2550,7 @@ window.addEventListener("DOMContentLoaded", function () {
         refreshDataList();
         hideStatus();
         e.target.value = "";
-        // Re-run only so apps that already call st.embedded(...) can see new files.
-        // Staging here does NOT auto-load data into the app — the author must reference it.
+        // Re-run so apps can read the newly mounted file from the virtual FS.
         if (pyodide) runApp();
     });
 
@@ -2027,6 +2558,7 @@ window.addEventListener("DOMContentLoaded", function () {
         if (!Object.keys(embeddedFiles).length) return;
         if (!confirm("Clear all tracked files? They will no longer be embedded on export.")) return;
         embeddedFiles = {};
+        syncDataFilesToFs();
         refreshDataList();
     });
 
@@ -2098,10 +2630,17 @@ window.addEventListener("DOMContentLoaded", function () {
 
     function replaceHdr(html, mode, dataPayload) {
         const block = buildHdrComment(mode, dataPayload);
-        const re = /<!--CAPYCANVAS_HDR:v1\n[\s\S]*?\nCAPYCANVAS_HDR_END-->/;
-        if (re.test(html)) return html.replace(re, block);
+        const start = html.indexOf("<!--CAPYCANVAS_HDR:v1");
+        const endMarker = "CAPYCANVAS_HDR_END-->";
+        const end = html.indexOf(endMarker, start);
+        if (start >= 0 && end >= 0) {
+            return html.slice(0, start) + block + html.slice(end + endMarker.length);
+        }
         // Insert after <title>...</title> if missing
-        return html.replace(/<\/title>/i, "</title>\n\n" + block);
+        const titleEnd = html.toLowerCase().indexOf("</title>");
+        if (titleEnd < 0) return html + "\n\n" + block;
+        const insertAt = titleEnd + "</title>".length;
+        return html.slice(0, insertAt) + "\n\n" + block + html.slice(insertAt);
     }
 
     // Export
