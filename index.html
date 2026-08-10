@@ -980,39 +980,56 @@ import capycanvas as st
 import pandas as pd
 import numpy as np
 
-st.set_page_config(page_title="Sales explorer")
-
-st.title("Sales explorer")
+st.set_page_config(page_title="Data explorer")
+st.title("Data explorer")
 st.caption("CapyCanvas is an independent project, heavily inspired by Streamlit. Not affiliated with Streamlit or Snowflake.")
 st.markdown(
     "Edit the code on the left and press **Run**. "
     "Use `%pip install package` for extra packages. "
-    "Upload a CSV or leave empty for sample data.\n\n"
+    "Upload any CSV — the filters and charts below build themselves from its columns.\n\n"
     "Data staged in the **Data** panel (developer data dependencies) is available "
     "via `st.embedded(\"filename\")` — it is **not** auto-loaded. Reference it "
     "explicitly in your code when you want it."
 )
 
-# Example of using a staged data dependency (uncomment to try):
-# f = st.embedded("stonks_data.csv")
-# if f is not None:
-#     df = f.dataframe()
-#     st.success(f"Loaded {f.name} — {len(df)} rows")
-#     st.stop()   # or continue with your own filters
 
-# Example package install:
-# %pip install seaborn
-# import seaborn as sns
+def pick_one(label, options, index=0):
+    """selectbox if available, otherwise a single-choice multiselect."""
+    if not options:
+        return None
+    index = min(index, len(options) - 1)
+    if hasattr(st, "selectbox"):
+        return st.selectbox(label, options, index=index)
+    chosen = st.multiselect(label + " (pick one)", options, default=[options[index]])
+    return chosen[0] if chosen else options[index]
 
+
+CHART_KINDS = [k for k in ("bar", "line", "area", "scatter")
+               if hasattr(st, k + "_chart")] or ["bar"]
+
+
+def draw(kind, data, x=None, y=None):
+    fn = getattr(st, kind + "_chart", st.bar_chart)
+    try:
+        if x is not None and y is not None:
+            return fn(data, x=x, y=y)
+    except TypeError:
+        pass
+    return fn(data)
+
+
+# ------------------------------------------------------------------ data ----
 @st.cache_data
 def load_sample(n_rows):
     rng = np.random.default_rng(7)
     return pd.DataFrame({
         "region": rng.choice(["North", "South", "East", "West"], n_rows),
         "month": rng.choice(["Jan", "Feb", "Mar", "Apr", "May", "Jun"], n_rows),
+        "rep": rng.choice([f"Rep {i:02d}" for i in range(1, 21)], n_rows),
         "units": rng.integers(20, 200, n_rows),
         "revenue": rng.normal(5000, 1500, n_rows).round(2),
     })
+
 
 uploaded = st.file_uploader("Upload a CSV, or leave empty for sample data", type=["csv"])
 if uploaded is not None:
@@ -1021,20 +1038,88 @@ if uploaded is not None:
 else:
     df = load_sample(st.slider("Sample rows", 50, 1000, 300, step=50))
 
-st.subheader("Filters")
-left, right = st.columns(2)
-with left:
-    regions = st.multiselect("Region", sorted(df["region"].unique()),
-                             default=sorted(df["region"].unique()))
-with right:
-    min_units = st.number_input("Minimum units", min_value=0, max_value=200, value=0, step=10)
 
-view = df[df["region"].isin(regions) & (df["units"] >= min_units)]
+def coerce_dates(frame):
+    """Best-effort: turn obviously date-like text columns into real datetimes."""
+    for col in frame.columns:
+        if frame[col].dtype != "object":
+            continue
+        sample = frame[col].dropna().astype(str).head(50)
+        if sample.empty or not sample.str.contains(r"[-/:]").all():
+            continue
+        try:
+            parsed = pd.to_datetime(frame[col], errors="coerce")
+        except Exception:
+            continue
+        if parsed.notna().mean() >= 0.9:
+            frame[col] = parsed
+    return frame
+
+
+df = coerce_dates(df.copy())
+
+num_cols = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c])]
+date_cols = [c for c in df.columns if pd.api.types.is_datetime64_any_dtype(df[c])]
+cat_cols = [c for c in df.columns if c not in num_cols and c not in date_cols]
+
+if df.empty or not len(df.columns):
+    st.warning("That file has no usable rows.")
+    st.stop()
+
+st.caption(
+    f"{len(df):,} rows x {len(df.columns)} columns — "
+    f"{len(num_cols)} numeric, {len(cat_cols)} categorical, {len(date_cols)} date"
+)
+
+# --------------------------------------------------------------- filters ----
+st.subheader("Filters")
+
+TOP_N_VALUES = 200  # cap on distinct values offered for a high-cardinality column
+
+filter_cols = st.multiselect(
+    "Columns to filter on", list(df.columns),
+    default=cat_cols[:1] or list(df.columns)[:1],
+)
+
+view = df
+for col in filter_cols:
+    if col in num_cols:
+        lo, hi = float(df[col].min()), float(df[col].max())
+        step = (hi - lo) / 100 or 1.0
+        left, right = st.columns(2)
+        with left:
+            fmin = st.number_input(f"{col} — min", min_value=lo, max_value=hi, value=lo, step=step)
+        with right:
+            fmax = st.number_input(f"{col} — max", min_value=lo, max_value=hi, value=hi, step=step)
+        view = view[view[col].between(fmin, fmax)]
+
+    elif col in date_cols:
+        lo, hi = df[col].min(), df[col].max()
+        spans = pd.Series(pd.date_range(lo, hi, periods=min(60, max(2, df[col].nunique()))))
+        labels = [d.strftime("%Y-%m-%d") for d in spans]
+        left, right = st.columns(2)
+        with left:
+            start = pick_one(f"{col} — from", labels, index=0)
+        with right:
+            end = pick_one(f"{col} — to", labels, index=len(labels) - 1)
+        view = view[view[col].between(pd.Timestamp(start), pd.Timestamp(end) + pd.Timedelta(days=1))]
+
+    else:
+        counts = df[col].astype(str).value_counts()
+        values = list(counts.index[:TOP_N_VALUES])
+        if len(counts) > TOP_N_VALUES:
+            st.caption(f"{col} has {len(counts):,} distinct values — showing the {TOP_N_VALUES} most common.")
+        keep = st.multiselect(f"{col} — values", values, default=values)
+        view = view[view[col].astype(str).isin(keep)]
 
 a, b, c = st.columns(3)
 a.metric("Rows", len(view))
-b.metric("Revenue", "$" + format(view["revenue"].sum(), ",.0f"))
-c.metric("Avg units", round(view["units"].mean(), 1) if len(view) else 0)
+b.metric("Share of file", f"{(len(view) / len(df) * 100):.0f}%")
+if num_cols:
+    headline = num_cols[0]
+    c.metric(f"Total {headline}", format(view[headline].sum(), ",.0f") if len(view) else 0)
+else:
+    c.metric("Columns", len(view.columns))
 
 st.divider()
 
@@ -1042,13 +1127,73 @@ if view.empty:
     st.warning("No rows match those filters.")
     st.stop()
 
-st.subheader("Revenue by month")
-st.bar_chart(view.groupby("month", sort=False)["revenue"].sum())
+# --------------------------------------------------------------- charting ---
+st.subheader("Build a chart")
 
-with st.expander("Show the filtered table"):
-    st.dataframe(view.head(50))
+AGGS = ["sum", "mean", "median", "min", "max", "count", "nunique"]
 
-st.download_button("Download filtered CSV", view, file_name="filtered.csv", mime="text/csv")
+left, right = st.columns(2)
+with left:
+    kind = pick_one("Chart type", CHART_KINDS)
+    x_col = pick_one("X axis", list(view.columns),
+                     index=list(view.columns).index((date_cols or cat_cols or list(view.columns))[0]))
+with right:
+    y_options = num_cols + ["(count of rows)"]
+    y_col = pick_one("Y axis", y_options)
+    agg = pick_one("Aggregate", AGGS) if y_col != "(count of rows)" else "count"
+
+series_col = pick_one("Split into series by (optional)",
+                      ["(none)"] + [c for c in cat_cols if c != x_col])
+max_cats = st.slider("Max X categories to plot", 5, 60, 20, step=5)
+
+x_is_continuous = x_col in num_cols or x_col in date_cols
+
+if kind == "scatter" and y_col != "(count of rows)" and x_col in num_cols:
+    # Raw points, no aggregation — sample so the browser stays happy.
+    plot_df = view[[x_col, y_col]].dropna()
+    if len(plot_df) > 5000:
+        plot_df = plot_df.sample(5000, random_state=0)
+        st.caption("Sampled 5,000 points for plotting.")
+    draw("scatter", plot_df, x=x_col, y=y_col)
+else:
+    if y_col == "(count of rows)":
+        if series_col != "(none)":
+            plot_df = view.pivot_table(index=x_col, columns=series_col, aggfunc="size").fillna(0)
+        else:
+            plot_df = view.groupby(x_col, sort=False).size().rename("rows")
+    else:
+        if series_col != "(none)":
+            plot_df = view.pivot_table(index=x_col, columns=series_col, values=y_col, aggfunc=agg)
+        else:
+            plot_df = view.groupby(x_col, sort=False)[y_col].agg(agg)
+
+    # Continuous X reads best in order; categorical X reads best biggest-first.
+    if x_is_continuous:
+        plot_df = plot_df.sort_index()
+    else:
+        magnitude = plot_df.sum(axis=1) if isinstance(plot_df, pd.DataFrame) else plot_df
+        plot_df = plot_df.loc[magnitude.sort_values(ascending=False).index]
+
+    if len(plot_df) > max_cats:
+        st.caption(f"Showing {max_cats} of {len(plot_df):,} X values.")
+        plot_df = plot_df.head(max_cats)
+
+    draw(kind, plot_df)
+
+with st.expander("Show the aggregated numbers"):
+    st.dataframe(plot_df if isinstance(plot_df, pd.DataFrame) else plot_df.to_frame())
+
+# ------------------------------------------------------------------ table ---
+st.subheader("Filtered data")
+
+show_cols = st.multiselect("Columns to show", list(view.columns), default=list(view.columns))
+table = view[show_cols] if show_cols else view
+
+with st.expander("Column summary"):
+    st.dataframe(table.describe(include="all").transpose())
+
+st.dataframe(table.head(50))
+st.download_button("Download filtered CSV", table, file_name="filtered.csv", mime="text/csv")
 
 if st.button("Say hello"):
     st.info("Buttons are True only on the run they trigger, then flip back.")
