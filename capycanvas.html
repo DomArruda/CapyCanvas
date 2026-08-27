@@ -19,7 +19,7 @@ CAPYCANVAS_HDR_END-->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <script defer src="https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
@@ -28,16 +28,13 @@ CAPYCANVAS_HDR_END-->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-<link
-  rel="icon"
-  href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>"
->
 
 <!-- #region file: styles.css -->
 <style>
 :root {
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-editor: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     --bg: #f8fafc; --surface: #ffffff; --border: #e2e8f0;
     --text: #0f172a; --text-muted: #64748b; --text-faint: #94a3b8;
     --accent: #4f46e5; --accent-hover: #4338ca;
@@ -197,15 +194,18 @@ body {
     text-transform: uppercase; letter-spacing: .06em; color: var(--text-faint);
 }
 .editor-wrap { flex: 1; min-height: 0; overflow: auto; }
-.CodeMirror { height: 100%; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; }
+.CodeMirror { height: 100%; font-family: var(--font-editor); font-size: 13px; line-height: 1.6; }
+.CodeMirror pre { font-family: var(--font-editor); }
 .resizer { flex: none; width: 5px; cursor: col-resize; background: transparent; }
 .resizer:hover { background: var(--accent); opacity: .35; }
 .pane-app { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
 .app-scroll { flex: 1; overflow: auto; padding: 26px 30px 60px; }
 .app-inner { max-width: 780px; margin: 0 auto; }
 body.layout-wide .app-inner { max-width: min(1400px, 96vw); }
-body.mode-app .pane-editor, body.mode-app .resizer { display: none; }
-/* Client mode: only Run + Theme remain visible */
+body.mode-app .pane-editor, body.mode-app .resizer,
+body.editor-hidden .pane-editor, body.editor-hidden .resizer { display: none; }
+/* Client mode: only Theme remains visible from the developer chrome */
+body.mode-app #runBtn,
 body.mode-app #editToggle,
 body.mode-app #depsMenu,
 body.mode-app #dataMenu,
@@ -260,6 +260,55 @@ body.mode-app .cache-toggle { display: none !important; }
 .st-expander > summary::before { content: "\25B8"; display: inline-block; margin-right: 8px; color: var(--text-faint); transition: transform .15s; }
 .st-expander[open] > summary::before { transform: rotate(90deg); }
 .st-expander .st-exp-body { padding: 2px 13px 12px; }
+.st-tabs { margin: 0 0 15px; }
+.st-tab-labels {
+    display: flex; align-items: stretch; gap: 4px; white-space: nowrap;
+    border-bottom: 1px solid var(--border); overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none;
+}
+.st-tab-labels::-webkit-scrollbar { display: none; }
+.st-tab {
+    flex: none; cursor: pointer; border: 0; border-bottom: 2px solid transparent;
+    background: transparent; color: var(--text-muted); font: inherit; font-size: 13px;
+    padding: 8px 12px; margin-bottom: -1px;
+}
+.st-tab:hover { color: var(--text); background: var(--slate-btn-bg); }
+.st-tab.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.st-tab-panel { padding-top: 13px; }
+.st-form { border: 1px solid var(--border); border-radius: 9px; padding: 14px 14px 2px; margin: 0 0 14px; }
+.st-form.no-border { border: 0; padding: 0; }
+.st-form-hint {
+    margin: -2px 0 13px; padding: 9px 11px; border-radius: 7px;
+    background: var(--info-bg); border: 1px solid var(--info-border);
+    color: var(--info-text); font-size: 12.5px; line-height: 1.45;
+}
+.st-form-hint.st-md, .st-form-hint .st-md { font-size: inherit; line-height: inherit; }
+.st-form-hint.st-md p, .st-form-hint .st-md p { margin: 0; }
+.st-spinner-block {
+    display: flex; align-items: center; gap: 8px; padding: 9px 12px; margin: 0 0 13px;
+    background: var(--info-bg); border: 1px solid var(--info-border); border-radius: 8px;
+    color: var(--info-text); font-size: 12.5px;
+}
+.st-spinner-block > .spinner { display: inline-block; }
+.st-toast {
+    position: fixed; right: 20px; bottom: 20px; z-index: 120;
+    max-width: min(360px, calc(100vw - 40px)); padding: 11px 14px;
+    border: 1px solid var(--border); border-radius: 9px; background: var(--surface);
+    color: var(--text); box-shadow: 0 8px 24px rgba(0,0,0,.16); font-size: 13px;
+    animation: toast-in .18s ease-out;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.st-empty-slot { min-height: 1px; }
+.st-editor-wrap { overflow-x: auto; margin: 0 0 14px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); }
+.st-editor-wrap.full-width { width: 100%; }
+.st-editor { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+.st-editor th, .st-editor td { padding: 5px 7px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.st-editor thead th { background: var(--code-bg); font-weight: 600; position: sticky; top: 0; }
+.st-editor tbody tr:last-child td, .st-editor tbody tr:last-child th { border-bottom: 0; }
+.st-editor tbody th { color: var(--text-muted); font-weight: 500; }
+.st-editor-input { min-width: 90px; width: 100%; border: 1px solid transparent; border-radius: 5px; padding: 5px 6px; background: transparent; color: var(--text); font: inherit; }
+.st-editor-input:hover, .st-editor-input:focus { border-color: var(--slate-btn-border); background: var(--surface); outline: none; }
+.st-editor-input[type="checkbox"] { min-width: 15px; width: 15px; accent-color: var(--accent); }
 
 /* --------------------------------------------------------------- widgets */
 .st-w { margin: 0 0 13px; }
@@ -271,6 +320,22 @@ body.mode-app .cache-toggle { display: none !important; }
     border-radius: 7px; padding: 7px 10px; transition: border-color .12s, box-shadow .12s;
 }
 .st-textarea { font-family: var(--font-mono); font-size: 12.5px; resize: vertical; }
+.st-code-editor-wrap {
+    overflow: hidden; border: 1px solid var(--slate-btn-border); border-radius: 8px;
+    background: var(--surface); transition: border-color .12s, box-shadow .12s;
+}
+.st-code-editor-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.st-code-editor-wrap .CodeMirror {
+    height: auto; min-height: 100px; font-family: var(--font-editor);
+    font-size: 13px; line-height: 1.6; background: var(--surface); color: var(--text);
+}
+.st-code-editor-wrap .CodeMirror-gutters {
+    background: var(--code-bg); border-right: 1px solid var(--border);
+}
+.st-code-editor-wrap .CodeMirror-scroll { min-height: 100px; }
 .st-input:focus, .st-select:focus, .st-textarea:focus {
     outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
@@ -280,7 +345,35 @@ body.mode-app .cache-toggle { display: none !important; }
 .st-check { display: flex; align-items: center; gap: 8px; font-size: 13.5px; cursor: pointer; }
 .st-check input { accent-color: var(--accent); width: 15px; height: 15px; }
 .st-radio-group { display: flex; flex-direction: column; gap: 6px; }
+.st-quiz-options { gap: 7px; }
+.st-quiz-option {
+    padding: 8px 10px; border: 1px solid transparent; border-radius: 8px;
+    transition: background .12s ease, border-color .12s ease;
+}
+.st-quiz-option:hover { background: var(--slate-btn-bg); }
+.st-quiz-option.correct { background: var(--ok-bg); border-color: var(--ok-border); color: var(--ok-text); }
+.st-quiz-option.wrong { background: var(--danger-bg); border-color: var(--danger-text); color: var(--danger-hover-text); }
+.st-quiz-option input { flex: none; }
+.st-quiz-option input:disabled { cursor: not-allowed; }
+.st-quiz-badge { margin-left: auto; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.st-quiz-result {
+    padding: 8px 10px; margin-top: 9px; border: 1px solid; border-radius: 7px;
+    font-size: 12.5px; font-weight: 550;
+}
+.st-quiz-result.correct { background: var(--ok-bg); border-color: var(--ok-border); color: var(--ok-text); }
+.st-quiz-result.wrong { background: var(--danger-bg); border-color: var(--danger-text); color: var(--danger-hover-text); }
+.st-quiz-result.neutral { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
+.st-quiz-feedback {
+    margin-top: 9px; padding: 9px 10px; border: 1px solid; border-radius: 7px;
+    font-size: 12.5px; line-height: 1.45;
+}
+.st-quiz-hint { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
+.st-quiz-explanation { background: var(--info-bg); border-color: var(--info-border); color: var(--info-text); }
+.st-quiz-feedback-body { margin-top: 3px; }
+.st-quiz-feedback-body.st-md, .st-quiz-feedback-body .st-md { font-size: inherit; line-height: inherit; }
+.st-quiz-feedback-body.st-md p, .st-quiz-feedback-body .st-md p { margin: 0; }
 .st-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.st-multiselect-actions { display: flex; gap: 6px; margin: -1px 0 8px; }
 .st-chip {
     display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
     font-size: 12.5px; padding: 5px 11px; border-radius: 999px;
@@ -365,7 +458,7 @@ body.mode-app .cache-toggle { display: none !important; }
         <button class="btn" id="dataBtn">Data</button>
         <div class="menu-panel" id="dataPanel">
             <div class="panel-section">
-                <div class="panel-label">Staged files (embed on Packaged export)</div>
+                <div class="panel-label">Staged files (available in Pyodide FS)</div>
                 <div class="panel-list" id="dataList"><div class="panel-empty">No files staged</div></div>
             </div>
             <div class="panel-section">
@@ -373,8 +466,9 @@ body.mode-app .cache-toggle { display: none !important; }
                 <input type="file" id="dataFileInput" multiple accept=".csv,.tsv,.txt,.json,.xlsx,.xls,.parquet" hidden />
                 <button class="btn" id="dataAddBtn" style="width:100%;margin-bottom:8px;">+ Add files</button>
                 <small style="color:var(--text-muted);font-size:11px;display:block;margin-bottom:8px;line-height:1.4;">
-                    For developers: stage files the app can load with <code style="font-size:10px;">st.embedded("name")</code>.
-                    They are embedded only on Packaged export. End users never see this panel.
+                    For developers: staged files are available by filename in Python, e.g.
+                    <code style="font-size:10px;">pd.read_csv("data.csv")</code>.
+                    They are included only on Packaged export. End users never see this panel.
                 </small>
                 <button class="btn" id="dataClearBtn" style="width:100%;">Clear all</button>
             </div>
@@ -477,9 +571,11 @@ _elements = []
 _stack = []
 _state = {}
 _clicked = None
+_submitted_form = None
 _counter = 0
+_form_stack = []
 _uploads = {}
-_embedded = {}   # name -> bytes  (restored from packaged export)
+_embedded = {}   # legacy st.embedded() storage for older app exports
 _cache = {}
 _config = {}
 
@@ -522,6 +618,8 @@ def _widget(wtype, label, key, default, **props):
     k = key or _next_key(wtype, label)
     value = _state.get(k, default)
     element = {"kind": "widget", "type": wtype, "key": k, "label": label, "value": value}
+    if _form_stack:
+        element["form"] = _form_stack[-1]
     element.update(props)
     _emit(element)
     return value
@@ -556,6 +654,56 @@ class Container:
         return scoped
 
 
+class EmptyContainer(Container):
+    def _clear(self):
+        self._element["children"][:] = []
+
+    def __getattr__(self, name):
+        fn = globals().get(name)
+        if not callable(fn):
+            raise AttributeError(name)
+        def scoped(*args, **kwargs):
+            self._clear()
+            with self:
+                return fn(*args, **kwargs)
+        return scoped
+
+    def container(self):
+        self._clear()
+        return Container(self._element)
+
+
+class FormContainer(Container):
+    def __init__(self, element):
+        super().__init__(element)
+        self._key = element["key"]
+
+    def __enter__(self):
+        _stack.append(self._element["children"])
+        _form_stack.append(self._key)
+        return self
+
+    def __exit__(self, *exc_info):
+        _form_stack.pop()
+        _stack.pop()
+        return False
+
+
+class _Spinner:
+    def __init__(self, text):
+        self.text = str(text)
+        self._element = None
+
+    def __enter__(self):
+        self._element = _emit({"kind": "spinner", "label": self.text, "children": []})
+        _stack.append(self._element["children"])
+        return self
+
+    def __exit__(self, *exc_info):
+        _stack.pop()
+        return False
+
+
 def container():
     return Container(_emit({"kind": "container", "children": []}))
 
@@ -571,6 +719,30 @@ def expander(label, expanded=False):
     return Container(_emit({
         "kind": "expander", "label": str(label),
         "expanded": bool(expanded), "children": []
+    }))
+
+
+def tabs(labels):
+    specs = [{"label": str(label), "children": []} for label in labels]
+    _emit({"kind": "tabs", "tabs": specs})
+    return [Container(spec) for spec in specs]
+
+
+def empty():
+    return EmptyContainer(_emit({"kind": "empty", "children": []}))
+
+
+def spinner(text="In progress..."):
+    return _Spinner(text)
+
+
+def form(key, clear_on_submit=False, enter_to_submit=True, border=True, hint=None):
+    return FormContainer(_emit({
+        "kind": "form", "key": str(key), "children": [],
+        "clear_on_submit": bool(clear_on_submit),
+        "enter_to_submit": bool(enter_to_submit),
+        "border": bool(border),
+        "hint": None if hint is None else str(hint),
     }))
 
 
@@ -634,6 +806,11 @@ def error(body):
     _alert("error", body)
 
 
+def toast(body, icon=None):
+    _emit({"kind": "toast", "body": str(body),
+           "icon": None if icon is None else str(icon)})
+
+
 def metric(label, value, delta=None, hero=False):
     _emit({"kind": "metric", "label": str(label), "value": str(value),
            "delta": None if delta is None else str(delta), "hero": bool(hero)})
@@ -653,6 +830,54 @@ def dataframe(data, use_container_width=True, max_rows=200):
 
 
 table = dataframe
+
+
+def _editor_cell(value):
+    import pandas as pd
+    try:
+        if bool(pd.isna(value)):
+            return None
+    except (TypeError, ValueError):
+        pass
+    try:
+        value = value.item()
+    except AttributeError:
+        pass
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    if hasattr(value, "isoformat"):
+        return value.isoformat()
+    return str(value)
+
+
+def data_editor(data, hide_index=False, num_rows="fixed",
+                use_container_width=True, key=None, **_kwargs):
+    import pandas as pd
+    frame = data.copy() if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
+    k = key or _next_key("data_editor", "")
+    saved = _state.get(k)
+    if isinstance(saved, dict) and isinstance(saved.get("rows"), list):
+        try:
+            frame = pd.DataFrame(saved["rows"], columns=list(frame.columns))
+            saved_index = saved.get("index")
+            if isinstance(saved_index, list) and len(saved_index) == len(frame):
+                frame.index = saved_index
+        except (TypeError, ValueError):
+            frame = data.copy() if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
+    element = {
+        "kind": "data_editor", "key": k,
+        "columns": [str(column) for column in frame.columns],
+        "rows": [[_editor_cell(value) for value in row]
+                 for row in frame.itertuples(index=False, name=None)],
+        "index": [_editor_cell(value) for value in frame.index],
+        "hide_index": bool(hide_index),
+        "num_rows": str(num_rows),
+        "full_width": bool(use_container_width),
+    }
+    if _form_stack:
+        element["form"] = _form_stack[-1]
+    _emit(element)
+    return frame
 
 
 def pyplot(fig=None, clear=True):
@@ -731,8 +956,20 @@ def scatter_chart(data):
 
 def button(label, key=None, type="secondary"):
     k = key or _next_key("button", label)
-    _emit({"kind": "widget", "type": "button", "key": k, "label": str(label),
-           "value": False, "variant": type})
+    element = {"kind": "widget", "type": "button", "key": k,
+               "label": str(label), "value": False, "variant": type}
+    if _form_stack:
+        element["form"] = _form_stack[-1]
+    _emit(element)
+    return _clicked == k
+
+
+def form_submit_button(label="Submit", help=None, type="secondary", key=None, **_kwargs):
+    k = key or _next_key("form_submit_button", label)
+    element = {"kind": "widget", "type": "form_submit_button", "key": k,
+               "label": str(label), "value": False, "variant": type,
+               "help": help, "form": _form_stack[-1] if _form_stack else None}
+    _emit(element)
     return _clicked == k
 
 
@@ -744,6 +981,33 @@ def text_input(label, value="", key=None, placeholder="", help=None):
 def text_area(label, value="", key=None, height=130, placeholder="", help=None):
     return str(_widget("text_area", label, key, str(value),
                        height=height, placeholder=placeholder, help=help))
+
+
+class CodeEditorValue(str):
+    """String-like editor value with an isolated execution helper."""
+
+    def dict(self, variables=None):
+        scope = {} if variables is None else variables
+        if not isinstance(scope, dict):
+            raise TypeError("variables must be a dictionary")
+        try:
+            exec(str(self), scope, scope)
+        finally:
+            scope.pop("__builtins__", None)
+        return scope
+
+
+def code_editor(label, value="", language="python", key=None, height=260,
+                line_numbers=True, wrap_lines=False, help=None):
+    """Render an editable CodeMirror editor and return its current source."""
+    initial = "" if value is None else str(value)
+    source = _widget(
+        "code_editor", label, key, initial,
+        language=str(language or "python"), height=height,
+        line_numbers=bool(line_numbers), wrap_lines=bool(wrap_lines),
+        help=help,
+    )
+    return CodeEditorValue(source)
 
 
 def number_input(label, min_value=None, max_value=None, value=0, step=1, key=None, help=None):
@@ -773,9 +1037,15 @@ def _pick_one(wtype, label, options, index, key, help):
     if not labels:
         _widget(wtype, label, key, "", options=[], help=help)
         return None
-    index = max(0, min(int(index), len(labels) - 1))
-    raw = _widget(wtype, label, key, labels[index], options=labels, help=help)
-    return opts[labels.index(raw)] if raw in labels else opts[index]
+    if index is None:
+        default = None
+    else:
+        index = max(0, min(int(index), len(labels) - 1))
+        default = labels[index]
+    raw = _widget(wtype, label, key, default, options=labels, help=help)
+    if raw in labels:
+        return opts[labels.index(raw)]
+    return opts[index] if index is not None else None
 
 
 def selectbox(label, options, index=0, key=None, help=None):
@@ -786,11 +1056,63 @@ def radio(label, options, index=0, key=None, help=None):
     return _pick_one("radio", label, options, index, key, help)
 
 
-def multiselect(label, options, default=None, key=None, help=None):
+def quiz_question(label, options, correct_answer, index=None, key=None,
+                  hint=None, explanation=None, help=None,
+                  show_correct=True, show_wrong=True, show_hint=True,
+                  allow_retry=True):
+    """Render a multiple-choice question with optional submit feedback.
+
+    Use inside ``st.form``. The question behaves like a radio widget until
+    that form is submitted, then the browser can mark the selected answer,
+    show the correct option, and reveal the hint or explanation.
+    """
+    opts = list(options)
+    labels = [str(option) for option in opts]
+    if not labels:
+        raise ValueError("quiz_question requires at least one option")
+
+    correct_label = str(correct_answer)
+    if correct_label not in labels:
+        raise ValueError("correct_answer must match one of the question options")
+
+    if index is None:
+        default = None
+    else:
+        index = max(0, min(int(index), len(labels) - 1))
+        default = labels[index]
+
+    k = key or _next_key("quiz_question", label)
+    selected = _state.get(k, default)
+    if selected not in labels:
+        selected = None
+    current_form = _form_stack[-1] if _form_stack else None
+    submitted = bool(current_form and _submitted_form == current_form)
+    element = {
+        "kind": "widget", "type": "quiz_question", "key": k,
+        "label": str(label), "value": selected, "options": labels,
+        "correct_answer": correct_label, "submitted": submitted,
+        "hint": None if hint is None else str(hint),
+        "explanation": None if explanation is None else str(explanation),
+        "help": help, "show_correct": bool(show_correct),
+        "show_wrong": bool(show_wrong), "show_hint": bool(show_hint),
+        "allow_retry": bool(allow_retry),
+    }
+    if current_form:
+        element["form"] = current_form
+    _emit(element)
+
+    if selected is None:
+        return None
+    return opts[labels.index(selected)]
+
+
+def multiselect(label, options, default=None, key=None, help=None,
+                show_select_all=False):
     opts = list(options)
     labels = [str(o) for o in opts]
     chosen = [str(d) for d in (default or [])]
-    raw = _widget("multiselect", label, key, chosen, options=labels, help=help)
+    raw = _widget("multiselect", label, key, chosen, options=labels, help=help,
+                  show_select_all=bool(show_select_all))
     if not isinstance(raw, list):
         raw = []
     return [opts[labels.index(r)] for r in raw if r in labels]
@@ -844,7 +1166,7 @@ def file_uploader(label, type=None, key=None, help=None):
 
 
 def embedded(name):
-    """Return an UploadedFile for a file that was embedded via packaged export, or None."""
+    """Legacy accessor; new apps should read staged files by their filename."""
     data = _embedded.get(name)
     if data is None:
         return None
@@ -852,7 +1174,7 @@ def embedded(name):
 
 
 def list_embedded():
-    """Return the list of filenames that were restored from a packaged export."""
+    """Legacy accessor for filenames restored from a packaged export."""
     return list(_embedded.keys())
 
 
@@ -942,12 +1264,14 @@ def _restore_embedded(name, b64):
 
 
 def _run(payload_json, source):
-    global _elements, _stack, _state, _clicked, _counter
+    global _elements, _stack, _state, _clicked, _submitted_form, _counter, _form_stack
     payload = _json.loads(payload_json)
     _state = payload.get("state") or {}
     _clicked = payload.get("clicked")
+    _submitted_form = payload.get("submitted_form")
     _elements = []
     _stack = []
+    _form_stack = []
     _counter = 0
     _config.clear()
     _config.update({"title": "CapyCanvas app", "layout": "centered"})
@@ -974,36 +1298,15 @@ def _run(payload_json, source):
 
 <script id="default-app" type="text/x-python">
 # pyregion file: default_app.py
-import capycanvas as st
-import pandas as pd
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
-st.set_page_config(page_title="Sales explorer")
+import capycanvas as st
 
-st.title("Sales explorer")
-st.caption("CapyCanvas is an independent project, heavily inspired by Streamlit. Not affiliated with Streamlit or Snowflake.")
-st.markdown(
-    "Edit the code on the left and press **Run**. "
-    "Use `%pip install package` for extra packages. "
-    "Upload a CSV or leave empty for sample data.\n\n"
-    "Data staged in the **Data** panel (developer data dependencies) is available "
-    "via `st.embedded(\"filename\")` — it is **not** auto-loaded. Reference it "
-    "explicitly in your code when you want it."
-)
-
-# Example of using a staged data dependency (uncomment to try):
-# f = st.embedded("stonks_data.csv")
-# if f is not None:
-#     df = f.dataframe()
-#     st.success(f"Loaded {f.name} — {len(df)} rows")
-#     st.stop()   # or continue with your own filters
-
-# Example package install:
-# %pip install seaborn
-# import seaborn as sns
 
 @st.cache_data
-def load_sample(n_rows):
+def make_demo_data(n_rows):
     rng = np.random.default_rng(7)
     return pd.DataFrame({
         "region": rng.choice(["North", "South", "East", "West"], n_rows),
@@ -1012,44 +1315,285 @@ def load_sample(n_rows):
         "revenue": rng.normal(5000, 1500, n_rows).round(2),
     })
 
-uploaded = st.file_uploader("Upload a CSV, or leave empty for sample data", type=["csv"])
-if uploaded is not None:
-    df = uploaded.dataframe()
-    st.success("Loaded " + uploaded.name + " — " + str(len(df)) + " rows")
-else:
-    df = load_sample(st.slider("Sample rows", 50, 1000, 300, step=50))
 
-st.subheader("Filters")
-left, right = st.columns(2)
-with left:
-    regions = st.multiselect("Region", sorted(df["region"].unique()),
-                             default=sorted(df["region"].unique()))
-with right:
-    min_units = st.number_input("Minimum units", min_value=0, max_value=200, value=0, step=10)
+@st.cache_resource
+def get_demo_resource():
+    return {"name": "cached demo resource", "kind": "cache_resource"}
 
-view = df[df["region"].isin(regions) & (df["units"] >= min_units)]
 
-a, b, c = st.columns(3)
-a.metric("Rows", len(view))
-b.metric("Revenue", "$" + format(view["revenue"].sum(), ",.0f"))
-c.metric("Avg units", round(view["units"].mean(), 1) if len(view) else 0)
+st.set_page_config(page_title="CapyCanvas demo", layout="wide")
+st.title("CapyCanvas demo")
+st.caption("A browser-native Streamlit-shaped runtime for interactive Python apps.")
+st.markdown(
+    "This starter app is a tour of the CapyCanvas API. Every tab is live: "
+    "edit the app on the left, then press **Run** to reload it."
+)
 
-st.divider()
+overview_tab, inputs_tab, forms_tab, data_tab, code_tab, layout_tab = st.tabs([
+    "Overview", "Input widgets", "Forms and quizzes", "Data and outputs",
+    "Code editor", "Layout and status",
+])
 
-if view.empty:
-    st.warning("No rows match those filters.")
-    st.stop()
+with overview_tab:
+    st.header("Runtime overview")
+    st.write(
+        "Use st.write for ordinary Python values:",
+        {"runtime": "Pyodide", "single_file": True},
+        ["Python", "widgets", "reruns"],
+    )
 
-st.subheader("Revenue by month")
-st.bar_chart(view.groupby("month", sort=False)["revenue"].sum())
+    st.metric("Runtime", "Pyodide", delta="browser WASM", hero=True)
+    metrics = st.columns(3)
+    metrics[0].metric("API style", "Streamlit-shaped", delta="single file")
+    metrics[1].metric("Data engine", "pandas", delta="preloaded")
+    metrics[2].metric("Resource cache", "Ready", delta="cache_resource")
 
-with st.expander("Show the filtered table"):
-    st.dataframe(view.head(50))
+    with st.container():
+        st.markdown("Containers group output and can be nested with columns.")
+        st.info("This is an informational alert.")
 
-st.download_button("Download filtered CSV", view, file_name="filtered.csv", mime="text/csv")
+    with st.expander("Status output examples", expanded=True):
+        st.success("Success output is available through st.success().")
+        st.warning("Warning output is available through st.warning().")
+        st.error("Error output is available through st.error().")
 
-if st.button("Say hello"):
-    st.info("Buttons are True only on the run they trigger, then flip back.")
+    st.subheader("Caching")
+    st.write("cache_data sample:", make_demo_data(3).head(2))
+    st.write("cache_resource sample:", get_demo_resource())
+
+    status_slot = st.empty()
+    status_slot.success("This message was written through st.empty().")
+    with st.spinner("Preparing the overview..."):
+        st.caption("The spinner is a layout primitive for work in a render pass.")
+
+    if st.button("Show an overview toast", key="overview_toast"):
+        st.toast("Hello from CapyCanvas", icon="OK")
+
+with inputs_tab:
+    st.header("Input widgets")
+    left, right = st.columns(2)
+    with left:
+        name = st.text_input(
+            "Name",
+            value="Capy",
+            placeholder="Enter a name",
+            help="This is a text_input with a placeholder and help message.",
+        )
+        notes = st.text_area("Notes", value="Try changing a few controls.", height=90)
+        quantity = st.number_input("Quantity", min_value=0, max_value=100, value=12, step=1)
+        threshold = st.slider("Threshold", min_value=0, max_value=100, value=65, step=5)
+        enabled = st.checkbox("Enabled", value=True)
+        preview = st.toggle("Preview mode", value=False)
+    with right:
+        category = st.selectbox("Category", ["Analytics", "Operations", "Finance"])
+        priority = st.radio("Priority", ["Low", "Medium", "High"], index=1)
+        tags = st.multiselect(
+            "Tags",
+            ["Python", "Data", "Charts", "Forms"],
+            default=["Python", "Data"],
+            show_select_all=True,
+        )
+        accent = st.color_picker("Accent color", value="#4f46e5")
+        review_date = st.date_input("Review date", value="2026-08-27")
+
+    st.info(
+        "Selected " + name + " in " + category + " with " + priority.lower()
+        + " priority."
+    )
+    st.json({
+        "notes": notes,
+        "quantity": quantity,
+        "threshold": threshold,
+        "enabled": enabled,
+        "preview": preview,
+        "tags": tags,
+        "accent": accent,
+        "review_date": review_date,
+    })
+
+with forms_tab:
+    st.header("Forms and quizzes")
+    st.markdown("Forms hold widget changes until their submit button is pressed.")
+
+    with st.form(
+        "settings_form",
+        clear_on_submit=False,
+        enter_to_submit=True,
+        border=True,
+        hint="This is a regular form with a text input, selectbox, and checkbox.",
+    ):
+        setting_name = st.text_input("Setting name", value="demo", key="setting_name")
+        setting_mode = st.selectbox(
+            "Setting mode",
+            ["Draft", "Review", "Published"],
+            key="setting_mode",
+        )
+        setting_enabled = st.checkbox("Enable setting", value=True, key="setting_enabled")
+        settings_submitted = st.form_submit_button("Save settings", type="primary")
+    if settings_submitted:
+        st.success(
+            "Saved " + setting_name + " in " + setting_mode.lower()
+            + " mode (enabled=" + str(setting_enabled) + ")."
+        )
+
+    st.subheader("Quiz form")
+    with st.form(
+        "quiz_form",
+        clear_on_submit=False,
+        enter_to_submit=False,
+        border=True,
+        hint="Choose an answer, then submit to reveal feedback.",
+    ):
+        answer = st.quiz_question(
+            "Which number is prime?",
+            ["21", "29", "35"],
+            correct_answer="29",
+            hint="A prime number has exactly two factors.",
+            explanation="29 is divisible only by 1 and itself.",
+            key="demo_quiz_answer",
+            show_correct=True,
+            show_wrong=True,
+            show_hint=True,
+            allow_retry=True,
+        )
+        quiz_submitted = st.form_submit_button("Check answer", type="primary")
+    if quiz_submitted:
+        st.caption("The selected answer is also returned to Python as: " + str(answer))
+
+with data_tab:
+    st.header("Data and outputs")
+    row_count = st.slider("Sample rows", 50, 500, 180, step=50, key="demo_row_count")
+    uploaded = st.file_uploader("Upload a CSV to preview", type=["csv"], key="demo_upload")
+    if uploaded is not None:
+        uploaded_frame = uploaded.dataframe()
+        st.success("Loaded " + uploaded.name + " with " + str(len(uploaded_frame)) + " rows")
+        st.table(uploaded_frame.head(5))
+        st.dataframe(uploaded_frame.head(20), max_rows=20)
+    else:
+        st.caption("No CSV uploaded. The examples below use generated sample data.")
+
+    df = make_demo_data(row_count)
+    st.subheader("Table, dataframe, and data editor")
+    st.table(df.head(5))
+    st.dataframe(df.head(20), max_rows=20)
+    edited = st.data_editor(
+        df.head(12),
+        hide_index=True,
+        num_rows="dynamic",
+        key="demo_data_editor",
+    )
+    st.caption("The edited table currently contains " + str(len(edited)) + " rows.")
+    st.download_button(
+        "Download edited table as CSV",
+        edited,
+        file_name="capycanvas-edited-table.csv",
+        mime="text/csv",
+        key="download_edited_table",
+    )
+    st.download_button(
+        "Download sample table as JSON",
+        df.to_json(orient="records", indent=2),
+        file_name="capycanvas-sample.json",
+        mime="application/json",
+        key="download_sample_json",
+    )
+
+    metrics = st.columns(3)
+    metrics[0].metric("Rows", len(df))
+    metrics[1].metric("Revenue", "$" + format(df["revenue"].sum(), ",.0f"))
+    metrics[2].metric("Average units", round(df["units"].mean(), 1))
+    st.write("First sample row:", df.iloc[0].to_dict())
+
+    st.subheader("Chart outputs")
+    bar_tab, line_tab, area_tab, scatter_tab = st.tabs([
+        "Bar chart", "Line chart", "Area chart", "Scatter chart",
+    ])
+    monthly = df.groupby("month", sort=False)["revenue"].sum()
+    with bar_tab:
+        st.bar_chart(monthly)
+    with line_tab:
+        st.line_chart(monthly)
+    with area_tab:
+        st.area_chart(monthly)
+    with scatter_tab:
+        st.scatter_chart(df[["units", "revenue"]])
+
+    st.subheader("Matplotlib output")
+    figure, axis = plt.subplots(figsize=(7.2, 3.4))
+    axis.plot(monthly.index, monthly.values, marker="o")
+    axis.set_title("Revenue by month")
+    axis.set_ylabel("Revenue")
+    axis.grid(True, alpha=0.25)
+    st.pyplot(figure)
+
+    with st.expander("Staged and embedded data access"):
+        embedded_names = st.list_embedded()
+        st.write("Packaged filenames:", embedded_names)
+        if embedded_names:
+            st.write("First packaged file:", st.embedded(embedded_names[0]))
+        else:
+            st.caption("Use the Data panel or a packaged export to populate this list.")
+
+with code_tab:
+    st.header("Python code editor")
+    st.markdown(
+        "The editor value is string-compatible. Calling `.dict()` executes it "
+        "in a fresh dictionary and returns the variables it created."
+    )
+    with st.form("code_demo", clear_on_submit=False, hint="Try changing the source before executing it."):
+        snippet = st.code_editor(
+            "Python snippet",
+            value='total = 2 + 2\nmessage = f"The total is {total}"',
+            key="demo_code_editor",
+            height=220,
+        )
+        execute_snippet = st.form_submit_button("Execute snippet", type="primary")
+
+    if execute_snippet:
+        try:
+            st.session_state["demo_code_variables"] = snippet.dict()
+            st.session_state.pop("demo_code_error", None)
+        except Exception as exc:
+            st.session_state["demo_code_error"] = str(exc)
+
+    if "demo_code_error" in st.session_state:
+        st.error("Snippet error: " + st.session_state["demo_code_error"])
+    if "demo_code_variables" in st.session_state:
+        st.caption("Variables returned by `.dict()`:")
+        st.json(st.session_state["demo_code_variables"])
+    st.code(snippet, language="python")
+
+with layout_tab:
+    st.header("Layout and status")
+    with st.container():
+        st.markdown("Use containers to group related output.")
+        column_left, column_right = st.columns(2)
+        with column_left:
+            st.text("This is monospace text from st.text().")
+        with column_right:
+            st.json({"layout": "columns", "nested": True})
+
+    with st.expander("Show more output primitives", expanded=True):
+        st.text("This is another text output.")
+        st.code("for item in [1, 2, 3]:\n    print(item)")
+        st.json({"runtime": "Pyodide", "single_file": True})
+        st.code("%pip install seaborn\nimport seaborn as sns", language="python")
+
+    with st.spinner("Preparing a demo status block..."):
+        st.caption("Spinner, alerts, toast, buttons, and dividers are all available.")
+
+    st.divider()
+    if st.button("Show toast", key="demo_toast"):
+        st.toast("Hello from CapyCanvas", icon="OK")
+    if st.button("Show warning", key="demo_warning"):
+        st.warning("Buttons return True only on the run they trigger.")
+    if st.button("Say hello", key="demo_hello"):
+        st.info("Hello, " + name + "!")
+
+    stop_demo = st.checkbox("Stop after this section", value=False, key="demo_stop")
+    if stop_demo:
+        st.warning("st.stop() ended this render pass after the layout demo.")
+        st.stop()
 </script>
 
 <script>
@@ -1064,13 +1608,22 @@ window.addEventListener("DOMContentLoaded", function () {
 
     let pyodide = null;
     let editor = null;
+    // Public map of app-facing CodeMirror instances, keyed by widget identity.
+    const code_editor = window.code_editor = Object.create(null);
     let running = false;
     let queued = false;
     let pendingClick = null;
+    let pendingForm = null;
+    let pendingFormClearKeys = null;
     let appState = {};
+    let formDraftState = {};
+    let formConfigs = {};
+    let tabGroupCounter = 0;
+    const activeTabs = {};
 
     // filename -> { b64, ext, size }
     let embeddedFiles = {};
+    let mountedDataFiles = new Set();
 
     const MODE = (() => {
         try { return (JSON.parse($("app-mode").textContent || "{}").mode) || "edit"; }
@@ -1096,6 +1649,12 @@ window.addEventListener("DOMContentLoaded", function () {
             binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
         }
         return btoa(binary);
+    }
+    function base64ToBytes(b64) {
+        const binary = atob(b64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        return bytes;
     }
     function formatBytes(n) {
         if (n < 1024) return n + " B";
@@ -1134,6 +1693,66 @@ window.addEventListener("DOMContentLoaded", function () {
     }
     const currentSource = () => (editor ? editor.getValue() : initialSource());
 
+    // Data dependencies live at the filesystem root, so app code can use
+    // ordinary paths such as pd.read_csv("data.csv").
+    function dataFilePath(name) {
+        const normalized = String(name).replace(/\\/g, "/").replace(/^\/+/, "");
+        if (!normalized || normalized === "." || normalized.split("/").indexOf("..") >= 0) {
+            throw new Error("Invalid staged data filename: " + name);
+        }
+        return "/" + normalized;
+    }
+
+    function mountDataFile(name, entry) {
+        if (!pyodide || !entry || !entry.b64) return null;
+        const path = dataFilePath(name);
+        const slash = path.lastIndexOf("/");
+        if (slash > 0) pyodide.FS.mkdirTree(path.slice(0, slash));
+        pyodide.FS.writeFile(path, base64ToBytes(entry.b64));
+        return path;
+    }
+
+    function unmountDataFile(name) {
+        if (!pyodide) return;
+        let path;
+        try { path = dataFilePath(name); } catch (e) { return; }
+        try { pyodide.FS.unlink(path); } catch (e) {}
+        mountedDataFiles.delete(path);
+    }
+
+    function syncDataFilesToFs() {
+        if (!pyodide) return;
+        const next = new Set();
+        for (const name of Object.keys(embeddedFiles)) {
+            try {
+                const path = mountDataFile(name, embeddedFiles[name]);
+                if (path) next.add(path);
+            } catch (e) {
+                console.warn("Could not mount " + name + " in Pyodide:", e);
+            }
+        }
+        for (const path of mountedDataFiles) {
+            if (!next.has(path)) {
+                try { pyodide.FS.unlink(path); } catch (e) {}
+            }
+        }
+        mountedDataFiles = next;
+    }
+
+    function restorePackagedDataFile(name, entry) {
+        const path = mountDataFile(name, entry);
+        if (path) mountedDataFiles.add(path);
+        pyodide.globals.set("__st_emb_name", name);
+        pyodide.globals.set("__st_emb_b64", entry.b64);
+        pyodide.runPython(
+            "import capycanvas\n" +
+            "capycanvas._restore_embedded(__st_emb_name, __st_emb_b64)"
+        );
+        ["__st_emb_name", "__st_emb_b64"].forEach((k) => {
+            try { pyodide.globals.delete(k); } catch (e) {}
+        });
+    }
+
     // ---- Data panel helpers ----
     function refreshDataList() {
         const list = $("dataList");
@@ -1155,7 +1774,9 @@ window.addEventListener("DOMContentLoaded", function () {
         list.querySelectorAll("[data-rm-file]").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.stopPropagation();
-                delete embeddedFiles[btn.dataset.rmFile];
+                const name = btn.dataset.rmFile;
+                delete embeddedFiles[name];
+                unmountDataFile(name);
                 refreshDataList();
             });
         });
@@ -1189,8 +1810,47 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     // ---- Widgets / render (unchanged core) ----
-    function commit(key, value) {
+    function draftValue(el) {
+        const draft = el.form && formDraftState[el.form];
+        if (draft && Object.prototype.hasOwnProperty.call(draft, el.key)) {
+            return draft[el.key];
+        }
+        return el.value;
+    }
+
+    function commit(key, value, formKey) {
+        if (formKey) {
+            if (!formDraftState[formKey]) formDraftState[formKey] = {};
+            formDraftState[formKey][key] = value;
+            return;
+        }
         appState[key] = value;
+        runApp();
+    }
+
+    function collectFormKeys(list, keys) {
+        (list || []).forEach((element) => {
+            if (element.kind === "widget" && element.key) keys.push(element.key);
+            if (element.children) collectFormKeys(element.children, keys);
+            if (element.cols) element.cols.forEach(col => collectFormKeys(col.children, keys));
+            if (element.tabs) element.tabs.forEach(tab => collectFormKeys(tab.children, keys));
+        });
+    }
+
+    function submitForm(el) {
+        syncCodeEditors();
+        const draft = (el.form && formDraftState[el.form]) || {};
+        Object.assign(appState, draft);
+        const config = el.form && formConfigs[el.form];
+        const clearKeys = [];
+        if (config && config.clear_on_submit) {
+            collectFormKeys(config.children, clearKeys);
+        }
+        delete formDraftState[el.form];
+        // Let Python see submitted values before clear_on_submit resets them.
+        pendingFormClearKeys = clearKeys.length ? clearKeys : null;
+        pendingClick = el.key;
+        pendingForm = el.form || null;
         runApp();
     }
 
@@ -1209,19 +1869,118 @@ window.addEventListener("DOMContentLoaded", function () {
         return d;
     }
 
+    function codeEditorMode(language) {
+        const value = String(language || "python").toLowerCase();
+        return value === "python" || value === "py" ? "python" : "text/plain";
+    }
+
+    function codeEditorHeight(value) {
+        const height = Number(value);
+        return Number.isFinite(height) ? Math.max(100, height) : 260;
+    }
+
+    function syncCodeEditor(instance) {
+        if (!instance || !instance.__capycanvasKey) return;
+        const key = instance.__capycanvasKey;
+        const value = instance.getValue();
+        const formKey = instance.__capycanvasForm;
+        if (formKey) {
+            if (!formDraftState[formKey]) formDraftState[formKey] = {};
+            formDraftState[formKey][key] = value;
+        } else {
+            appState[key] = value;
+        }
+        instance.__capycanvasLastValue = value;
+    }
+
+    function syncCodeEditors(includeForms = true) {
+        Object.keys(code_editor).forEach((key) => {
+            const instance = code_editor[key];
+            if (!includeForms && instance.__capycanvasForm) return;
+            syncCodeEditor(instance);
+        });
+    }
+
+    function destroyCodeEditors() {
+        Object.keys(code_editor).forEach((key) => {
+            const instance = code_editor[key];
+            // Remove the map entry first so teardown cannot commit stale events.
+            delete code_editor[key];
+            if (instance && typeof instance.toTextArea === "function") {
+                try { instance.toTextArea(); } catch (e) {}
+            }
+        });
+    }
+
+    function buildCodeEditor(el, id) {
+        const host = document.createElement("div");
+        host.className = "st-code-editor-wrap";
+        const textarea = document.createElement("textarea");
+        const current = draftValue(el);
+        textarea.id = id;
+        textarea.value = current == null ? "" : String(current);
+        textarea.setAttribute("aria-label", el.label || "Code editor");
+        textarea.spellcheck = false;
+        textarea.dataset.key = el.key;
+        host.appendChild(textarea);
+
+        const cm = CodeMirror.fromTextArea(textarea, {
+            mode: codeEditorMode(el.language),
+            lineNumbers: el.line_numbers !== false,
+            lineWrapping: !!el.wrap_lines,
+            indentUnit: 4,
+            indentWithTabs: false,
+            matchBrackets: true,
+            theme: document.documentElement.getAttribute("data-theme") === "dark"
+                ? "ayu-dark" : "default"
+        });
+        cm.setSize("100%", codeEditorHeight(el.height) + "px");
+        cm.__capycanvasKey = el.key;
+        cm.__capycanvasForm = el.form || null;
+        cm.__capycanvasLastValue = cm.getValue();
+        cm.getWrapperElement().dataset.codeEditorKey = el.key;
+        code_editor[el.key] = cm;
+
+        cm.on("blur", () => {
+            if (code_editor[el.key] !== cm) return;
+            syncCodeEditor(cm);
+            if (!cm.__capycanvasForm) runApp();
+        });
+        return host;
+    }
+
     function buildWidget(el) {
         const wrap = document.createElement("div");
         wrap.className = "st-w";
         const id = "w_" + Math.random().toString(36).slice(2, 9);
         const t = el.type;
+        const value = draftValue(el);
 
-        if (t === "button") {
+        if (t === "button" || t === "form_submit_button") {
             const b = document.createElement("button");
             b.className = "btn " + (el.variant === "primary" ? "btn-accent" : "");
+            b.type = t === "form_submit_button" ? "submit" : "button";
             b.textContent = el.label;
             b.dataset.key = el.key;
-            b.addEventListener("click", () => { pendingClick = el.key; runApp(); });
+            b.addEventListener("click", (event) => {
+                if (t === "form_submit_button") {
+                    event.preventDefault();
+                    submitForm(el);
+                } else {
+                    pendingClick = el.key;
+                    pendingForm = null;
+                    pendingFormClearKeys = null;
+                    runApp();
+                }
+            });
             wrap.appendChild(b);
+            return wrap;
+        }
+
+        if (t === "code_editor") {
+            wrap.appendChild(labelFor(el, id));
+            wrap.appendChild(buildCodeEditor(el, id));
+            const h = helpFor(el); if (h) wrap.appendChild(h);
             return wrap;
         }
 
@@ -1230,9 +1989,9 @@ window.addEventListener("DOMContentLoaded", function () {
             lab.className = "st-check";
             const input = document.createElement("input");
             input.type = "checkbox";
-            input.checked = !!el.value;
+            input.checked = !!value;
             input.dataset.key = el.key;
-            input.addEventListener("change", () => commit(el.key, input.checked));
+            input.addEventListener("change", () => commit(el.key, input.checked, el.form));
             lab.appendChild(input);
             lab.appendChild(document.createTextNode(el.label || ""));
             wrap.appendChild(lab);
@@ -1246,19 +2005,19 @@ window.addEventListener("DOMContentLoaded", function () {
             const input = document.createElement("input");
             input.id = id; input.className = "st-input";
             input.type = t === "date_input" ? "date" : "text";
-            input.value = el.value == null ? "" : el.value;
+            input.value = value == null ? "" : value;
             input.placeholder = el.placeholder || "";
             input.dataset.key = el.key;
-            input.addEventListener("change", () => commit(el.key, input.value));
+            input.addEventListener("change", () => commit(el.key, input.value, el.form));
             wrap.appendChild(input);
         } else if (t === "text_area") {
             const ta = document.createElement("textarea");
             ta.id = id; ta.className = "st-textarea";
             ta.style.height = (el.height || 130) + "px";
-            ta.value = el.value == null ? "" : el.value;
+            ta.value = value == null ? "" : value;
             ta.placeholder = el.placeholder || "";
             ta.dataset.key = el.key;
-            ta.addEventListener("change", () => commit(el.key, ta.value));
+            ta.addEventListener("change", () => commit(el.key, ta.value, el.form));
             wrap.appendChild(ta);
         } else if (t === "number_input") {
             const input = document.createElement("input");
@@ -1266,8 +2025,8 @@ window.addEventListener("DOMContentLoaded", function () {
             if (el.min != null) input.min = el.min;
             if (el.max != null) input.max = el.max;
             if (el.step != null) input.step = el.step;
-            input.value = el.value; input.dataset.key = el.key;
-            input.addEventListener("change", () => commit(el.key, input.value));
+            input.value = value; input.dataset.key = el.key;
+            input.addEventListener("change", () => commit(el.key, input.value, el.form));
             wrap.appendChild(input);
         } else if (t === "slider") {
             const row = document.createElement("div");
@@ -1275,24 +2034,112 @@ window.addEventListener("DOMContentLoaded", function () {
             const input = document.createElement("input");
             input.id = id; input.className = "st-range"; input.type = "range";
             input.min = el.min; input.max = el.max; input.step = el.step || 1;
-            input.value = el.value; input.dataset.key = el.key;
+            input.value = value; input.dataset.key = el.key;
             const out = document.createElement("span");
-            out.className = "st-range-val"; out.textContent = el.value;
+            out.className = "st-range-val"; out.textContent = value;
             input.addEventListener("input", () => { out.textContent = input.value; });
-            input.addEventListener("change", () => commit(el.key, input.value));
+            input.addEventListener("change", () => commit(el.key, input.value, el.form));
             row.appendChild(input); row.appendChild(out);
             wrap.appendChild(row);
         } else if (t === "selectbox") {
             const sel = document.createElement("select");
             sel.id = id; sel.className = "st-select"; sel.dataset.key = el.key;
+            if (value == null) {
+                const placeholder = document.createElement("option");
+                placeholder.value = "";
+                placeholder.textContent = "Choose an option";
+                placeholder.disabled = true;
+                placeholder.selected = true;
+                sel.appendChild(placeholder);
+            }
             (el.options || []).forEach((opt) => {
                 const o = document.createElement("option");
                 o.value = opt; o.textContent = opt;
-                if (opt === el.value) o.selected = true;
+                if (opt === value) o.selected = true;
                 sel.appendChild(o);
             });
-            sel.addEventListener("change", () => commit(el.key, sel.value));
+            sel.addEventListener("change", () => commit(el.key, sel.value, el.form));
             wrap.appendChild(sel);
+        } else if (t === "quiz_question") {
+            const group = document.createElement("div");
+            group.className = "st-radio-group st-quiz-options";
+            const options = el.options || [];
+            const selected = value == null ? null : String(value);
+            const correct = el.correct_answer == null ? null : String(el.correct_answer);
+            const submitted = !!el.submitted;
+            const answered = selected !== null && selected !== "";
+            const isCorrect = submitted && answered && selected === correct;
+
+            options.forEach((opt) => {
+                const lab = document.createElement("label");
+                const states = [];
+                if (submitted && answered) {
+                    if (opt === selected && opt !== correct && el.show_wrong !== false) states.push("wrong");
+                    if (opt === correct && el.show_correct !== false) states.push("correct");
+                }
+                lab.className = "st-check st-quiz-option" + (states.length ? " " + states.join(" ") : "");
+                const input = document.createElement("input");
+                input.type = "radio";
+                input.name = el.key;
+                input.value = opt;
+                input.checked = opt === selected;
+                input.disabled = submitted && el.allow_retry === false;
+                input.dataset.key = el.key;
+                input.addEventListener("change", () => commit(el.key, opt, el.form));
+                lab.appendChild(input);
+                lab.appendChild(document.createTextNode(opt));
+
+                if (submitted && answered) {
+                    let badgeText = null;
+                    if (opt === selected && opt !== correct && el.show_wrong !== false) {
+                        badgeText = "Your answer";
+                    } else if (opt === correct && el.show_correct !== false) {
+                        badgeText = isCorrect ? "Correct" : "Correct answer";
+                    }
+                    if (badgeText) {
+                        const badge = document.createElement("span");
+                        badge.className = "st-quiz-badge";
+                        badge.textContent = badgeText;
+                        lab.appendChild(badge);
+                    }
+                }
+                group.appendChild(lab);
+            });
+            wrap.appendChild(group);
+
+            if (submitted) {
+                const result = document.createElement("div");
+                result.className = "st-quiz-result " +
+                    (isCorrect ? "correct" : answered ? "wrong" : "neutral");
+                result.textContent = !answered
+                    ? "Choose an answer before submitting."
+                    : isCorrect
+                        ? "Correct"
+                        : el.allow_retry === false
+                            ? "Not quite."
+                            : "Not quite. Try another answer and submit again.";
+                wrap.appendChild(result);
+
+                const feedbackBlock = (className, title, body) => {
+                    const block = document.createElement("div");
+                    block.className = "st-quiz-feedback " + className;
+                    const heading = document.createElement("strong");
+                    heading.textContent = title;
+                    block.appendChild(heading);
+                    const content = document.createElement("div");
+                    content.className = "st-quiz-feedback-body st-md";
+                    content.innerHTML = mdToHtml(body);
+                    block.appendChild(content);
+                    wrap.appendChild(block);
+                };
+
+                if (answered && !isCorrect && el.show_hint !== false && el.hint) {
+                    feedbackBlock("st-quiz-hint", "Hint", el.hint);
+                }
+                if (answered && el.explanation) {
+                    feedbackBlock("st-quiz-explanation", "Explanation", el.explanation);
+                }
+            }
         } else if (t === "radio") {
             const group = document.createElement("div");
             group.className = "st-radio-group";
@@ -1301,18 +2148,36 @@ window.addEventListener("DOMContentLoaded", function () {
                 lab.className = "st-check";
                 const input = document.createElement("input");
                 input.type = "radio"; input.name = el.key; input.value = opt;
-                input.checked = opt === el.value; input.dataset.key = el.key;
-                input.addEventListener("change", () => commit(el.key, opt));
+                input.checked = opt === value; input.dataset.key = el.key;
+                input.addEventListener("change", () => commit(el.key, opt, el.form));
                 lab.appendChild(input);
                 lab.appendChild(document.createTextNode(opt));
                 group.appendChild(lab);
             });
             wrap.appendChild(group);
         } else if (t === "multiselect") {
-            const chosen = Array.isArray(el.value) ? el.value.slice() : [];
+            const chosen = Array.isArray(value) ? value.slice() : [];
+            const options = el.options || [];
+            if (el.show_select_all) {
+                const actions = document.createElement("div");
+                actions.className = "st-multiselect-actions";
+                const selectAll = document.createElement("button");
+                selectAll.type = "button";
+                selectAll.className = "btn btn-sm";
+                selectAll.textContent = "Select all";
+                selectAll.addEventListener("click", () => commit(el.key, options.slice(), el.form));
+                const deselectAll = document.createElement("button");
+                deselectAll.type = "button";
+                deselectAll.className = "btn btn-sm";
+                deselectAll.textContent = "Deselect all";
+                deselectAll.addEventListener("click", () => commit(el.key, [], el.form));
+                actions.appendChild(selectAll);
+                actions.appendChild(deselectAll);
+                wrap.appendChild(actions);
+            }
             const chips = document.createElement("div");
             chips.className = "st-chips";
-            (el.options || []).forEach((opt) => {
+            options.forEach((opt) => {
                 const lab = document.createElement("label");
                 lab.className = "st-chip" + (chosen.indexOf(opt) >= 0 ? " on" : "");
                 const input = document.createElement("input");
@@ -1320,7 +2185,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 input.checked = chosen.indexOf(opt) >= 0;
                 input.addEventListener("change", () => {
                     const next = input.checked ? chosen.concat([opt]) : chosen.filter((x) => x !== opt);
-                    commit(el.key, next);
+                    commit(el.key, next, el.form);
                 });
                 lab.appendChild(input);
                 lab.appendChild(document.createTextNode(opt));
@@ -1330,8 +2195,8 @@ window.addEventListener("DOMContentLoaded", function () {
         } else if (t === "color_picker") {
             const input = document.createElement("input");
             input.id = id; input.type = "color"; input.className = "st-color";
-            input.value = el.value || "#4f46e5"; input.dataset.key = el.key;
-            input.addEventListener("change", () => commit(el.key, input.value));
+            input.value = value || "#4f46e5"; input.dataset.key = el.key;
+            input.addEventListener("change", () => commit(el.key, input.value, el.form));
             wrap.appendChild(input);
         } else if (t === "file_uploader") {
             const drop = document.createElement("div");
@@ -1377,10 +2242,10 @@ window.addEventListener("DOMContentLoaded", function () {
                 if (f) putUpload(el.key, f);
             });
 
-            if (el.value) {
+            if (value) {
                 const name = document.createElement("div");
                 name.className = "st-file-name";
-                name.textContent = "Loaded: " + el.value;
+                name.textContent = "Loaded: " + value;
                 drop.appendChild(name);
             }
             wrap.appendChild(drop);
@@ -1418,6 +2283,105 @@ window.addEventListener("DOMContentLoaded", function () {
         });
         hideStatus();
         runApp();
+    }
+
+    function editorCellValue(input) {
+        if (input.dataset.editorKind === "boolean") return input.checked;
+        if (input.dataset.editorKind === "number") {
+            return input.value === "" ? null : Number(input.value);
+        }
+        return input.value;
+    }
+
+    function buildDataEditor(el) {
+        const wrap = document.createElement("div");
+        wrap.className = "st-editor-wrap" + (el.full_width ? " full-width" : "");
+        const table = document.createElement("table");
+        table.className = "st-editor";
+        const state = draftValue(el) || {};
+        const rows = Array.isArray(state.rows) ? state.rows.map(row => row.slice()) :
+            (el.rows || []).map(row => row.slice());
+        const columns = el.columns || [];
+        const index = Array.isArray(state.index) ? state.index : (el.index || []);
+
+        const head = document.createElement("thead");
+        const headRow = document.createElement("tr");
+        if (!el.hide_index) {
+            const th = document.createElement("th");
+            th.textContent = "";
+            headRow.appendChild(th);
+        }
+        columns.forEach((column) => {
+            const th = document.createElement("th");
+            th.textContent = column;
+            headRow.appendChild(th);
+        });
+        head.appendChild(headRow);
+        table.appendChild(head);
+
+        const body = document.createElement("tbody");
+        rows.forEach((row, rowIndex) => {
+            const tr = document.createElement("tr");
+            if (!el.hide_index) {
+                const indexCell = document.createElement("th");
+                indexCell.textContent = index[rowIndex] == null ? String(rowIndex) : String(index[rowIndex]);
+                tr.appendChild(indexCell);
+            }
+            columns.forEach((_, columnIndex) => {
+                const td = document.createElement("td");
+                const input = document.createElement("input");
+                const value = row[columnIndex];
+                input.className = "st-editor-input";
+                input.dataset.editorRow = rowIndex;
+                input.dataset.editorColumn = columnIndex;
+                if (typeof value === "boolean") {
+                    input.type = "checkbox";
+                    input.checked = value;
+                    input.dataset.editorKind = "boolean";
+                } else if (typeof value === "number") {
+                    input.type = "number";
+                    input.step = "any";
+                    input.value = value;
+                    input.dataset.editorKind = "number";
+                } else {
+                    input.type = "text";
+                    input.value = value == null ? "" : String(value);
+                    input.dataset.editorKind = "text";
+                }
+                td.appendChild(input);
+                tr.appendChild(td);
+            });
+            body.appendChild(tr);
+        });
+        table.appendChild(body);
+
+        const snapshot = () => {
+            const next = rows.map(row => row.slice());
+            table.querySelectorAll("[data-editor-row]").forEach((input) => {
+                next[Number(input.dataset.editorRow)][Number(input.dataset.editorColumn)] = editorCellValue(input);
+            });
+            return { rows: next, index: index.slice() };
+        };
+        table.querySelectorAll("[data-editor-row]").forEach((input) => {
+            input.addEventListener("change", () => commit(el.key, snapshot(), el.form));
+        });
+        wrap.appendChild(table);
+
+        if (el.num_rows === "dynamic") {
+            const add = document.createElement("button");
+            add.type = "button";
+            add.className = "btn btn-sm";
+            add.textContent = "Add row";
+            add.style.marginTop = "8px";
+            add.addEventListener("click", () => {
+                const next = snapshot();
+                next.rows.push(columns.map(() => null));
+                next.index.push(next.index.length);
+                commit(el.key, next, el.form);
+            });
+            wrap.appendChild(add);
+        }
+        return wrap;
     }
 
     function buildElement(el) {
@@ -1465,6 +2429,25 @@ window.addEventListener("DOMContentLoaded", function () {
                 node.className = "st-alert " + el.level;
                 node.innerHTML = mdToHtml(el.body);
                 return node;
+            case "toast":
+                node = document.createElement("div");
+                node.className = "st-toast";
+                if (el.icon) node.appendChild(document.createTextNode(el.icon + " "));
+                node.appendChild(document.createTextNode(el.body));
+                setTimeout(() => node.remove(), 4500);
+                return node;
+            case "spinner": {
+                node = document.createElement("div");
+                node.className = "st-spinner-block";
+                const indicator = document.createElement("span");
+                indicator.className = "spinner";
+                const label = document.createElement("span");
+                label.textContent = el.label;
+                node.appendChild(indicator);
+                node.appendChild(label);
+                renderList(el.children || [], node);
+                return node;
+            }
             case "metric": {
                 node = document.createElement("div");
                 node.className = "st-metric" + (el.hero ? " hero" : "");
@@ -1491,6 +2474,8 @@ window.addEventListener("DOMContentLoaded", function () {
                 }
                 return node;
             }
+            case "data_editor":
+                return buildDataEditor(el);
             case "download": {
                 node = document.createElement("button");
                 node.className = "btn";
@@ -1507,6 +2492,83 @@ window.addEventListener("DOMContentLoaded", function () {
                 node = document.createElement("div");
                 renderList(el.children || [], node);
                 return node;
+            case "empty":
+                node = document.createElement("div");
+                node.className = "st-empty-slot";
+                renderList(el.children || [], node);
+                return node;
+            case "form":
+                node = document.createElement("form");
+                node.className = "st-form" + (el.border === false ? " no-border" : "");
+                formConfigs[el.key] = el;
+                if (el.hint) {
+                    const formHint = document.createElement("div");
+                    formHint.className = "st-form-hint st-md";
+                    formHint.innerHTML = mdToHtml(el.hint);
+                    node.appendChild(formHint);
+                }
+                const submit = (target) => {
+                    if (target && target.dataset && target.dataset.key && target.tagName !== "BUTTON") {
+                        if (target.type !== "radio" || target.checked) {
+                            const value = target.type === "checkbox" ? target.checked : target.value;
+                            commit(target.dataset.key, value, el.key);
+                        }
+                    }
+                    const button = node.querySelector('button[type="submit"]');
+                    if (button) button.click();
+                };
+                node.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    submit(null);
+                });
+                if (el.enter_to_submit !== false) {
+                    node.addEventListener("keydown", (event) => {
+                        if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+                        if (event.target && event.target.tagName === "TEXTAREA") return;
+                        event.preventDefault();
+                        submit(event.target);
+                    });
+                }
+                renderList(el.children || [], node);
+                return node;
+            case "tabs": {
+                node = document.createElement("div");
+                node.className = "st-tabs";
+                const groupId = "tabs-" + tabGroupCounter++;
+                const labels = document.createElement("div");
+                labels.className = "st-tab-labels";
+                const panels = document.createElement("div");
+                panels.className = "st-tab-panels";
+                const specs = el.tabs || [];
+                let active = Number.isInteger(activeTabs[groupId]) ? activeTabs[groupId] : 0;
+                if (active < 0 || active >= specs.length) active = 0;
+                const buttons = [];
+                const panelNodes = [];
+                const select = (index) => {
+                    activeTabs[groupId] = index;
+                    buttons.forEach((button, i) => button.classList.toggle("on", i === index));
+                    panelNodes.forEach((panel, i) => { panel.hidden = i !== index; });
+                };
+                specs.forEach((spec, index) => {
+                    const button = document.createElement("button");
+                    button.type = "button";
+                    button.className = "st-tab";
+                    button.textContent = spec.label;
+                    button.addEventListener("click", () => select(index));
+                    labels.appendChild(button);
+                    buttons.push(button);
+
+                    const panel = document.createElement("div");
+                    panel.className = "st-tab-panel";
+                    renderList(spec.children || [], panel);
+                    panels.appendChild(panel);
+                    panelNodes.push(panel);
+                });
+                node.appendChild(labels);
+                node.appendChild(panels);
+                select(active);
+                return node;
+            }
             case "columns": {
                 node = document.createElement("div");
                 node.className = "st-cols";
@@ -1592,13 +2654,21 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     function renderApp(result) {
+        destroyCodeEditors();
         appRoot.innerHTML = "";
+        formConfigs = {};
+        tabGroupCounter = 0;
         document.body.classList.toggle("layout-wide",
             result.config && result.config.layout === "wide");
         if (result.config && result.config.title) {
             document.title = result.config.title + " · CapyCanvas";
         }
         renderList(result.elements || [], appRoot);
+        setTimeout(() => {
+            Object.keys(code_editor).forEach((key) => {
+                try { code_editor[key].refresh(); } catch (e) {}
+            });
+        }, 0);
         if (result.error) {
             showError(appRoot, result.error);
         }
@@ -1611,16 +2681,27 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     async function runApp() {
+        // Form editors are synchronized by submitForm so clear_on_submit can
+        // remove their draft instead of recreating it here.
+        syncCodeEditors(false);
         if (!pyodide) return;
         if (running) { queued = true; return; }
         running = true;
+        const clearKeysAfterRun = pendingFormClearKeys;
+        pendingFormClearKeys = null;
         const focus = captureFocus();
         try {
             const rawSource = currentSource();
+            syncDataFilesToFs();
             await installFor(rawSource);
             const source = cleanMagicCommands(rawSource);
-            const payload = JSON.stringify({ state: appState, clicked: pendingClick });
+            const payload = JSON.stringify({
+                state: appState,
+                clicked: pendingClick,
+                submitted_form: pendingForm
+            });
             pendingClick = null;
+            pendingForm = null;
             pyodide.globals.set("__st_payload", payload);
             pyodide.globals.set("__st_source", source);
             const raw = pyodide.runPython(
@@ -1628,9 +2709,13 @@ window.addEventListener("DOMContentLoaded", function () {
             );
             renderApp(JSON.parse(raw));
         } catch (err) {
+            destroyCodeEditors();
             appRoot.innerHTML = "";
             showError(appRoot, String((err && err.message) || err));
         } finally {
+            if (clearKeysAfterRun) {
+                clearKeysAfterRun.forEach(key => delete appState[key]);
+            }
             running = false;
             restoreFocus(focus);
             if (queued) { queued = false; runApp(); }
@@ -1713,6 +2798,8 @@ window.addEventListener("DOMContentLoaded", function () {
             $("capycanvas-py").textContent, { encoding: "utf8" });
         pyodide.runPython(
             "import sys\n" +
+            "import os\n" +
+            "os.chdir('/')\n" +
             "if '/sl_lib' not in sys.path: sys.path.insert(0, '/sl_lib')\n" +
             "import matplotlib\n" +
             "matplotlib.use('Agg')\n" +
@@ -1734,16 +2821,8 @@ window.addEventListener("DOMContentLoaded", function () {
                         ext: entry.ext || (name.split(".").pop() || "").toLowerCase(),
                         size: entry.size || Math.floor((entry.b64.length * 3) / 4)
                     };
-                    pyodide.globals.set("__st_emb_name", name);
-                    pyodide.globals.set("__st_emb_b64", entry.b64);
-                    pyodide.runPython(
-                        "import capycanvas\n" +
-                        "capycanvas._restore_embedded(__st_emb_name, __st_emb_b64)"
-                    );
+                    restorePackagedDataFile(name, embeddedFiles[name]);
                 }
-                ["__st_emb_name", "__st_emb_b64"].forEach(k => {
-                    try { pyodide.globals.delete(k); } catch (e) {}
-                });
                 refreshDataList();
             }
         } catch (e) {
@@ -1771,7 +2850,10 @@ window.addEventListener("DOMContentLoaded", function () {
     $("runBtn").addEventListener("click", async () => {
         await installFor(currentSource());
         appState = {};
+        formDraftState = {};
         pendingClick = null;
+        pendingForm = null;
+        pendingFormClearKeys = null;
         runApp();
     });
     editor.setOption("extraKeys", {
@@ -1780,7 +2862,7 @@ window.addEventListener("DOMContentLoaded", function () {
     });
 
     $("editToggle").addEventListener("click", () => {
-        const hidden = document.body.classList.toggle("mode-app");
+        const hidden = document.body.classList.toggle("editor-hidden");
         $("editToggle").textContent = hidden ? "Show editor" : "Hide editor";
         if (!hidden) setTimeout(() => editor.refresh(), 0);
     });
@@ -1789,6 +2871,9 @@ window.addEventListener("DOMContentLoaded", function () {
         const dark = document.documentElement.getAttribute("data-theme") === "dark";
         document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
         editor.setOption("theme", dark ? "default" : "ayu-dark");
+        Object.keys(code_editor).forEach((key) => {
+            code_editor[key].setOption("theme", dark ? "default" : "ayu-dark");
+        });
         try { localStorage.setItem("sl-theme", dark ? "light" : "dark"); } catch (e) {}
     });
 
@@ -1853,16 +2938,9 @@ window.addEventListener("DOMContentLoaded", function () {
                 const b64 = bytesToBase64(bytes);
                 const ext = (file.name.split(".").pop() || "").toLowerCase();
                 embeddedFiles[file.name] = { b64, ext, size: bytes.length };
-                // Also restore into Python so st.embedded("name") works immediately
+                // Keep the legacy API working while the file is mounted normally.
                 if (pyodide) {
-                    pyodide.globals.set("__st_emb_name", file.name);
-                    pyodide.globals.set("__st_emb_b64", b64);
-                    pyodide.runPython(
-                        "import capycanvas\n" +
-                        "capycanvas._restore_embedded(__st_emb_name, __st_emb_b64)"
-                    );
-                    try { pyodide.globals.delete("__st_emb_name"); } catch (err) {}
-                    try { pyodide.globals.delete("__st_emb_b64"); } catch (err) {}
+                    restorePackagedDataFile(file.name, embeddedFiles[file.name]);
                 }
             } catch (err) {
                 console.warn("Failed to read " + file.name + ":", err);
@@ -1871,8 +2949,7 @@ window.addEventListener("DOMContentLoaded", function () {
         refreshDataList();
         hideStatus();
         e.target.value = "";
-        // Re-run only so apps that already call st.embedded(...) can see new files.
-        // Staging here does NOT auto-load data into the app — the author must reference it.
+        // Re-run so apps can read the newly mounted file from the virtual FS.
         if (pyodide) runApp();
     });
 
@@ -1880,6 +2957,7 @@ window.addEventListener("DOMContentLoaded", function () {
         if (!Object.keys(embeddedFiles).length) return;
         if (!confirm("Clear all tracked files? They will no longer be embedded on export.")) return;
         embeddedFiles = {};
+        syncDataFilesToFs();
         refreshDataList();
     });
 
@@ -1951,10 +3029,17 @@ window.addEventListener("DOMContentLoaded", function () {
 
     function replaceHdr(html, mode, dataPayload) {
         const block = buildHdrComment(mode, dataPayload);
-        const re = /<!--CAPYCANVAS_HDR:v1\n[\s\S]*?\nCAPYCANVAS_HDR_END-->/;
-        if (re.test(html)) return html.replace(re, block);
+        const start = html.indexOf("<!--CAPYCANVAS_HDR:v1");
+        const endMarker = "CAPYCANVAS_HDR_END-->";
+        const end = html.indexOf(endMarker, start);
+        if (start >= 0 && end >= 0) {
+            return html.slice(0, start) + block + html.slice(end + endMarker.length);
+        }
         // Insert after <title>...</title> if missing
-        return html.replace(/<\/title>/i, "</title>\n\n" + block);
+        const titleEnd = html.toLowerCase().indexOf("</title>");
+        if (titleEnd < 0) return html + "\n\n" + block;
+        const insertAt = titleEnd + "</title>".length;
+        return html.slice(0, insertAt) + "\n\n" + block + html.slice(insertAt);
     }
 
     // Export
