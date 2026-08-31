@@ -592,6 +592,8 @@ _uploads = {}
 _embedded = {}   # legacy st.embedded() storage for older app exports
 _cache = {}
 _config = {}
+_persisted = {}
+_reset_requested = False
 
 
 class _SessionState(dict):
@@ -607,6 +609,65 @@ class _SessionState(dict):
 
 
 session_state = _SessionState()
+
+
+class _LocalStorage:
+    """Small JSON-safe key/value storage backed by the browser host."""
+
+    @staticmethod
+    def _copy(value):
+        try:
+            return _json.loads(_json.dumps(value, allow_nan=False))
+        except (TypeError, ValueError):
+            raise TypeError("local_storage values must be JSON-serializable")
+
+    def get(self, key, default=None):
+        return _persisted.get(str(key), default)
+
+    def set(self, key, value):
+        _persisted[str(key)] = self._copy(value)
+        return _persisted[str(key)]
+
+    def delete(self, key):
+        return _persisted.pop(str(key), None)
+
+    def clear(self):
+        _persisted.clear()
+
+    def keys(self):
+        return _persisted.keys()
+
+    def items(self):
+        return _persisted.items()
+
+    def __getitem__(self, key):
+        return _persisted[str(key)]
+
+    def __setitem__(self, key, value):
+        self.set(key, value)
+
+    def __delitem__(self, key):
+        del _persisted[str(key)]
+
+    def __contains__(self, key):
+        return str(key) in _persisted
+
+    def __len__(self):
+        return len(_persisted)
+
+    def snapshot(self):
+        return self._copy(_persisted)
+
+
+local_storage = _LocalStorage()
+
+
+def reset():
+    """Clear app session state and browser-persisted app values."""
+    global _reset_requested
+    session_state.clear()
+    local_storage.clear()
+    _reset_requested = True
 
 
 class StopApp(Exception):
@@ -1278,11 +1339,18 @@ def _restore_embedded(name, b64):
 
 
 def _run(payload_json, source):
-    global _elements, _stack, _state, _clicked, _submitted_form, _counter, _form_stack
+    global _elements, _stack, _state, _clicked, _submitted_form, _counter, _form_stack, _persisted, _reset_requested
     payload = _json.loads(payload_json)
     _state = payload.get("state") or {}
     _clicked = payload.get("clicked")
     _submitted_form = payload.get("submitted_form")
+    _reset_requested = False
+    try:
+        _persisted = _LocalStorage._copy(payload.get("persisted") or {})
+        if not isinstance(_persisted, dict):
+            _persisted = {}
+    except (TypeError, ValueError):
+        _persisted = {}
     _elements = []
     _stack = []
     _form_stack = []
@@ -1306,7 +1374,9 @@ def _run(payload_json, source):
     except Exception:
         error_text = traceback.format_exc()
 
-    return _json.dumps({"elements": _elements, "error": error_text, "config": _config},
+    return _json.dumps({"elements": _elements, "error": error_text, "config": _config,
+                        "persisted": local_storage.snapshot(),
+                        "reset_state": _reset_requested},
                        default=str)
 </script>
 
@@ -1957,6 +2027,37 @@ window.addEventListener("DOMContentLoaded", function () {
         try { return (JSON.parse($("app-mode").textContent || "{}").mode) || "edit"; }
         catch (e) { return "edit"; }
     })();
+
+    // Persisted app values are scoped to the current document, so separate
+    // canvases do not share course progress accidentally.
+    const PERSISTENCE_KEY = (() => {
+        try {
+            return "capycanvas:local-storage:" + window.location.origin + window.location.pathname;
+        } catch (e) {
+            return "capycanvas:local-storage:document";
+        }
+    })();
+
+    function loadPersistedState() {
+        try {
+            const parsed = JSON.parse(localStorage.getItem(PERSISTENCE_KEY) || "{}");
+            return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function savePersistedState(next) {
+        if (!next || typeof next !== "object" || Array.isArray(next)) return;
+        persistedState = next;
+        try {
+            localStorage.setItem(PERSISTENCE_KEY, JSON.stringify(persistedState));
+        } catch (e) {
+            console.warn("Could not persist CapyCanvas state:", e);
+        }
+    }
+
+    let persistedState = loadPersistedState();
 
     function b64Encode(str) {
         const bytes = new TextEncoder().encode(str);
@@ -3048,7 +3149,8 @@ window.addEventListener("DOMContentLoaded", function () {
             const payload = JSON.stringify({
                 state: appState,
                 clicked: pendingClick,
-                submitted_form: pendingForm
+                submitted_form: pendingForm,
+                persisted: persistedState
             });
             pendingClick = null;
             pendingForm = null;
@@ -3057,7 +3159,18 @@ window.addEventListener("DOMContentLoaded", function () {
             const raw = pyodide.runPython(
                 "import capycanvas\ncapycanvas._run(__st_payload, __st_source)"
             );
-            renderApp(JSON.parse(raw));
+            const result = JSON.parse(raw);
+            savePersistedState(result.persisted || {});
+            if (result.reset_state) {
+                appState = {};
+                formDraftState = {};
+                pendingClick = null;
+                pendingForm = null;
+                pendingFormClearKeys = null;
+                queued = true;
+            } else {
+                renderApp(result);
+            }
         } catch (err) {
             destroyCodeEditors();
             appRoot.innerHTML = "";
