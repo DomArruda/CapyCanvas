@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light"><head>
+<html lang="en" data-theme="light">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CapyCanvas</title>
@@ -10,23 +11,25 @@ CAPYCANVAS_HDR_END-->
 
 <!-- The app script. On export this is rewritten with data-encoding="base64",
      which sidesteps any chance of user code containing a closing script tag. -->
-<script id="app-source" type="text/x-python" data-encoding="base64">IyBweXJlZ2lvbiBmaWxlOiBkZWZhdWx0X2FwcC5weQppbXBvcnQgbWF0cGxvdGxpYi5weXBsb3QgYXMgcGx0CmltcG9ydCBudW1weSBhcyBucAppbXBvcnQgcGFuZGFzIGFzIHBkCgppbXBvcnQgY2FweWNhbnZhcyBhcyBzdAoKCkBzdC5jYWNoZV9kYXRhCmRlZiBtYWtlX2RlbW9fZGF0YShuX3Jvd3MpOgogICAgcm5nID0gbnAucmFuZG9tLmRlZmF1bHRfcm5nKDcpCiAgICByZXR1cm4gcGQuRGF0YUZyYW1lKHsKICAgICAgICAicmVnaW9uIjogcm5nLmNob2ljZShbIk5vcnRoIiwgIlNvdXRoIiwgIkVhc3QiLCAiV2VzdCJdLCBuX3Jvd3MpLAogICAgICAgICJtb250aCI6IHJuZy5jaG9pY2UoWyJKYW4iLCAiRmViIiwgIk1hciIsICJBcHIiLCAiTWF5IiwgIkp1biJdLCBuX3Jvd3MpLAogICAgICAgICJ1bml0cyI6IHJuZy5pbnRlZ2VycygyMCwgMjAwLCBuX3Jvd3MpLAogICAgICAgICJyZXZlbnVlIjogcm5nLm5vcm1hbCg1MDAwLCAxNTAwLCBuX3Jvd3MpLnJvdW5kKDIpLAogICAgfSkKCgpAc3QuY2FjaGVfcmVzb3VyY2UKZGVmIGdldF9kZW1vX3Jlc291cmNlKCk6CiAgICByZXR1cm4geyJuYW1lIjogImNhY2hlZCBkZW1vIHJlc291cmNlIiwgImtpbmQiOiAiY2FjaGVfcmVzb3VyY2UifQoKCnN0LnNldF9wYWdlX2NvbmZpZyhwYWdlX3RpdGxlPSJDYXB5Q2FudmFzIGRlbW8iLCBsYXlvdXQ9IndpZGUiKQpzdC50aXRsZSgiQ2FweUNhbnZhcyBkZW1vIikKc3QuY2FwdGlvbigiQSBicm93c2VyLW5hdGl2ZSBTdHJlYW1saXQtc2hhcGVkIHJ1bnRpbWUgZm9yIGludGVyYWN0aXZlIFB5dGhvbiBhcHBzLiIpCnN0Lm1hcmtkb3duKAogICAgIlRoaXMgc3RhcnRlciBhcHAgaXMgYSB0b3VyIG9mIHRoZSBDYXB5Q2FudmFzIEFQSS4gRXZlcnkgdGFiIGlzIGxpdmU6ICIKICAgICJlZGl0IHRoZSBhcHAgb24gdGhlIGxlZnQsIHRoZW4gcHJlc3MgKipSdW4qKiB0byByZWxvYWQgaXQuIgopCgpvdmVydmlld190YWIsIGlucHV0c190YWIsIGZvcm1zX3RhYiwgZGF0YV90YWIsIGNvZGVfdGFiLCBsYXlvdXRfdGFiLCBsb2NhbF9zdG9yYWdlID0gc3QudGFicyhbCiAgICAiT3ZlcnZpZXciLCAiSW5wdXQgd2lkZ2V0cyIsICJGb3JtcyBhbmQgcXVpenplcyIsICJEYXRhIGFuZCBvdXRwdXRzIiwKICAgICJDb2RlIGVkaXRvciIsICJMYXlvdXQgYW5kIHN0YXR1cyIsIkxvY2FsIFN0b3JhZ2UiCl0pCgp3aXRoIG92ZXJ2aWV3X3RhYjoKICAgIHN0LmhlYWRlcigiUnVudGltZSBvdmVydmlldyIpCiAgICBzdC53cml0ZSgKICAgICAgICAiVXNlIHN0LndyaXRlIGZvciBvcmRpbmFyeSBQeXRob24gdmFsdWVzOiIsCiAgICAgICAgeyJydW50aW1lIjogIlB5b2RpZGUiLCAic2luZ2xlX2ZpbGUiOiBUcnVlfSwKICAgICAgICBbIlB5dGhvbiIsICJ3aWRnZXRzIiwgInJlcnVucyJdLAogICAgKQoKICAgIHN0Lm1ldHJpYygiUnVudGltZSIsICJQeW9kaWRlIiwgZGVsdGE9ImJyb3dzZXIgV0FTTSIsIGhlcm89VHJ1ZSkKICAgIG1ldHJpY3MgPSBzdC5jb2x1bW5zKDMpCiAgICBtZXRyaWNzWzBdLm1ldHJpYygiQVBJIHN0eWxlIiwgIlN0cmVhbWxpdC1zaGFwZWQiLCBkZWx0YT0ic2luZ2xlIGZpbGUiKQogICAgbWV0cmljc1sxXS5tZXRyaWMoIkRhdGEgZW5naW5lIiwgInBhbmRhcyIsIGRlbHRhPSJwcmVsb2FkZWQiKQogICAgbWV0cmljc1syXS5tZXRyaWMoIlJlc291cmNlIGNhY2hlIiwgIlJlYWR5IiwgZGVsdGE9ImNhY2hlX3Jlc291cmNlIikKCiAgICB3aXRoIHN0LmNvbnRhaW5lcigpOgogICAgICAgIHN0Lm1hcmtkb3duKCJDb250YWluZXJzIGdyb3VwIG91dHB1dCBhbmQgY2FuIGJlIG5lc3RlZCB3aXRoIGNvbHVtbnMuIikKICAgICAgICBzdC5pbmZvKCJUaGlzIGlzIGFuIGluZm9ybWF0aW9uYWwgYWxlcnQuIikKCiAgICB3aXRoIHN0LmV4cGFuZGVyKCJTdGF0dXMgb3V0cHV0IGV4YW1wbGVzIiwgZXhwYW5kZWQ9VHJ1ZSk6CiAgICAgICAgc3Quc3VjY2VzcygiU3VjY2VzcyBvdXRwdXQgaXMgYXZhaWxhYmxlIHRocm91Z2ggc3Quc3VjY2VzcygpLiIpCiAgICAgICAgc3Qud2FybmluZygiV2FybmluZyBvdXRwdXQgaXMgYXZhaWxhYmxlIHRocm91Z2ggc3Qud2FybmluZygpLiIpCiAgICAgICAgc3QuZXJyb3IoIkVycm9yIG91dHB1dCBpcyBhdmFpbGFibGUgdGhyb3VnaCBzdC5lcnJvcigpLiIpCgogICAgc3Quc3ViaGVhZGVyKCJDYWNoaW5nIikKICAgIHN0LndyaXRlKCJjYWNoZV9kYXRhIHNhbXBsZToiLCBtYWtlX2RlbW9fZGF0YSgzKS5oZWFkKDIpKQogICAgc3Qud3JpdGUoImNhY2hlX3Jlc291cmNlIHNhbXBsZToiLCBnZXRfZGVtb19yZXNvdXJjZSgpKQoKICAgIHN0YXR1c19zbG90ID0gc3QuZW1wdHkoKQogICAgc3RhdHVzX3Nsb3Quc3VjY2VzcygiVGhpcyBtZXNzYWdlIHdhcyB3cml0dGVuIHRocm91Z2ggc3QuZW1wdHkoKS4iKQogICAgd2l0aCBzdC5zcGlubmVyKCJQcmVwYXJpbmcgdGhlIG92ZXJ2aWV3Li4uIik6CiAgICAgICAgc3QuY2FwdGlvbigiVGhlIHNwaW5uZXIgaXMgYSBsYXlvdXQgcHJpbWl0aXZlIGZvciB3b3JrIGluIGEgcmVuZGVyIHBhc3MuIikKCiAgICBpZiBzdC5idXR0b24oIlNob3cgYW4gb3ZlcnZpZXcgdG9hc3QiLCBrZXk9Im92ZXJ2aWV3X3RvYXN0Iik6CiAgICAgICAgc3QudG9hc3QoIkhlbGxvIGZyb20gQ2FweUNhbnZhcyIsIGljb249Ik9LIikKCndpdGggaW5wdXRzX3RhYjoKICAgIHN0LmhlYWRlcigiSW5wdXQgd2lkZ2V0cyIpCiAgICBsZWZ0LCByaWdodCA9IHN0LmNvbHVtbnMoMikKICAgIHdpdGggbGVmdDoKICAgICAgICBuYW1lID0gc3QudGV4dF9pbnB1dCgKICAgICAgICAgICAgIk5hbWUiLAogICAgICAgICAgICB2YWx1ZT0iQ2FweSIsCiAgICAgICAgICAgIHBsYWNlaG9sZGVyPSJFbnRlciBhIG5hbWUiLAogICAgICAgICAgICBoZWxwPSJUaGlzIGlzIGEgdGV4dF9pbnB1dCB3aXRoIGEgcGxhY2Vob2xkZXIgYW5kIGhlbHAgbWVzc2FnZS4iLAogICAgICAgICkKICAgICAgICBub3RlcyA9IHN0LnRleHRfYXJlYSgiTm90ZXMiLCB2YWx1ZT0iVHJ5IGNoYW5naW5nIGEgZmV3IGNvbnRyb2xzLiIsIGhlaWdodD05MCkKICAgICAgICBxdWFudGl0eSA9IHN0Lm51bWJlcl9pbnB1dCgiUXVhbnRpdHkiLCBtaW5fdmFsdWU9MCwgbWF4X3ZhbHVlPTEwMCwgdmFsdWU9MTIsIHN0ZXA9MSkKICAgICAgICB0aHJlc2hvbGQgPSBzdC5zbGlkZXIoIlRocmVzaG9sZCIsIG1pbl92YWx1ZT0wLCBtYXhfdmFsdWU9MTAwLCB2YWx1ZT02NSwgc3RlcD01KQogICAgICAgIGVuYWJsZWQgPSBzdC5jaGVja2JveCgiRW5hYmxlZCIsIHZhbHVlPVRydWUpCiAgICAgICAgcHJldmlldyA9IHN0LnRvZ2dsZSgiUHJldmlldyBtb2RlIiwgdmFsdWU9RmFsc2UpCiAgICB3aXRoIHJpZ2h0OgogICAgICAgIGNhdGVnb3J5ID0gc3Quc2VsZWN0Ym94KCJDYXRlZ29yeSIsIFsiQW5hbHl0aWNzIiwgIk9wZXJhdGlvbnMiLCAiRmluYW5jZSJdKQogICAgICAgIHByaW9yaXR5ID0gc3QucmFkaW8oIlByaW9yaXR5IiwgWyJMb3ciLCAiTWVkaXVtIiwgIkhpZ2giXSwgaW5kZXg9MSkKICAgICAgICB0YWdzID0gc3QubXVsdGlzZWxlY3QoCiAgICAgICAgICAgICJUYWdzIiwKICAgICAgICAgICAgWyJQeXRob24iLCAiRGF0YSIsICJDaGFydHMiLCAiRm9ybXMiXSwKICAgICAgICAgICAgZGVmYXVsdD1bIlB5dGhvbiIsICJEYXRhIl0sCiAgICAgICAgICAgIHNob3dfc2VsZWN0X2FsbD1UcnVlLAogICAgICAgICkKICAgICAgICBhY2NlbnQgPSBzdC5jb2xvcl9waWNrZXIoIkFjY2VudCBjb2xvciIsIHZhbHVlPSIjNGY0NmU1IikKICAgICAgICByZXZpZXdfZGF0ZSA9IHN0LmRhdGVfaW5wdXQoIlJldmlldyBkYXRlIiwgdmFsdWU9IjIwMjYtMDgtMjciKQoKICAgIHN0LmluZm8oCiAgICAgICAgIlNlbGVjdGVkICIgKyBuYW1lICsgIiBpbiAiICsgY2F0ZWdvcnkgKyAiIHdpdGggIiArIHByaW9yaXR5Lmxvd2VyKCkKICAgICAgICArICIgcHJpb3JpdHkuIgogICAgKQogICAgc3QuanNvbih7CiAgICAgICAgIm5vdGVzIjogbm90ZXMsCiAgICAgICAgInF1YW50aXR5IjogcXVhbnRpdHksCiAgICAgICAgInRocmVzaG9sZCI6IHRocmVzaG9sZCwKICAgICAgICAiZW5hYmxlZCI6IGVuYWJsZWQsCiAgICAgICAgInByZXZpZXciOiBwcmV2aWV3LAogICAgICAgICJ0YWdzIjogdGFncywKICAgICAgICAiYWNjZW50IjogYWNjZW50LAogICAgICAgICJyZXZpZXdfZGF0ZSI6IHJldmlld19kYXRlLAogICAgfSkKCndpdGggZm9ybXNfdGFiOgogICAgc3QuaGVhZGVyKCJGb3JtcyBhbmQgcXVpenplcyIpCiAgICBzdC5tYXJrZG93bigiRm9ybXMgaG9sZCB3aWRnZXQgY2hhbmdlcyB1bnRpbCB0aGVpciBzdWJtaXQgYnV0dG9uIGlzIHByZXNzZWQuIikKCiAgICB3aXRoIHN0LmZvcm0oCiAgICAgICAgInNldHRpbmdzX2Zvcm0iLAogICAgICAgIGNsZWFyX29uX3N1Ym1pdD1GYWxzZSwKICAgICAgICBlbnRlcl90b19zdWJtaXQ9VHJ1ZSwKICAgICAgICBib3JkZXI9VHJ1ZSwKICAgICAgICBoaW50PSJUaGlzIGlzIGEgcmVndWxhciBmb3JtIHdpdGggYSB0ZXh0IGlucHV0LCBzZWxlY3Rib3gsIGFuZCBjaGVja2JveC4iLAogICAgKToKICAgICAgICBzZXR0aW5nX25hbWUgPSBzdC50ZXh0X2lucHV0KCJTZXR0aW5nIG5hbWUiLCB2YWx1ZT0iZGVtbyIsIGtleT0ic2V0dGluZ19uYW1lIikKICAgICAgICBzZXR0aW5nX21vZGUgPSBzdC5zZWxlY3Rib3goCiAgICAgICAgICAgICJTZXR0aW5nIG1vZGUiLAogICAgICAgICAgICBbIkRyYWZ0IiwgIlJldmlldyIsICJQdWJsaXNoZWQiXSwKICAgICAgICAgICAga2V5PSJzZXR0aW5nX21vZGUiLAogICAgICAgICkKICAgICAgICBzZXR0aW5nX2VuYWJsZWQgPSBzdC5jaGVja2JveCgiRW5hYmxlIHNldHRpbmciLCB2YWx1ZT1UcnVlLCBrZXk9InNldHRpbmdfZW5hYmxlZCIpCiAgICAgICAgc2V0dGluZ3Nfc3VibWl0dGVkID0gc3QuZm9ybV9zdWJtaXRfYnV0dG9uKCJTYXZlIHNldHRpbmdzIiwgdHlwZT0icHJpbWFyeSIpCiAgICBpZiBzZXR0aW5nc19zdWJtaXR0ZWQ6CiAgICAgICAgc3Quc3VjY2VzcygKICAgICAgICAgICAgIlNhdmVkICIgKyBzZXR0aW5nX25hbWUgKyAiIGluICIgKyBzZXR0aW5nX21vZGUubG93ZXIoKQogICAgICAgICAgICArICIgbW9kZSAoZW5hYmxlZD0iICsgc3RyKHNldHRpbmdfZW5hYmxlZCkgKyAiKS4iCiAgICAgICAgKQoKICAgIHN0LnN1YmhlYWRlcigiUXVpeiBmb3JtIikKICAgIHdpdGggc3QuZm9ybSgKICAgICAgICAicXVpel9mb3JtIiwKICAgICAgICBjbGVhcl9vbl9zdWJtaXQ9RmFsc2UsCiAgICAgICAgZW50ZXJfdG9fc3VibWl0PUZhbHNlLAogICAgICAgIGJvcmRlcj1UcnVlLAogICAgICAgIGhpbnQ9IkNob29zZSBhbiBhbnN3ZXIsIHRoZW4gc3VibWl0IHRvIHJldmVhbCBmZWVkYmFjay4iLAogICAgKToKICAgICAgICBhbnN3ZXIgPSBzdC5xdWl6X3F1ZXN0aW9uKAogICAgICAgICAgICAiV2hpY2ggbnVtYmVyIGlzIHByaW1lPyIsCiAgICAgICAgICAgIFsiMjEiLCAiMjkiLCAiMzUiXSwKICAgICAgICAgICAgY29ycmVjdF9hbnN3ZXI9IjI5IiwKICAgICAgICAgICAgaGludD0iQSBwcmltZSBudW1iZXIgaGFzIGV4YWN0bHkgdHdvIGZhY3RvcnMuIiwKICAgICAgICAgICAgZXhwbGFuYXRpb249IjI5IGlzIGRpdmlzaWJsZSBvbmx5IGJ5IDEgYW5kIGl0c2VsZi4iLAogICAgICAgICAgICBrZXk9ImRlbW9fcXVpel9hbnN3ZXIiLAogICAgICAgICAgICBzaG93X2NvcnJlY3Q9VHJ1ZSwKICAgICAgICAgICAgc2hvd193cm9uZz1UcnVlLAogICAgICAgICAgICBzaG93X2hpbnQ9VHJ1ZSwKICAgICAgICAgICAgYWxsb3dfcmV0cnk9VHJ1ZSwKICAgICAgICApCiAgICAgICAgcXVpel9zdWJtaXR0ZWQgPSBzdC5mb3JtX3N1Ym1pdF9idXR0b24oIkNoZWNrIGFuc3dlciIsIHR5cGU9InByaW1hcnkiKQogICAgaWYgcXVpel9zdWJtaXR0ZWQ6CiAgICAgICAgc3QuY2FwdGlvbigiVGhlIHNlbGVjdGVkIGFuc3dlciBpcyBhbHNvIHJldHVybmVkIHRvIFB5dGhvbiBhczogIiArIHN0cihhbnN3ZXIpKQoKd2l0aCBkYXRhX3RhYjoKICAgIHN0LmhlYWRlcigiRGF0YSBhbmQgb3V0cHV0cyIpCiAgICByb3dfY291bnQgPSBzdC5zbGlkZXIoIlNhbXBsZSByb3dzIiwgNTAsIDUwMCwgMTgwLCBzdGVwPTUwLCBrZXk9ImRlbW9fcm93X2NvdW50IikKICAgIHVwbG9hZGVkID0gc3QuZmlsZV91cGxvYWRlcigiVXBsb2FkIGEgQ1NWIHRvIHByZXZpZXciLCB0eXBlPVsiY3N2Il0sIGtleT0iZGVtb191cGxvYWQiKQogICAgaWYgdXBsb2FkZWQgaXMgbm90IE5vbmU6CiAgICAgICAgdXBsb2FkZWRfZnJhbWUgPSB1cGxvYWRlZC5kYXRhZnJhbWUoKQogICAgICAgIHN0LnN1Y2Nlc3MoIkxvYWRlZCAiICsgdXBsb2FkZWQubmFtZSArICIgd2l0aCAiICsgc3RyKGxlbih1cGxvYWRlZF9mcmFtZSkpICsgIiByb3dzIikKICAgICAgICBzdC50YWJsZSh1cGxvYWRlZF9mcmFtZS5oZWFkKDUpKQogICAgICAgIHN0LmRhdGFmcmFtZSh1cGxvYWRlZF9mcmFtZS5oZWFkKDIwKSwgbWF4X3Jvd3M9MjApCiAgICBlbHNlOgogICAgICAgIHN0LmNhcHRpb24oIk5vIENTViB1cGxvYWRlZC4gVGhlIGV4YW1wbGVzIGJlbG93IHVzZSBnZW5lcmF0ZWQgc2FtcGxlIGRhdGEuIikKCiAgICBkZiA9IG1ha2VfZGVtb19kYXRhKHJvd19jb3VudCkKICAgIHN0LnN1YmhlYWRlcigiVGFibGUsIGRhdGFmcmFtZSwgYW5kIGRhdGEgZWRpdG9yIikKICAgIHN0LnRhYmxlKGRmLmhlYWQoNSkpCiAgICBzdC5kYXRhZnJhbWUoZGYuaGVhZCgyMCksIG1heF9yb3dzPTIwKQogICAgZWRpdGVkID0gc3QuZGF0YV9lZGl0b3IoCiAgICAgICAgZGYuaGVhZCgxMiksCiAgICAgICAgaGlkZV9pbmRleD1UcnVlLAogICAgICAgIG51bV9yb3dzPSJkeW5hbWljIiwKICAgICAgICBrZXk9ImRlbW9fZGF0YV9lZGl0b3IiLAogICAgKQogICAgc3QuY2FwdGlvbigiVGhlIGVkaXRlZCB0YWJsZSBjdXJyZW50bHkgY29udGFpbnMgIiArIHN0cihsZW4oZWRpdGVkKSkgKyAiIHJvd3MuIikKICAgIHN0LmRvd25sb2FkX2J1dHRvbigKICAgICAgICAiRG93bmxvYWQgZWRpdGVkIHRhYmxlIGFzIENTViIsCiAgICAgICAgZWRpdGVkLAogICAgICAgIGZpbGVfbmFtZT0iY2FweWNhbnZhcy1lZGl0ZWQtdGFibGUuY3N2IiwKICAgICAgICBtaW1lPSJ0ZXh0L2NzdiIsCiAgICAgICAga2V5PSJkb3dubG9hZF9lZGl0ZWRfdGFibGUiLAogICAgKQogICAgc3QuZG93bmxvYWRfYnV0dG9uKAogICAgICAgICJEb3dubG9hZCBzYW1wbGUgdGFibGUgYXMgSlNPTiIsCiAgICAgICAgZGYudG9fanNvbihvcmllbnQ9InJlY29yZHMiLCBpbmRlbnQ9MiksCiAgICAgICAgZmlsZV9uYW1lPSJjYXB5Y2FudmFzLXNhbXBsZS5qc29uIiwKICAgICAgICBtaW1lPSJhcHBsaWNhdGlvbi9qc29uIiwKICAgICAgICBrZXk9ImRvd25sb2FkX3NhbXBsZV9qc29uIiwKICAgICkKCiAgICBtZXRyaWNzID0gc3QuY29sdW1ucygzKQogICAgbWV0cmljc1swXS5tZXRyaWMoIlJvd3MiLCBsZW4oZGYpKQogICAgbWV0cmljc1sxXS5tZXRyaWMoIlJldmVudWUiLCAiJCIgKyBmb3JtYXQoZGZbInJldmVudWUiXS5zdW0oKSwgIiwuMGYiKSkKICAgIG1ldHJpY3NbMl0ubWV0cmljKCJBdmVyYWdlIHVuaXRzIiwgcm91bmQoZGZbInVuaXRzIl0ubWVhbigpLCAxKSkKICAgIHN0LndyaXRlKCJGaXJzdCBzYW1wbGUgcm93OiIsIGRmLmlsb2NbMF0udG9fZGljdCgpKQoKICAgIHN0LnN1YmhlYWRlcigiQ2hhcnQgb3V0cHV0cyIpCiAgICBiYXJfdGFiLCBsaW5lX3RhYiwgYXJlYV90YWIsIHNjYXR0ZXJfdGFiID0gc3QudGFicyhbCiAgICAgICAgIkJhciBjaGFydCIsICJMaW5lIGNoYXJ0IiwgIkFyZWEgY2hhcnQiLCAiU2NhdHRlciBjaGFydCIsCiAgICBdKQogICAgbW9udGhseSA9IGRmLmdyb3VwYnkoIm1vbnRoIiwgc29ydD1GYWxzZSlbInJldmVudWUiXS5zdW0oKQogICAgd2l0aCBiYXJfdGFiOgogICAgICAgIHN0LmJhcl9jaGFydChtb250aGx5KQogICAgd2l0aCBsaW5lX3RhYjoKICAgICAgICBzdC5saW5lX2NoYXJ0KG1vbnRobHkpCiAgICB3aXRoIGFyZWFfdGFiOgogICAgICAgIHN0LmFyZWFfY2hhcnQobW9udGhseSkKICAgIHdpdGggc2NhdHRlcl90YWI6CiAgICAgICAgc3Quc2NhdHRlcl9jaGFydChkZltbInVuaXRzIiwgInJldmVudWUiXV0pCgogICAgc3Quc3ViaGVhZGVyKCJNYXRwbG90bGliIG91dHB1dCIpCiAgICBmaWd1cmUsIGF4aXMgPSBwbHQuc3VicGxvdHMoZmlnc2l6ZT0oNy4yLCAzLjQpKQogICAgYXhpcy5wbG90KG1vbnRobHkuaW5kZXgsIG1vbnRobHkudmFsdWVzLCBtYXJrZXI9Im8iKQogICAgYXhpcy5zZXRfdGl0bGUoIlJldmVudWUgYnkgbW9udGgiKQogICAgYXhpcy5zZXRfeWxhYmVsKCJSZXZlbnVlIikKICAgIGF4aXMuZ3JpZChUcnVlLCBhbHBoYT0wLjI1KQogICAgc3QucHlwbG90KGZpZ3VyZSkKCiAgICB3aXRoIHN0LmV4cGFuZGVyKCJTdGFnZWQgYW5kIGVtYmVkZGVkIGRhdGEgYWNjZXNzIik6CiAgICAgICAgZW1iZWRkZWRfbmFtZXMgPSBzdC5saXN0X2VtYmVkZGVkKCkKICAgICAgICBzdC53cml0ZSgiUGFja2FnZWQgZmlsZW5hbWVzOiIsIGVtYmVkZGVkX25hbWVzKQogICAgICAgIGlmIGVtYmVkZGVkX25hbWVzOgogICAgICAgICAgICBzdC53cml0ZSgiRmlyc3QgcGFja2FnZWQgZmlsZToiLCBzdC5lbWJlZGRlZChlbWJlZGRlZF9uYW1lc1swXSkpCiAgICAgICAgZWxzZToKICAgICAgICAgICAgc3QuY2FwdGlvbigiVXNlIHRoZSBEYXRhIHBhbmVsIG9yIGEgcGFja2FnZWQgZXhwb3J0IHRvIHBvcHVsYXRlIHRoaXMgbGlzdC4iKQoKd2l0aCBjb2RlX3RhYjoKICAgIHN0LmhlYWRlcigiUHl0aG9uIGNvZGUgZWRpdG9yIikKICAgIHN0Lm1hcmtkb3duKAogICAgICAgICJUaGUgZWRpdG9yIHZhbHVlIGlzIHN0cmluZy1jb21wYXRpYmxlLiBDYWxsaW5nIGAuZGljdCgpYCBleGVjdXRlcyBpdCAiCiAgICAgICAgImluIGEgZnJlc2ggZGljdGlvbmFyeSBhbmQgcmV0dXJucyB0aGUgdmFyaWFibGVzIGl0IGNyZWF0ZWQuIgogICAgKQogICAgd2l0aCBzdC5mb3JtKCJjb2RlX2RlbW8iLCBjbGVhcl9vbl9zdWJtaXQ9RmFsc2UsIGhpbnQ9IlRyeSBjaGFuZ2luZyB0aGUgc291cmNlIGJlZm9yZSBleGVjdXRpbmcgaXQuIik6CiAgICAgICAgc25pcHBldCA9IHN0LmNvZGVfZWRpdG9yKAogICAgICAgICAgICAiUHl0aG9uIHNuaXBwZXQiLAogICAgICAgICAgICB2YWx1ZT0ndG90YWwgPSAyICsgMlxubWVzc2FnZSA9IGYiVGhlIHRvdGFsIGlzIHt0b3RhbH0iJywKICAgICAgICAgICAga2V5PSJkZW1vX2NvZGVfZWRpdG9yIiwKICAgICAgICAgICAgaGVpZ2h0PTIyMCwKICAgICAgICApCiAgICAgICAgZXhlY3V0ZV9zbmlwcGV0ID0gc3QuZm9ybV9zdWJtaXRfYnV0dG9uKCJFeGVjdXRlIHNuaXBwZXQiLCB0eXBlPSJwcmltYXJ5IikKCiAgICBpZiBleGVjdXRlX3NuaXBwZXQ6CiAgICAgICAgdHJ5OgogICAgICAgICAgICBzdC5zZXNzaW9uX3N0YXRlWyJkZW1vX2NvZGVfdmFyaWFibGVzIl0gPSBzbmlwcGV0LmRpY3QoKQogICAgICAgICAgICBzdC5zZXNzaW9uX3N0YXRlLnBvcCgiZGVtb19jb2RlX2Vycm9yIiwgTm9uZSkKICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGV4YzoKICAgICAgICAgICAgc3Quc2Vzc2lvbl9zdGF0ZVsiZGVtb19jb2RlX2Vycm9yIl0gPSBzdHIoZXhjKQoKICAgIGlmICJkZW1vX2NvZGVfZXJyb3IiIGluIHN0LnNlc3Npb25fc3RhdGU6CiAgICAgICAgc3QuZXJyb3IoIlNuaXBwZXQgZXJyb3I6ICIgKyBzdC5zZXNzaW9uX3N0YXRlWyJkZW1vX2NvZGVfZXJyb3IiXSkKICAgIGlmICJkZW1vX2NvZGVfdmFyaWFibGVzIiBpbiBzdC5zZXNzaW9uX3N0YXRlOgogICAgICAgIHN0LmNhcHRpb24oIlZhcmlhYmxlcyByZXR1cm5lZCBieSBgLmRpY3QoKWA6IikKICAgICAgICBzdC5qc29uKHN0LnNlc3Npb25fc3RhdGVbImRlbW9fY29kZV92YXJpYWJsZXMiXSkKICAgIHN0LmNvZGUoc25pcHBldCwgbGFuZ3VhZ2U9InB5dGhvbiIpCgp3aXRoIGxheW91dF90YWI6CiAgICBzdC5oZWFkZXIoIkxheW91dCBhbmQgc3RhdHVzIikKICAgIHdpdGggc3QuY29udGFpbmVyKCk6CiAgICAgICAgc3QubWFya2Rvd24oIlVzZSBjb250YWluZXJzIHRvIGdyb3VwIHJlbGF0ZWQgb3V0cHV0LiIpCiAgICAgICAgY29sdW1uX2xlZnQsIGNvbHVtbl9yaWdodCA9IHN0LmNvbHVtbnMoMikKICAgICAgICB3aXRoIGNvbHVtbl9sZWZ0OgogICAgICAgICAgICBzdC50ZXh0KCJUaGlzIGlzIG1vbm9zcGFjZSB0ZXh0IGZyb20gc3QudGV4dCgpLiIpCiAgICAgICAgd2l0aCBjb2x1bW5fcmlnaHQ6CiAgICAgICAgICAgIHN0Lmpzb24oeyJsYXlvdXQiOiAiY29sdW1ucyIsICJuZXN0ZWQiOiBUcnVlfSkKCiAgICB3aXRoIHN0LmV4cGFuZGVyKCJTaG93IG1vcmUgb3V0cHV0IHByaW1pdGl2ZXMiLCBleHBhbmRlZD1UcnVlKToKICAgICAgICBzdC50ZXh0KCJUaGlzIGlzIGFub3RoZXIgdGV4dCBvdXRwdXQuIikKICAgICAgICBzdC5jb2RlKCJmb3IgaXRlbSBpbiBbMSwgMiwgM106XG4gICAgcHJpbnQoaXRlbSkiKQogICAgICAgIHN0Lmpzb24oeyJydW50aW1lIjogIlB5b2RpZGUiLCAic2luZ2xlX2ZpbGUiOiBUcnVlfSkKICAgICAgICBzdC5jb2RlKCIlcGlwIGluc3RhbGwgc2VhYm9yblxuaW1wb3J0IHNlYWJvcm4gYXMgc25zIiwgbGFuZ3VhZ2U9InB5dGhvbiIpCgogICAgd2l0aCBzdC5zcGlubmVyKCJQcmVwYXJpbmcgYSBkZW1vIHN0YXR1cyBibG9jay4uLiIpOgogICAgICAgIHN0LmNhcHRpb24oIlNwaW5uZXIsIGFsZXJ0cywgdG9hc3QsIGJ1dHRvbnMsIGFuZCBkaXZpZGVycyBhcmUgYWxsIGF2YWlsYWJsZS4iKQoKICAgIHN0LmRpdmlkZXIoKQogICAgaWYgc3QuYnV0dG9uKCJTaG93IHRvYXN0Iiwga2V5PSJkZW1vX3RvYXN0Iik6CiAgICAgICAgc3QudG9hc3QoIkhlbGxvIGZyb20gQ2FweUNhbnZhcyIsIGljb249Ik9LIikKICAgIGlmIHN0LmJ1dHRvbigiU2hvdyB3YXJuaW5nIiwga2V5PSJkZW1vX3dhcm5pbmciKToKICAgICAgICBzdC53YXJuaW5nKCJCdXR0b25zIHJldHVybiBUcnVlIG9ubHkgb24gdGhlIHJ1biB0aGV5IHRyaWdnZXIuIikKICAgIGlmIHN0LmJ1dHRvbigiU2F5IGhlbGxvIiwga2V5PSJkZW1vX2hlbGxvIik6CiAgICAgICAgc3QuaW5mbygiSGVsbG8sICIgKyBuYW1lICsgIiEiKQoKICAgIHN0b3BfZGVtbyA9IHN0LmNoZWNrYm94KCJTdG9wIGFmdGVyIHRoaXMgc2VjdGlvbiIsIHZhbHVlPUZhbHNlLCBrZXk9ImRlbW9fc3RvcCIpCiAgICBpZiBzdG9wX2RlbW86CiAgICAgICAgc3Qud2FybmluZygic3Quc3RvcCgpIGVuZGVkIHRoaXMgcmVuZGVyIHBhc3MgYWZ0ZXIgdGhlIGxheW91dCBkZW1vLiIpCiAgICAgICAgc3Quc3RvcCgpCgogICAgICAgIAp3aXRoIGxvY2FsX3N0b3JhZ2U6CiAgICBuYW1lID0gc3QudGV4dF9pbnB1dCgiUGxlYXNlIHB1dCBpbiB5b3VyIG5hbWUhIiwgdmFsdWU9IiIpCiAgICBpZiBzdC5sb2NhbF9zdG9yYWdlLmdldCgibmFtZSIpOgogICAgICAgIHN0LnRleHQoZiJTYXZlZCBuYW1lOiB7c3QubG9jYWxfc3RvcmFnZS5nZXQoIm5hbWUiKX0iKQogICAgCiAgICBpZiBzdC5idXR0b24oIlNhdmUgSW5mbyEiLCBrZXk9InNhdmUiKToKICAgICAgICBzdC5sb2NhbF9zdG9yYWdlLnNldCgibmFtZSIsIG5hbWUpCiAgICAgICAgc3QudG9hc3QoIlNhdmVkIHlvdXIgbmFtZSBpbiBsb2NhbCBzdG9yYWdlISIpCiAgICAgICAgc3QuaW5mbygiTm8gaW5mb3JtYXRpb24gaXMgc3RvcmVkIG9uIHRoZSBzZXJ2ZXI7IGl0IHN0YXlzIG9uIHRoZSB1c2VyJ3MgYnJvd3NlciIpCiAgICAgICAgCiAgICAgICAgCiAgICBpZiBzdC5idXR0b24oIkRlbGV0ZSBTYXZlZCBJbmZvISIpOgogICAgICAgIHN0LnJlc2V0KCkKICAgICAgICAKICAgICAgICAKICAgIAo=</script>
+<script id="app-source" type="text/x-python"></script>
 <script id="app-mode" type="application/json">{"mode":"edit"}</script>
 <!-- Packaged data (only present when export chose "packaged"). Same shape as Data Canvas.
      Shape: { "filename.ext": { "b64": "...", "ext": "csv", "size": 123 } } -->
 <script id="embedded-data" type="application/json">{}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=DM+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<script defer="" src="https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.js"></script>
+<script defer src="https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/ayu-dark.min.css">
-<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
-<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
-<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
 
 <!-- #region file: styles.css -->
 <style>
@@ -445,7 +448,7 @@ body.mode-app .cache-toggle { display: none !important; }
 
 <nav class="navbar">
     <div class="brand">Capy<span>Canvas</span></div>
-    <button class="btn btn-run" id="runBtn" disabled="">Run</button>
+    <button class="btn btn-run" id="runBtn" disabled>Run</button>
     <button class="btn" id="editToggle">Hide editor</button>
     <div class="spacer"></div>
 
@@ -460,7 +463,7 @@ body.mode-app .cache-toggle { display: none !important; }
             <div class="panel-section">
                 <div class="panel-label">Install package</div>
                 <div class="panel-row">
-                    <input type="text" id="depsInput" placeholder="e.g. seaborn or pandas==2.2.0">
+                    <input type="text" id="depsInput" placeholder="e.g. seaborn or pandas==2.2.0" />
                     <button class="btn btn-accent" id="depsInstallBtn" style="padding:5px 10px;">Install</button>
                 </div>
             </div>
@@ -477,7 +480,7 @@ body.mode-app .cache-toggle { display: none !important; }
             </div>
             <div class="panel-section">
                 <div class="panel-label">Add data dependencies</div>
-                <input type="file" id="dataFileInput" multiple="" accept=".csv,.tsv,.txt,.json,.xlsx,.xls,.parquet" hidden="">
+                <input type="file" id="dataFileInput" multiple accept=".csv,.tsv,.txt,.json,.xlsx,.xls,.parquet" hidden />
                 <button class="btn" id="dataAddBtn" style="width:100%;margin-bottom:8px;">+ Add files</button>
                 <small style="color:var(--text-muted);font-size:11px;display:block;margin-bottom:8px;line-height:1.4;">
                     For developers: staged files are available by filename in Python, e.g.
@@ -496,7 +499,7 @@ body.mode-app .cache-toggle { display: none !important; }
             <div class="panel-section">
                 <div class="panel-label">Audience</div>
                 <div class="export-choice" id="audienceChoice">
-                    <label class="on"><input type="radio" name="audience" value="client" checked=""> Client</label>
+                    <label class="on"><input type="radio" name="audience" value="client" checked> Client</label>
                     <label><input type="radio" name="audience" value="dev"> Developer</label>
                 </div>
                 <small style="color:var(--text-muted);font-size:11px;display:block;margin-top:-4px;margin-bottom:8px;">
@@ -506,7 +509,7 @@ body.mode-app .cache-toggle { display: none !important; }
             <div class="panel-section">
                 <div class="panel-label">Packaging</div>
                 <div class="export-choice" id="packageChoice">
-                    <label class="on"><input type="radio" name="packaging" value="packaged" checked=""> Packaged</label>
+                    <label class="on"><input type="radio" name="packaging" value="packaged" checked> Packaged</label>
                     <label><input type="radio" name="packaging" value="logic"> Logic only</label>
                 </div>
                 <small style="color:var(--text-muted);font-size:11px;display:block;margin-top:-4px;margin-bottom:10px;">
@@ -523,20 +526,20 @@ body.mode-app .cache-toggle { display: none !important; }
 
 <div class="status show" id="status">
     <div class="spinner" id="spinner"></div>
-    <span id="statusText">Starting the Python runtime…</span>
+    <span id="statusText">Starting the Python runtime&hellip;</span>
 </div>
 
 
 <!-- Export rename modal -->
-<div id="exportModal" class="cc-modal" hidden="">
-  <div class="cc-modal-backdrop" data-close-export=""></div>
+<div id="exportModal" class="cc-modal" hidden>
+  <div class="cc-modal-backdrop" data-close-export></div>
   <div class="cc-modal-card" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
     <h3 id="exportModalTitle" class="cc-modal-title">Export canvas</h3>
     <p class="cc-modal-hint">Choose a file name. Default follows Audience + Packaging.</p>
     <label class="cc-modal-label" for="exportFileName">File name</label>
-    <input type="text" id="exportFileName" class="cc-modal-input" spellcheck="false">
+    <input type="text" id="exportFileName" class="cc-modal-input" spellcheck="false" />
     <div class="cc-modal-actions">
-      <button type="button" class="btn" data-close-export="">Cancel</button>
+      <button type="button" class="btn" data-close-export>Cancel</button>
       <button type="button" class="btn btn-accent" id="exportConfirmBtn">Download</button>
     </div>
   </div>
@@ -551,7 +554,7 @@ body.mode-app .cache-toggle { display: none !important; }
     <div class="pane-app">
         <div class="app-scroll">
             <div class="app-inner" id="appRoot">
-                <div class="st-empty">Waiting for the runtime…</div>
+                <div class="st-empty">Waiting for the runtime&hellip;</div>
             </div>
         </div>
     </div>
@@ -594,6 +597,10 @@ _cache = {}
 _config = {}
 _persisted = {}
 _reset_requested = False
+_active_tabs = {}
+_tab_groups = []
+_tab_requests = {}
+_tab_counter = 0
 
 
 class _SessionState(dict):
@@ -687,6 +694,12 @@ def _next_key(kind, label):
     global _counter
     _counter += 1
     return "auto:" + kind + ":" + str(_counter)
+
+
+def _next_tab_key():
+    global _tab_counter
+    _tab_counter += 1
+    return "auto:tabs:" + str(_tab_counter)
 
 
 def _widget(wtype, label, key, default, **props):
@@ -797,10 +810,75 @@ def expander(label, expanded=False):
     }))
 
 
-def tabs(labels):
-    specs = [{"label": str(label), "children": []} for label in labels]
-    _emit({"kind": "tabs", "tabs": specs})
+def _tab_group(key=None):
+    target = None if key is None else str(key)
+    for group in reversed(_tab_groups):
+        if target is None or group["key"] == target:
+            return group
+    return None
+
+
+def _tab_index(group, target):
+    labels = group["labels"]
+    if isinstance(target, bool):
+        raise ValueError("st.active_tab expects a tab label or integer index")
+    if isinstance(target, int):
+        index = target
+    else:
+        label = str(target)
+        try:
+            index = labels.index(label)
+        except ValueError:
+            raise ValueError(
+                "Unknown tab " + repr(label) + "; available tabs: " + ", ".join(labels)
+            )
+    if index < 0 or index >= len(labels):
+        raise ValueError("Tab index out of range: " + str(index))
+    return index
+
+
+def tabs(labels, key=None):
+    labels = [str(label) for label in labels]
+    specs = [{"label": label, "children": []} for label in labels]
+    group_key = str(key) if key is not None else _next_tab_key()
+    element = {"kind": "tabs", "key": group_key, "tabs": specs}
+    _emit(element)
+    group = {"key": group_key, "labels": labels, "element": element}
+    _tab_groups.append(group)
+    if group_key in _tab_requests:
+        element["active"] = _tab_index(group, _tab_requests.pop(group_key))
     return [Container(spec) for spec in specs]
+
+
+def active_tab(tab=None, key=None):
+    """Read or request the selected tab in a tab group.
+
+    ``tab`` may be a tab label or zero-based index. With no ``tab`` the
+    currently selected label is returned and tab clicks trigger a rerun so the
+    value is fresh on the next render. Without ``key``, the most recently
+    declared tab group is used.
+    """
+    group = _tab_group(key)
+    if tab is None:
+        if group is None or not group["labels"]:
+            return None
+        group["element"]["watch"] = True
+        raw_index = group["element"].get("active", _active_tabs.get(group["key"], 0))
+        try:
+            index = _tab_index(group, raw_index)
+        except (TypeError, ValueError):
+            index = 0
+        return group["labels"][index]
+
+    if group is None:
+        if key is None:
+            raise RuntimeError("st.active_tab(...) requires st.tabs(...) first")
+        _tab_requests[str(key)] = tab
+        return tab
+
+    index = _tab_index(group, tab)
+    group["element"]["active"] = index
+    return group["labels"][index]
 
 
 def empty():
@@ -1338,12 +1416,48 @@ def _restore_embedded(name, b64):
     _embedded[name] = base64.b64decode(b64)
 
 
+def _public_names(value, limit=400):
+    try:
+        names = {
+            name for name in dir(value)
+            if isinstance(name, str) and name.isidentifier() and not name.startswith("_")
+        }
+    except Exception:
+        return []
+    return sorted(names)[:limit]
+
+
+def _completion_snapshot(namespace):
+    """Return names and safe-to-display members without exposing values."""
+    names = set()
+    members = {}
+    for name, value in namespace.items():
+        if not isinstance(name, str) or not name.isidentifier() or name.startswith("_"):
+            continue
+        names.add(name)
+        attrs = _public_names(value)
+        if attrs:
+            members[name] = attrs
+    try:
+        import builtins
+        names.update(
+            name for name in dir(builtins)
+            if name.isidentifier() and not name.startswith("_")
+        )
+    except Exception:
+        pass
+    return {"names": sorted(names), "members": members}
+
+
 def _run(payload_json, source):
-    global _elements, _stack, _state, _clicked, _submitted_form, _counter, _form_stack, _persisted, _reset_requested
+    global _elements, _stack, _state, _clicked, _submitted_form, _counter, _form_stack, _persisted, _reset_requested, _active_tabs, _tab_groups, _tab_requests, _tab_counter
     payload = _json.loads(payload_json)
     _state = payload.get("state") or {}
     _clicked = payload.get("clicked")
     _submitted_form = payload.get("submitted_form")
+    _active_tabs = payload.get("active_tabs")
+    if not isinstance(_active_tabs, dict):
+        _active_tabs = {}
     _reset_requested = False
     try:
         _persisted = _LocalStorage._copy(payload.get("persisted") or {})
@@ -1355,6 +1469,9 @@ def _run(payload_json, source):
     _stack = []
     _form_stack = []
     _counter = 0
+    _tab_counter = 0
+    _tab_groups = []
+    _tab_requests = {}
     _config.clear()
     _config.update({"title": "CapyCanvas app", "layout": "centered"})
 
@@ -1374,9 +1491,10 @@ def _run(payload_json, source):
     except Exception:
         error_text = traceback.format_exc()
 
+    completion = _completion_snapshot(namespace) if payload.get("sweep_globals") else None
     return _json.dumps({"elements": _elements, "error": error_text, "config": _config,
                         "persisted": local_storage.snapshot(),
-                        "reset_state": _reset_requested},
+                        "reset_state": _reset_requested, "completion": completion},
                        default=str)
 </script>
 
@@ -1480,7 +1598,7 @@ st.markdown(
 start_tab, json_tab, csv_tab, clean_tab, noir_tab, ethics_tab, quiz_tab = st.tabs([
     "Start here", "Lab 1: JSON", "Lab 2: CSV", "Lab 3: Clean data",
     "Lab 4: NOIR", "Lab 5: Story quiz", "Final quiz",
-])
+], key="chapter_tabs")
 
 
 with start_tab:
@@ -1535,6 +1653,8 @@ with start_tab:
         "The labs follow this journey: read a flexible record, explore a table, repair data, classify measurements, "
         "and make a responsible project decision."
     )
+    if st.button("Jump to final quiz", key="jump_to_final_quiz"):
+        st.active_tab("Final quiz", key="chapter_tabs")
 
 
 with json_tab:
@@ -2018,6 +2138,51 @@ window.addEventListener("DOMContentLoaded", function () {
     let formConfigs = {};
     let tabGroupCounter = 0;
     const activeTabs = {};
+    let runCount = 0;
+    let globalSweepReady = false;
+    let lastGlobalSweepRun = 0;
+    let lastGlobalSweepAt = 0;
+
+    const completionNames = new Set([
+        "st", "pd", "np", "abs", "all", "any", "bool", "dict", "enumerate",
+        "filter", "float", "int", "len", "list", "map", "max", "min", "open",
+        "print", "range", "repr", "round", "set", "sorted", "str", "sum", "tuple",
+        "zip", "True", "False", "None",
+        "active_tab", "area_chart", "bar_chart", "button", "cache_data",
+        "cache_resource", "caption", "checkbox", "code", "code_editor",
+        "color_picker", "columns", "container", "data_editor", "dataframe",
+        "date_input", "divider", "download_button", "empty", "embedded", "error",
+        "expander", "file_uploader", "form", "form_submit_button", "header", "info",
+        "json", "line_chart", "list_embedded", "local_storage", "markdown", "metric",
+        "multiselect", "number_input", "pyplot", "radio", "reset", "scatter_chart",
+        "selectbox", "session_state", "set_page_config", "slider", "spinner", "stop",
+        "subheader", "success", "table", "tabs", "text", "text_area", "text_input",
+        "toast", "toggle", "warning", "write"
+    ]);
+    const sourceCompletionNames = new Set();
+    const discoveredCompletionNames = new Set();
+    const completionMembers = Object.create(null);
+    const discoveredCompletionMembers = Object.create(null);
+    const staticMembers = {
+        st: [
+            "active_tab", "area_chart", "bar_chart", "button", "cache_data", "cache_resource",
+            "caption", "checkbox", "code", "code_editor", "color_picker", "columns", "container",
+            "data_editor", "dataframe", "date_input", "divider", "download_button", "empty",
+            "embedded", "error", "expander", "file_uploader", "form", "form_submit_button",
+            "header", "info", "json", "line_chart", "list_embedded", "local_storage", "markdown",
+            "metric", "multiselect", "number_input", "pyplot", "radio", "reset", "scatter_chart",
+            "selectbox", "session_state", "set_page_config", "slider", "spinner", "stop",
+            "subheader", "success", "table", "tabs", "text", "text_area", "text_input", "toast",
+            "toggle", "warning", "write"
+        ],
+        "st.local_storage": ["clear", "delete", "get", "items", "keys", "set", "snapshot"],
+        "st.session_state": ["clear", "get", "items", "keys", "pop", "setdefault", "update", "values"],
+        "local_storage": ["clear", "delete", "get", "items", "keys", "set", "snapshot"],
+        "session_state": ["clear", "get", "items", "keys", "pop", "setdefault", "update", "values"]
+    };
+    Object.keys(staticMembers).forEach((name) => {
+        completionMembers[name] = new Set(staticMembers[name]);
+    });
 
     // filename -> { b64, ext, size }
     let embeddedFiles = {};
@@ -2124,6 +2289,123 @@ window.addEventListener("DOMContentLoaded", function () {
         return el.dataset.encoding === "base64" ? b64Decode(raw) : raw;
     }
     const currentSource = () => (editor ? editor.getValue() : initialSource());
+
+    function refreshSourceCompletions(source) {
+        sourceCompletionNames.clear();
+        const add = (name) => {
+            if (name && /^[A-Za-z_]\w*$/.test(name)) sourceCompletionNames.add(name);
+        };
+        let match;
+        const declarations = /^\s*(?:(?:async)\s+)?(?:def|class)\s+([A-Za-z_]\w*)/gm;
+        while ((match = declarations.exec(source)) !== null) add(match[1]);
+
+        const imports = /^\s*import\s+([^\n#]+)/gm;
+        while ((match = imports.exec(source)) !== null) {
+            match[1].split(",").forEach((part) => {
+                const pieces = part.trim().split(/\s+as\s+/);
+                add((pieces[1] || pieces[0]).trim().split(".")[0]);
+            });
+        }
+
+        const fromImports = /^\s*from\s+[^\n#]+?\s+import\s+([^\n#]+)/gm;
+        while ((match = fromImports.exec(source)) !== null) {
+            match[1].split(",").forEach((part) => {
+                const pieces = part.trim().split(/\s+as\s+/);
+                if (pieces[0] !== "*") add((pieces[1] || pieces[0]).trim());
+            });
+        }
+
+        const assignments = /^\s*([A-Za-z_]\w*)\s*=\s*(?!=)/gm;
+        while ((match = assignments.exec(source)) !== null) add(match[1]);
+
+        const loopNames = /^\s*for\s+([A-Za-z_]\w*)\s+in\b/gm;
+        while ((match = loopNames.exec(source)) !== null) add(match[1]);
+    }
+
+    function updateCompletionSnapshot(snapshot) {
+        if (!snapshot || typeof snapshot !== "object") return;
+        discoveredCompletionNames.clear();
+        (Array.isArray(snapshot.names) ? snapshot.names : []).forEach((name) => {
+            if (/^[A-Za-z_]\w*$/.test(name)) discoveredCompletionNames.add(name);
+        });
+        Object.keys(discoveredCompletionMembers).forEach((name) => {
+            delete discoveredCompletionMembers[name];
+        });
+        if (!snapshot.members || typeof snapshot.members !== "object") return;
+        Object.keys(snapshot.members).forEach((name) => {
+            const values = snapshot.members[name];
+            if (!Array.isArray(values)) return;
+            discoveredCompletionMembers[name] = new Set();
+            values.forEach((value) => {
+                if (/^[A-Za-z_]\w*$/.test(value)) discoveredCompletionMembers[name].add(value);
+            });
+        });
+    }
+
+    function completionListFor(cm) {
+        const cursor = cm.getCursor();
+        const line = cm.getLine(cursor.line).slice(0, cursor.ch);
+        const member = line.match(/([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)\.([A-Za-z_]\w*)?$/);
+        let prefix = "";
+        let from = cursor.ch;
+        let candidates;
+
+        if (member) {
+            prefix = member[2] || "";
+            from = cursor.ch - prefix.length;
+            candidates = Array.from(new Set([
+                ...(completionMembers[member[1]] || []),
+                ...(discoveredCompletionMembers[member[1]] || [])
+            ]));
+        } else {
+            const word = line.match(/[A-Za-z_]\w*$/);
+            prefix = word ? word[0] : "";
+            from = cursor.ch - prefix.length;
+            candidates = Array.from(new Set([
+                ...completionNames,
+                ...discoveredCompletionNames,
+                ...sourceCompletionNames
+            ]));
+        }
+
+        const lowerPrefix = prefix.toLowerCase();
+        const list = candidates
+            .filter((name) => name.toLowerCase().startsWith(lowerPrefix))
+            .sort((a, b) => a.localeCompare(b))
+            .slice(0, 100);
+        if (!list.length) return null;
+        return {
+            list,
+            from: CodeMirror.Pos(cursor.line, from),
+            to: CodeMirror.Pos(cursor.line, cursor.ch)
+        };
+    }
+
+    function showCompletions(cm) {
+        if (!cm || typeof cm.showHint !== "function") return;
+        cm.showHint({ hint: completionListFor, completeSingle: false, closeOnUnfocus: true });
+    }
+
+    function configureAutocomplete(cm) {
+        if (!cm || cm.__capycanvasAutocomplete) return;
+        cm.__capycanvasAutocomplete = true;
+        const extraKeys = cm.getOption("extraKeys") || {};
+        cm.setOption("extraKeys", Object.assign({}, extraKeys, {
+            "Ctrl-Space": showCompletions,
+            "Cmd-Space": showCompletions
+        }));
+        cm.on("inputRead", (instance, change) => {
+            if (!change || change.origin !== "+input" || !change.text) return;
+            if (change.text.join("") !== ".") return;
+            const cursor = instance.getCursor();
+            const line = instance.getLine(cursor.line).slice(0, cursor.ch);
+            if (/[A-Za-z_]\w*\.$/.test(line)) showCompletions(instance);
+        });
+    }
+
+    if (typeof CodeMirror !== "undefined" && CodeMirror.registerHelper) {
+        CodeMirror.registerHelper("hint", "python", completionListFor);
+    }
 
     // Data dependencies live at the filesystem root, so app code can use
     // ordinary paths such as pd.read_csv("data.csv").
@@ -2333,11 +2615,24 @@ window.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function refreshCodeEditors(container = null) {
+        Object.keys(code_editor).forEach((key) => {
+            const instance = code_editor[key];
+            if (!instance || typeof instance.refresh !== "function") return;
+            const wrapper = instance.getWrapperElement && instance.getWrapperElement();
+            if (container && wrapper && !container.contains(wrapper)) return;
+            try { instance.refresh(); } catch (e) {}
+        });
+    }
+
     function destroyCodeEditors() {
         Object.keys(code_editor).forEach((key) => {
             const instance = code_editor[key];
             // Remove the map entry first so teardown cannot commit stale events.
             delete code_editor[key];
+            if (instance && instance.__capycanvasResizeObserver) {
+                try { instance.__capycanvasResizeObserver.disconnect(); } catch (e) {}
+            }
             if (instance && typeof instance.toTextArea === "function") {
                 try { instance.toTextArea(); } catch (e) {}
             }
@@ -2372,11 +2667,30 @@ window.addEventListener("DOMContentLoaded", function () {
         cm.__capycanvasLastValue = cm.getValue();
         cm.getWrapperElement().dataset.codeEditorKey = el.key;
         code_editor[el.key] = cm;
+        configureAutocomplete(cm);
+
+        // CodeMirror can be created while its tab or expander is hidden. Its
+        // dimensions are refreshed when the container becomes measurable.
+        if (typeof ResizeObserver !== "undefined") {
+            const observer = new ResizeObserver(() => {
+                if (host.offsetWidth > 0) {
+                    try { cm.refresh(); } catch (e) {}
+                }
+            });
+            observer.observe(host);
+            cm.__capycanvasResizeObserver = observer;
+        }
+        requestAnimationFrame(() => {
+            try { cm.refresh(); } catch (e) {}
+        });
 
         cm.on("blur", () => {
             if (code_editor[el.key] !== cm) return;
             syncCodeEditor(cm);
             if (!cm.__capycanvasForm) runApp();
+        });
+        cm.on("focus", () => {
+            try { cm.refresh(); } catch (e) {}
         });
         return host;
     }
@@ -2966,27 +3280,30 @@ window.addEventListener("DOMContentLoaded", function () {
             case "tabs": {
                 node = document.createElement("div");
                 node.className = "st-tabs";
-                const groupId = "tabs-" + tabGroupCounter++;
+                const groupId = el.key != null ? String(el.key) : "tabs-" + tabGroupCounter++;
                 const labels = document.createElement("div");
                 labels.className = "st-tab-labels";
                 const panels = document.createElement("div");
                 panels.className = "st-tab-panels";
                 const specs = el.tabs || [];
                 let active = Number.isInteger(activeTabs[groupId]) ? activeTabs[groupId] : 0;
+                if (Number.isInteger(el.active)) active = el.active;
                 if (active < 0 || active >= specs.length) active = 0;
                 const buttons = [];
                 const panelNodes = [];
-                const select = (index) => {
+                const select = (index, notify = false) => {
                     activeTabs[groupId] = index;
                     buttons.forEach((button, i) => button.classList.toggle("on", i === index));
                     panelNodes.forEach((panel, i) => { panel.hidden = i !== index; });
+                    requestAnimationFrame(() => refreshCodeEditors(panelNodes[index]));
+                    if (notify && el.watch) runApp();
                 };
                 specs.forEach((spec, index) => {
                     const button = document.createElement("button");
                     button.type = "button";
                     button.className = "st-tab";
                     button.textContent = spec.label;
-                    button.addEventListener("click", () => select(index));
+                    button.addEventListener("click", () => select(index, true));
                     labels.appendChild(button);
                     buttons.push(button);
 
@@ -3114,9 +3431,7 @@ window.addEventListener("DOMContentLoaded", function () {
         }
         renderList(result.elements || [], appRoot);
         setTimeout(() => {
-            Object.keys(code_editor).forEach((key) => {
-                try { code_editor[key].refresh(); } catch (e) {}
-            });
+            refreshCodeEditors();
         }, 0);
         if (result.error) {
             showError(appRoot, result.error);
@@ -3129,6 +3444,11 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function shouldSweepGlobals() {
+        if (!globalSweepReady) return true;
+        return runCount - lastGlobalSweepRun >= 6 || Date.now() - lastGlobalSweepAt >= 15000;
+    }
+
     async function runApp() {
         // Form editors are synchronized by submitForm so clear_on_submit can
         // remove their draft instead of recreating it here.
@@ -3136,6 +3456,8 @@ window.addEventListener("DOMContentLoaded", function () {
         if (!pyodide) return;
         if (running) { queued = true; return; }
         running = true;
+        runCount += 1;
+        const sweepGlobals = shouldSweepGlobals();
         const clearKeysAfterRun = pendingFormClearKeys;
         pendingFormClearKeys = null;
         const focus = captureFocus();
@@ -3143,6 +3465,7 @@ window.addEventListener("DOMContentLoaded", function () {
         setRerunBusy(true);
         try {
             const rawSource = currentSource();
+            refreshSourceCompletions(rawSource);
             syncDataFilesToFs();
             await installFor(rawSource);
             const source = cleanMagicCommands(rawSource);
@@ -3150,7 +3473,9 @@ window.addEventListener("DOMContentLoaded", function () {
                 state: appState,
                 clicked: pendingClick,
                 submitted_form: pendingForm,
-                persisted: persistedState
+                persisted: persistedState,
+                active_tabs: activeTabs,
+                sweep_globals: sweepGlobals
             });
             pendingClick = null;
             pendingForm = null;
@@ -3160,6 +3485,12 @@ window.addEventListener("DOMContentLoaded", function () {
                 "import capycanvas\ncapycanvas._run(__st_payload, __st_source)"
             );
             const result = JSON.parse(raw);
+            if (result.completion) {
+                updateCompletionSnapshot(result.completion);
+                globalSweepReady = true;
+                lastGlobalSweepRun = runCount;
+                lastGlobalSweepAt = Date.now();
+            }
             savePersistedState(result.persisted || {});
             if (result.reset_state) {
                 appState = {};
@@ -3329,6 +3660,8 @@ window.addEventListener("DOMContentLoaded", function () {
         "Ctrl-Enter": () => $("runBtn").click(),
         "Cmd-Enter": () => $("runBtn").click()
     });
+    configureAutocomplete(editor);
+    editor.on("change", () => refreshSourceCompletions(editor.getValue()));
 
     $("editToggle").addEventListener("click", () => {
         const hidden = document.body.classList.toggle("editor-hidden");
@@ -3618,4 +3951,6 @@ window.addEventListener("DOMContentLoaded", function () {
 //#endregion
 </script>
 
-<script>window.__SL_PRISTINE__ = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;</script></body></html>
+<script>window.__SL_PRISTINE__ = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;</script>
+</body>
+</html>
