@@ -2084,6 +2084,27 @@ window.addEventListener("DOMContentLoaded", function () {
             try { cm.refresh(); } catch (e) {}
         });
         return host;
+	
+	const refreshUntilVisible = () => {
+    const wrapper = cm.getWrapperElement();
+
+    if (
+        wrapper &&
+        wrapper.offsetWidth > 0 &&
+        wrapper.offsetHeight > 0
+    ) {
+        cm.refresh();
+    }
+};
+
+requestAnimationFrame(refreshUntilVisible);
+
+if (typeof ResizeObserver !== "undefined") {
+    const observer = new ResizeObserver(refreshUntilVisible);
+    observer.observe(host);
+    cm.__capycanvasResizeObserver = observer;
+}
+
     }
 
     function buildWidget(el) {
